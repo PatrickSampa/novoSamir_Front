@@ -631,7 +631,7 @@
     <br />
     <br />
     <br />
-    <v-data-table id="areaToPrint" dense v-if="mode === 'table'" :headers="headers" :items="calc_total"
+    <v-data-table dense v-if="mode === 'table'" :headers="headers" :items="calc_total"
       :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
       <template v-slot:item="{ item }">
         <tr>
