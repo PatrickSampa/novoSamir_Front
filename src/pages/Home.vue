@@ -831,7 +831,7 @@
           <div class="columnResumoProcesso">
             <h6>Juros R$</h6>
             <label class="inputToPrintResumo" id="resumoJuros" />
-            {{ totaisValorCalculo.valorCorrecao }}
+            {{ totaisValorCalculo.valorJuros }}
           </div>
           <div class="columnResumoProcesso">
             <h6>Total R$</h6>
