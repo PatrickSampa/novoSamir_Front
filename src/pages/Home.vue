@@ -32,7 +32,8 @@
         <v-col cols="12" sm="6" md="3">
           <label for="data-inicial" class="labels pb-3">Data Inicial <b class="item-obrigatorio">*</b></label>
 
-          <v-text-field v-mask="'##/##/####'" v-model="dtInicial" id="data-inicial" dense outlined required></v-text-field>
+          <v-text-field v-mask="'##/##/####'" v-model="dtInicial" id="data-inicial" dense outlined required>
+          </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <label for="data_final" class="labels pb-3">Data Final <b class="item-obrigatorio">*</b></label>
@@ -45,7 +46,8 @@
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <label for="inicio_Juros" class="labels pb-3">Início do juros <b class="item-obrigatorio">*</b></label>
-          <v-text-field v-mask="'##/##/####'" v-model="inicio_juros" id="data-final" dense outlined required></v-text-field>
+          <v-text-field v-mask="'##/##/####'" v-model="inicio_juros" id="data-final" dense outlined required>
+          </v-text-field>
         </v-col>
       </v-row>
       <v-row>
@@ -77,12 +79,14 @@
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <label for="atualizacao" class="labels pb-2">Atualização <b class="item-obrigatorio">*</b></label>
-          <v-text-field v-mask="'##/####'" v-model="atulizacao" id="atualizacao" placeholder="Ex: 06/2022" dense outlined required>
+          <v-text-field v-mask="'##/####'" v-model="atulizacao" id="atualizacao" placeholder="Ex: 06/2022" dense
+            outlined required>
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <label for="dibAnterior" class="labels pb-2">DIB-Anterior</label>
-          <v-text-field v-mask="'##/##/####'" v-model="dibAnterior" id="dibAnterior" placeholder="Ex: 17/06/2022" dense outlined>
+          <v-text-field v-mask="'##/##/####'" v-model="dibAnterior" id="dibAnterior" placeholder="Ex: 17/06/2022" dense
+            outlined>
           </v-text-field>
         </v-col>
       </v-row>
@@ -129,8 +133,8 @@
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <label for="info_calculo.dib" class="labels">DIB</label>
-          <v-text-field v-mask="'##/##/####'" @input="atulizarvalor()" dense outlined id="info_calculo.dib" v-model="info_calculo.dib"
-            type="text" size="sm" placeholder="Ex: 22/10/2020">
+          <v-text-field v-mask="'##/##/####'" @input="atulizarvalor()" dense outlined id="info_calculo.dib"
+            v-model="info_calculo.dib" type="text" size="sm" placeholder="Ex: 22/10/2020">
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
@@ -160,17 +164,19 @@
         <b-row class="row-one my-3 align-items-center">
           <b-col sm="3" v-if="beneficio === true">
             <v-autocomplete id="beneficio" :items="beneficiosInacumulveisBancoName"
-              v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?">
+              v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?" @input="beneficiosEspecialInfo(obj_beneficioAcumulado)" >
             </v-autocomplete>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio_inicial" class="labels">Início do Benefício</label>
-            <b-form-input v-mask="'##/##/####'" id="beneficio_inicial" v-model="obj_beneficioAcumulado.dib" type="text" size="sm">
+            <b-form-input v-mask="'##/##/####'" id="beneficio_inicial" v-model="obj_beneficioAcumulado.dib" type="text"
+              size="sm">
             </b-form-input>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio_final" class="labels">Fim do Benefício</label>
-            <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.dif" id="beneficio_final" type="text" size="sm">
+            <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.dif" id="beneficio_final" type="text"
+              size="sm">
             </b-form-input>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
@@ -183,23 +189,23 @@
         <b-row>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">Limite de Minimo e Maximo</label>
-            <input v-model="obj_beneficioAcumulado.limiteMinimoMaximo"
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.limiteMinimoMaximo"
               :value="obj_beneficioAcumulado.limiteMinimoMaximo" class="form-check-input" style="margin-left: 5px"
               type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">13 Salario</label>
-            <input v-model="obj_beneficioAcumulado.salario13" :value="obj_beneficioAcumulado.salario13"
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salario13" :value="obj_beneficioAcumulado.salario13"
               class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">Salario Minimo</label>
-            <input v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
               class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">13 Salario Obrigatorio</label>
-            <input v-model="obj_beneficioAcumulado.salario13Obrigatorio"
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salario13Obrigatorio"
               :value="obj_beneficioAcumulado.salario13Obrigatorio" class="form-check-input" style="margin-left: 5px"
               type="checkbox" id="beneficio" size="sm" />
           </b-col>
@@ -311,8 +317,8 @@
             placeholder="XX/XX/XXXX" /></label><label class="inputToPrint" id="ajuizamentoForm" />
         <br />
         <label class="camposInput">Início do Juros:
-          <input v-mask="'##/##/####'" v-model="inicio_juros" placeholder="XX/XXXX" /></label><label class="inputToPrint"
-          id="inicioJurosForm" />
+          <input v-mask="'##/##/####'" v-model="inicio_juros" placeholder="XX/XXXX" /></label><label
+          class="inputToPrint" id="inicioJurosForm" />
         <br />
         <!-- Criar Função -->
         <label class="camposInput">Valido até:
@@ -485,7 +491,7 @@
         <p>DIB: {{ beneficio.dib }}</p>
       </v-col>
       <v-col cols="12" sm="6" md="2">
-        <p>DIF: {{ beneficio.dif }}</p>
+        <p>DCB: {{ beneficio.dif }}</p>
       </v-col>
       <v-col cols="12" sm="6" md="2">
         <p>RMI: R${{ beneficio.rmi }}</p>
@@ -510,8 +516,8 @@
         <br />
       </div>
       <div class="column">
-        <input type="number" @input="parcelasDevida()" class="inputTetoAlcada" v-model="alcadaValor" placeholder="X,XX" /><label
-          class="inputCalculo" id="c" />
+        <input type="number" @input="parcelasDevida()" class="inputTetoAlcada" v-model="alcadaValor"
+          placeholder="X,XX" /><label class="inputCalculo" id="c" />
         <br />
         <input type="number" @input="parcelasDevida()" class="inputTetoAlcada" v-model="salariominimosAlcada"
           placeholder="X,XX" /><label class="inputCalculo" id="d" />
@@ -596,12 +602,12 @@
         <label class="inputToPrintAlcada" id="autorPlanilha" />
         <br />
         <label class="camposInputAlcada">DIB Jud:
-          <input v-mask="'##/##/####'" v-model="info_calculo.dib" placeholder="00/00/0000" /></label><label class="inputToPrint"
-          id="dibJudPlanilha" />
+          <input v-mask="'##/##/####'" v-model="info_calculo.dib" placeholder="00/00/0000" /></label><label
+          class="inputToPrint" id="dibJudPlanilha" />
         <br />
         <label class="camposInputAlcada">DIB Anterior:
-          <input v-mask="'##/##/####'" v-model="info_calculo.dibAnterior" @input="atulizarvalor()" placeholder="00/00/0000" /></label><label
-          class="inputToPrint" id="dibAnteriorPlanilha" />
+          <input v-mask="'##/##/####'" v-model="info_calculo.dibAnterior" @input="atulizarvalor()"
+            placeholder="00/00/0000" /></label><label class="inputToPrint" id="dibAnteriorPlanilha" />
         <br />
         <label class="camposInputAlcada">RMI Jud.:
           <input type="number" v-model="salarioInicial" placeholder="00/00" /></label><label class="inputToPrint"
@@ -609,12 +615,12 @@
         <br />
       </div>
       <div class="column">
-        <label class="camposInputAlcada">%RMI: <input type="number" placeholder="000,00" v-model="porcentagemRMI" /></label><label
-          class="inputToPrint" id="porCententagemRmiPlanilha" />
+        <label class="camposInputAlcada">%RMI: <input type="number" placeholder="000,00"
+            v-model="porcentagemRMI" /></label><label class="inputToPrint" id="porCententagemRmiPlanilha" />
         <br />
         <label class="camposInputAlcada">Período (Data de Início):
-          <input v-mask="'##/##/####'" v-model="dtInicial" placeholder="XX/XX/XXXX" /></label><label class="inputToPrint"
-          id="dataInicialPlanilha" />
+          <input v-mask="'##/##/####'" v-model="dtInicial" placeholder="XX/XX/XXXX" /></label><label
+          class="inputToPrint" id="dataInicialPlanilha" />
         <br />
         <!-- Criar Função -->
         <label class="camposInputAlcada">Período (Data de Fim):
@@ -636,42 +642,51 @@
       <template v-slot:item="{ item }">
         <tr>
           <td>
-            <input type="text" v-mask="'##/##/####'" v-model="item.data">
+            <the-mask
+              @input="item.data = formatarDataTable(item.data), acrescentarTaxaTablePrincipal(item), item.correcao = 0"
+              :mask="['XXAaaaaaa/##/####', '##/##/####']" v-model="item.data" />
           </td>
           <td>
             <input type="number" v-model="item.reajusteAcumulado">
           </td>
           <td v-if="beneficioInacumulavel[0]">
-            <input type="number" v-model="item.devido">
+            <input type="number" v-model="item.devido" @input="item = totaisSalarioTablePrincipal(item)"
+              :disabled="disableLinhaTable(item.data)">
           </td>
           <td v-if="beneficioInacumulavel[0]">
-            <input type="number" v-model="item.reajusteRecebido">
+            <input type="number" v-model="item.reajusteRecebido" @input="item = totaisSalarioTablePrincipal(item)"
+              :disabled="disableLinhaTable(item.data)">
           </td>
           <td v-if="beneficioInacumulavel[0]">
-            <input type="number" v-model="item.recebido">
+            <input type="number" v-model="item.recebido" @input="item = totaisSalarioTablePrincipal(item)"
+              :disabled="disableLinhaTable(item.data)">
           </td>
           <td>
-            <input type="number" v-model="item.salario">
+            <input type="number" @input="item = totaisSalarioTablePrincipal(item)" v-model="item.salario"
+              :disabled="disableLinhaTable(item.data)">
           </td>
           <td>
-            <input type="number" v-model="item.correcao">
+            <input v-model="item.correcao" :disabled="disableLinhaTable(item.data)">
           </td>
           <td>
-            <input type="number" v-model="item.salarioCorrigido">
+            <input type="number" v-model="item.salarioCorrigido" disabled>
           </td>
           <td>
-            <input type="number" v-model="item.juros">
+            <input type="number" v-model="item.juros" :disabled="disableLinhaTable(item.data)">
           </td>
           <td>
-            <input type="number" v-model="item.salarioJuros">
+            <input type="number" v-model="item.salarioJuros" disabled>
           </td>
           <td>
-            <input type="number" v-model="item.salarioTotal">
+            <input type="number" v-model="item.salarioTotal" disabled>
+          </td>
+          <td>
+            <v-icon @click="removerItemTablePrincipal(item)" color="red">mdi-delete</v-icon>
           </td>
         </tr>
       </template>
     </v-data-table>
-    <v-btn color="primary"  v-if="mode === 'table'" @click="adicionarLinha()" primary> Adicionar Linha</v-btn>
+    <v-btn color="primary" v-if="mode === 'table'" @click="adicionarLinha()" primary> Adicionar Linha</v-btn>
 
     <div id="tabelaImpostoRenda">
       <h4 class="center">
@@ -946,7 +961,7 @@
           <p>DIB: {{ beneficio.dib }}</p>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <p>DIF: {{ beneficio.dif }}</p>
+          <p>DCB: {{ beneficio.dif }}</p>
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <p>RMI: {{ beneficio.rmi }}</p>
@@ -1308,6 +1323,7 @@ export default {
     };
   },
   computed: {
+
     totaisValorCalculo() {
       this.totaisSalario()
       return {
@@ -1324,6 +1340,99 @@ export default {
     }
   },
   methods: {
+    beneficiosEspecialInfo(obj_beneficioAcumulado) {
+      if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
+        obj_beneficioAcumulado.salario13 = true;
+        obj_beneficioAcumulado.salario13Obrigatorio = true;
+        return obj_beneficioAcumulado;
+      } else {
+        return obj_beneficioAcumulado;
+      }
+    },
+    disableBeneficiosEspecial(obj_beneficioAcumulado){
+      if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    removerItemTablePrincipal(item) {
+      this.calc_total = this.calc_total.filter(obj => { return obj != item })
+    },
+    acrescentarTaxaTablePrincipal(item) {
+      item.data = this.formatarDataTable(item.data);
+      if (!this.disableLinhaTable(item.data) && (item.correcao == 0 || item.correcao == null)) {
+        this.calc_total = this.calc_total.filter(async obj => {
+          if (obj.correcao == null || obj.correcao == 0) {
+            let bodytaxaUnica = {
+              dib: item.data,
+              tipoJuros: this.tipoJuros,
+              tipoCorrecao: this.tipoCorrecao,
+              atulizacao: this.atulizacao,
+            };
+            let taxas = await axios
+              .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
+              .then(async (taxaUnica) => {
+                let taxaUnicaData = await taxaUnica.data;
+                let correcao = await taxaUnicaData.correcao;
+                let juros = await taxaUnicaData.juros;
+                return {
+                  correcao,
+                  juros
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+                console.log("error taxaUnica");
+                return {
+                  correcao: 1,
+                  juros: 1,
+                }
+              });
+            obj.juros = await taxas.juros;
+            obj.correcao = await taxas.correcao;
+            return obj
+          } else {
+            return obj
+          }
+        })
+      }
+    },
+    totaisSalarioTablePrincipal(item) {
+      if (item.devido == 0 || item.devido == null) {
+        item.salarioCorrigido = Math.floor(item.salario * item.correcao * 100) / 100;
+        item.salarioJuros = Math.floor(item.salario * item.juros * 100) / 100;
+        item.salarioTotal = Math.floor(item.salario * item.correcao * (1 + item.juros) * 100) / 100;
+        return item;
+      } else {
+        item.salario = (item.devido - item.recebido);
+        item.salarioCorrigido = Math.floor(item.salario * item.correcao * 100) / 100;
+        item.salarioJuros = Math.floor(item.salario * item.juros * 100) / 100;
+        item.salarioTotal = Math.floor(item.salario * item.correcao * (1 + item.juros) * 100) / 100;
+        return item;
+      }
+    },
+    formatarDataTable(data) {
+      let tamanhoData = data.toString().split('').length;
+      let tamanhoDataVerificacao = data.toString().split('/').length;
+      if (tamanhoDataVerificacao == 3) {
+        return data;
+      } else if (tamanhoData == 8 && tamanhoDataVerificacao == 1) {
+        let newData = data.toString().split('');
+        let dataFormatada = newData[0] + newData[1] + "/" + newData[2] + newData[3] + "/" + newData[4] + newData[5] + newData[6] + newData[7]
+        return dataFormatada
+      } else {
+        return data;
+      }
+    },
+    disableLinhaTable(data) {
+      let tamanhoDataVerificacao = data.toString().split('/');
+      if (tamanhoDataVerificacao.length == 3 && parseInt(tamanhoDataVerificacao[2]) >= 1995) {
+        return false
+      } else {
+        return true
+      }
+    },
     //FUNCAO SEM SENTIDO MAS EVITA BUG DE ATUALIZAO ENTAO NAO MEXA!!!!
     atulizarvalor() {
       let valor = this.valor_total;
@@ -1335,10 +1444,10 @@ export default {
       this.valor_juros += 100;
       this.valor_juros -= 100;
     },
-    adicionarLinha(){
+    adicionarLinha() {
       this.calc_total.push({
         data: "",
-        reajusteAcumulado: 0,
+        reajusteAcumulado: 1,
         devido: 0,
         reajusteRecebido: 0,
         recebido: 0,
@@ -1454,19 +1563,21 @@ export default {
               let beneficioProvisorio;
               this.beneficiosInacumulveisBanco.forEach((value) => {
                 if (
-                  parseInt(value.name.split("-")[0]) ==
-                  parseInt(this.info_calculo.beneficio.split("-")[0])
+                  (parseInt(value.name.split("-")[0]) ==
+                    parseInt(this.info_calculo.beneficio.split("-")[0]))
                 ) {
                   console.log("Beneficio provisorio: " + value.name);
                   beneficioProvisorio = value;
                 }
               });
               this.arrayBenficios.forEach((value) => {
-                beneficioProvisorio.inacumulavel.forEach((dado) => {
+                beneficioProvisorio.inacumulavel.forEach((dado, index) => {
                   if (
                     parseInt(dado.split("-")[0]) ==
                     parseInt(value.beneficio.split("-")[0])
                   ) {
+                    this.beneficioInacumulavel.push(value);
+                  } else if ((value.beneficio.includes("Seguro Desemprego") || value.beneficio.includes("Auxilio Defesa")) && index == beneficioProvisorio.inacumulavel.length - 1) {
                     this.beneficioInacumulavel.push(value);
                   }
                   timer = 500;
@@ -1928,8 +2039,8 @@ export default {
       let benficioVerdadeiro = beneficio;
       this.beneficiosInacumulveisBanco.forEach((value) => {
         if (
-          parseInt(value.name.split("-")[0]) ==
-          parseInt(beneficio.split("-")[0])
+          (parseInt(value.name.split("-")[0]) ==
+            parseInt(beneficio.split("-")[0])) || beneficio.includes("Seguro Desemprego") || beneficio.includes("Auxilio Defesa")
         ) {
           console.log("benefio e " + value.name);
           benficioVerdadeiro = value.name;
@@ -2059,32 +2170,7 @@ export default {
         });
     },
     async calcularEmLote() {
-      //this.atulizarInfosLote(this.calculoLote[0])
-      // const executar = async () =>{
-      //     let fazer = await this.atulizarInfosLote(this.calculoLote[0]);
-      //     console.log(fazer);
-      //     this.imprimirPdf(this.calculoLote[0])
-      //   }
-      //   console.log(executar());
       this.calculoLote.forEach(async (dado /*index*/) => {
-        // const print = () => {
-        //     return new Promise((resolve) => {
-        //       setTimeout(() => {
-        //         resolve("The request is successful. " + this.atulizarInfosLote(dado));
-        //       });
-        //     },);
-        //   };
-        //   const sleep = async () => {
-        //     let second_response = await print();
-        //     console.log(second_response);
-        //   };
-
-        //   sleep().then(() => {
-        //   this.printDiv()
-        //  });
-
-        // var caular = await this.calculo()
-        // caular
         const print = () => {
           return new Promise((resolve) => {
             setTimeout(() => {
@@ -2342,6 +2428,7 @@ export default {
     },
     beneficioAcumuladoCalculo() {
       let beneficioAcumulado13 = 0;
+      let beneficioAcumulado13Especial = 0;
       function decontar(
         value,
         dado,
@@ -2373,6 +2460,7 @@ export default {
             beneficioAcumulado13 = 0;
           } else {
             recebido = 0;
+            beneficioAcumulado13 = 0;
           }
         }
         console.log(dtFinal);
@@ -2470,7 +2558,21 @@ export default {
         };
         // }
       }
-      function manter(dado) {
+      function manter(dado, dtInicial) {
+        let dinicial = dtInicial.split("/");
+        if (dado.data.split("/")[0] != "13Salario") {
+          if (
+            dado.data.split("/")[1] == dinicial[1] &&
+            dado.data.split("/")[2] == dinicial[2]
+          ) {
+            beneficioAcumulado13Especial =
+              dinicial[0] >= 15 ? beneficioAcumulado13Especial++ : beneficioAcumulado13Especial;
+          } else {
+            beneficioAcumulado13Especial++;
+          }
+        } else {
+          beneficioAcumulado13Especial = 0;
+        }
         // console.log("slario juros: " + dado.salarioJuros);
         return {
           data: dado.data,
@@ -2487,6 +2589,63 @@ export default {
           salarioTotal: dado.salarioTotal,
         };
       }
+
+      function decontarExpecial(
+        value,
+        dado,
+        dtInicial,
+        dtFinal,
+        index,
+      ) {
+        console.log("Index: " + index);
+        let recebido = dado.devido > 0 ? dado.devido : dado.salario;
+
+        if (value.data.split("/")[0] != "13Salario") {
+          let dinicial = dtInicial.split("/");
+          if (
+            value.data.split("/")[1] == dinicial[1] &&
+            value.data.split("/")[2] == dinicial[2]
+          ) {
+            beneficioAcumulado13 =
+              dinicial[0] >= 15 ? beneficioAcumulado13++ : beneficioAcumulado13;
+            beneficioAcumulado13 =
+              dinicial[0] >= 15 ? beneficioAcumulado13++ : beneficioAcumulado13;
+          } else {
+            beneficioAcumulado13++;
+            beneficioAcumulado13Especial++;
+          }
+        } else {
+          recebido = (recebido / beneficioAcumulado13Especial) * beneficioAcumulado13;
+          beneficioAcumulado13 = 0;
+          beneficioAcumulado13Especial = 0;
+        }
+        return {
+          data: dado.data,
+          reajusteAcumulado: dado.reajusteAcumulado,
+          devido: dado.devido > 0 ? dado.devido : dado.salario,
+          reajusteRecebido: dado.reajusteAcumulado,
+          recebido:
+            dado.recebido > 0
+              ? Math.floor((dado.recebido + recebido) * 100) / 100
+              : Math.floor(recebido * 100) / 100,
+          salario: Math.floor((dado.salario - recebido) * 100) / 100,
+
+          correcao: dado.correcao,
+          salarioCorrigido:
+            Math.floor((dado.salario - recebido) * dado.correcao * 100) / 100,
+          juros: dado.juros,
+          salarioJuros:
+            Math.floor(
+              (dado.salario - recebido) * dado.juros * dado.correcao * 100
+            ) / 100,
+          salarioTotal:
+            Math.floor(
+              (dado.salario - recebido) * (dado.juros + 1) * dado.correcao * 100
+            ) / 100,
+        };
+        // }
+      }
+
       this.beneficioInacumulavel.forEach((info, index) => {
         let dataDib = info.dib.split("/");
         let dataDif = info.dif.split("/");
@@ -2557,25 +2716,41 @@ export default {
                     dataBeneficioAcumulado[2] == dataCalculo[2]
                   ) {
                     //console.log(decontar(value, dado));
-                    newArrayCalculo.push(
-                      decontar(
-                        value,
-                        dado,
-                        this.dtInicial,
-                        this.dtFinal,
-                        index,
-                        size,
-                        info.dib,
-                        info.dif,
-                        info.salario13
-                      )
-                    );
+                    if (info.beneficio.includes("Seguro Desemprego") || info.beneficio.includes("Auxilio Defesa")) {
+                      newArrayCalculo.push(
+                        decontarExpecial(
+                          value,
+                          dado,
+                          this.dtInicial,
+                          this.dtFinal,
+                          index,
+                          size,
+                          info.dib,
+                          info.dif,
+                          info.salario13
+                        )
+                      );
+                    } else {
+                      newArrayCalculo.push(
+                        decontar(
+                          value,
+                          dado,
+                          this.dtInicial,
+                          this.dtFinal,
+                          index,
+                          size,
+                          info.dib,
+                          info.dif,
+                          info.salario13
+                        )
+                      );
+                    }
                     alteracaoConfimada = true;
                   }
                 });
                 if (!alteracaoConfimada) {
                   // console.log(manter(dado));
-                  newArrayCalculo.push(manter(dado));
+                  newArrayCalculo.push(manter(dado, this.dtInicial));
                 }
               });
               this.calc_total = newArrayCalculo;
@@ -2686,6 +2861,11 @@ export default {
       this.total_processos = 0;
       this.valor_total = 0;
       this.valor_juros = 0;
+      this.valor_corrigido = 0;
+      this.iPvalorAnoAtual = 0;
+      this.competenciaAnoAnterior = 0
+      this.competenciaAnoAtual = 0;
+      this.iPvalorAnoAtual = 0;
       let dataAtual = new Date();
       let anoAtual = dataAtual.getFullYear();
 
