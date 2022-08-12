@@ -1373,7 +1373,7 @@ export default {
       }
     },
     disableBeneficiosEspecial(obj_beneficioAcumulado){
-      if (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa")) {
+      if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
         return true;
       } else {
         return false;
