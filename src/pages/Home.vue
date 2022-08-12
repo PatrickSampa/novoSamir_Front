@@ -860,63 +860,41 @@
         </div>
       </div>
       <br />
-      <div class="rowCalculo">
-        <div class="columnRight">
-          <label class="camposInput">Soma do Principal: R$</label>
-          <br />
-          <label class="camposInput">Soma do Juros: R$</label>
-          <br />
-          <label class="camposInput">12 Parcelas Vincendas: R$</label>
-          <br />
-          <br />
-          <label class="camposInput">Devido ao(s) Reclamante(s): R$</label>
-          <br />
-          <label class="camposInput">Honorários Advocatícios: R$</label>
-          <br />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Acordo: %</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Devido ao(s)
-            Reclamante(s)(Acordo):R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label v-if="procntagem_acordo != 0 && procntagem_acordo != null" class="camposInput">Honorários Advocatícios
-            (Acordo): R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br />
-          <label class="camposInput">Total do Processo: R$</label>
-          <br />
-          <br />
-        </div>
-        <div class="column">
-          {{ Math.floor(valor_corrigido * 100) / 100 }}
-          <label class="inputCalculo" id="somaPrincipal" />
-          <br />
-          {{ Math.floor(valor_juros * 100) / 100 }}
-          <label class="inputCalculo" id="somaJuros" />
-          <br />
-          {{ Math.floor(pacelasVencidas * 100) / 100 }}
-          <label class="inputCalculo" id="parcelasVincendas" />
-          <br />
-          <br />
-
-          {{
-              Math.floor(
-                (parseFloat(valor_corrigido) +
-                  parseFloat(valor_juros) -
-                  parseFloat(pacelasVencidas)) *
-                100
-              ) / 100
-          }}
-          <br />
-          {{ valorHonorarios }}
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">
-            {{ procntagem_acordo }}</b>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+      
+      <table id="testeTotal">
+        <tr>
+          <td id="textosResumo">Soma do Principal:</td>
+          <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Soma do Juros:</td>
+          <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
+        </tr>
+        <tr v-if="alcadaBoolean == true">
+          <td id="textosResumo">12 Parcelas Vincendas:</td>
+          <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
+        </tr>
+      </table>
+    <br />
+      <table id="testeTotal">
+        <tr>
+          <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
+          <td id="valoresResumo">R${{Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) - parseFloat(pacelasVencidas))*100)/100}}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Honorários Advocatícios:</td>
+          <td id="valoresResumo">R${{ valorHonorarios }}</td>
+        </tr>
+      </table>
+    <br />
+      <table id="testeTotal" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+        <tr>
+          <td id="textosResumo">Acordo:</td>
+          <td id="valoresResumo">%{{ procntagem_acordo }}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Devido ao(s) Reclamante(s)(Acordo):</td>
+          <td id="valoresResumo">R${{
               procntagem_acordo != 0 && procntagem_acordo != null
                 ? Math.floor(
                   (((parseFloat(valor_corrigido) +
@@ -932,12 +910,11 @@
                     parseFloat(pacelasVencidas)) *
                   100
                 ) / 100
-          }}
-          </b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+          }}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Honorários Advocatícios (Acordo):</td>
+          <td id="valoresResumo">R${{
               procntagem_acordo != 0 && procntagem_acordo != null
                 ? Math.floor(
                   ((parseFloat(valorHonorarios) *
@@ -946,12 +923,14 @@
                   100
                 ) / 100
                 : Math.floor(parseFloat(valorHonorarios) * 100) / 100
-          }}</b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br />
-          <br />
-          <p class="inputCalculo" id="totalProcesso">
-            {{
+          }}</td>
+        </tr>
+      </table>
+    <br  v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+      <table id="testeTotal">
+        <tr>
+          <td id="textosResumo">Total do Processo:</td>
+          <td id="valoresResumo">R${{
                 procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
                     (((parseFloat(valor_corrigido) +
@@ -969,13 +948,11 @@
                       parseFloat(valorHonorarios)) *
                     100
                   ) / 100
-            }}
-          </p>
-          <label class="inputCalculo" id="totalProcesso" />
-          <br />
-          <br />
-        </div>
-      </div>
+            }}</td>
+        </tr>
+      </table>
+
+
       <v-row v-for="beneficio of beneficioInacumulavel" :key="beneficio">
         <v-col cols="12" sm="6" md="3">
           <p>Beneficio recebido: {{ beneficio.beneficio }}</p>
@@ -3287,7 +3264,6 @@ export default {
         table,
         th,
         td {
-          border: 1px solid;
           text-align: left;
           margin-left: 0px;
           padding-left: 5px;
@@ -3299,7 +3275,23 @@ export default {
           width: 120%;
         }
 
-        
+        #testeTotal {
+          width: 100%;
+          text-align: center;
+        }
+
+        #textosResumo {
+          width: 50%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #valoresResumo {
+          width: 50%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
         `;
       style = style + "</style>";
 
@@ -3618,4 +3610,22 @@ td {
 #impostoRendaCompetencias {
   width: 20%;
 }
+
+#testeTotal {
+  width: 100%;
+  text-align: center;
+}
+
+#textosResumo {
+  width: 50%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#valoresResumo {
+  width: 50%;
+  text-align: left;
+  border: 1px solid white;
+}
+
 </style>
