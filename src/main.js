@@ -8,11 +8,19 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vuetify from './plugins/vuetify'
 import router from './config/router'
-import VueMask from 'v-mask';
-import VueSimpleAlert from "vue-simple-alert";
 
+
+import VueTheMask from 'vue-the-mask'
+Vue.use(VueTheMask)
+
+import VueMask from 'v-mask';
 Vue.use(VueMask);
+
+import VueSimpleAlert from "vue-simple-alert";
 Vue.use(VueSimpleAlert);
+
+
+
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
@@ -25,3 +33,4 @@ new Vue({
   vuetify,
   render: (h) => h(App)
 }).$mount('#app')
+
