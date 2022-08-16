@@ -164,7 +164,10 @@
         <b-row class="row-one my-3 align-items-center">
           <b-col sm="3" v-if="beneficio === true">
             <v-autocomplete id="beneficio" :items="beneficiosInacumulveisBancoName"
-              v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?" @input="beneficiosEspecialInfo(obj_beneficioAcumulado)" >
+
+              v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?"
+              @input="beneficiosEspecialInfo(obj_beneficioAcumulado)">
+
             </v-autocomplete>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
@@ -189,6 +192,7 @@
         <b-row>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">Limite de Minimo e Maximo</label>
+
             <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.limiteMinimoMaximo"
               :value="obj_beneficioAcumulado.limiteMinimoMaximo" class="form-check-input" style="margin-left: 5px"
               type="checkbox" id="beneficio" size="sm" />
@@ -200,11 +204,13 @@
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">Salario Minimo</label>
+
             <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
               class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">13 Salario Obrigatorio</label>
+
             <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salario13Obrigatorio"
               :value="obj_beneficioAcumulado.salario13Obrigatorio" class="form-check-input" style="margin-left: 5px"
               type="checkbox" id="beneficio" size="sm" />
@@ -860,63 +866,41 @@
         </div>
       </div>
       <br />
-      <div class="rowCalculo">
-        <div class="columnRight">
-          <label class="camposInput">Soma do Principal: R$</label>
-          <br />
-          <label class="camposInput">Soma do Juros: R$</label>
-          <br />
-          <label class="camposInput">12 Parcelas Vincendas: R$</label>
-          <br />
-          <br />
-          <label class="camposInput">Devido ao(s) Reclamante(s): R$</label>
-          <br />
-          <label class="camposInput">Honorários Advocatícios: R$</label>
-          <br />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Acordo: %</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Devido ao(s)
-            Reclamante(s)(Acordo):R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label v-if="procntagem_acordo != 0 && procntagem_acordo != null" class="camposInput">Honorários Advocatícios
-            (Acordo): R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br />
-          <label class="camposInput">Total do Processo: R$</label>
-          <br />
-          <br />
-        </div>
-        <div class="column">
-          {{ Math.floor(valor_corrigido * 100) / 100 }}
-          <label class="inputCalculo" id="somaPrincipal" />
-          <br />
-          {{ Math.floor(valor_juros * 100) / 100 }}
-          <label class="inputCalculo" id="somaJuros" />
-          <br />
-          {{ Math.floor(pacelasVencidas * 100) / 100 }}
-          <label class="inputCalculo" id="parcelasVincendas" />
-          <br />
-          <br />
-
-          {{
-              Math.floor(
-                (parseFloat(valor_corrigido) +
-                  parseFloat(valor_juros) -
-                  parseFloat(pacelasVencidas)) *
-                100
-              ) / 100
-          }}
-          <br />
-          {{ valorHonorarios }}
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">
-            {{ procntagem_acordo }}</b>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+      
+      <table id="testeTotal">
+        <tr>
+          <td id="textosResumo">Soma do Principal:</td>
+          <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Soma do Juros:</td>
+          <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
+        </tr>
+        <tr v-if="alcadaBoolean == true">
+          <td id="textosResumo">12 Parcelas Vincendas:</td>
+          <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
+        </tr>
+      </table>
+    <br />
+      <table id="testeTotal">
+        <tr>
+          <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
+          <td id="valoresResumo">R${{Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) - parseFloat(pacelasVencidas))*100)/100}}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Honorários Advocatícios:</td>
+          <td id="valoresResumo">R${{ valorHonorarios }}</td>
+        </tr>
+      </table>
+    <br />
+      <table id="testeTotal" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+        <tr>
+          <td id="textosResumo">Acordo:</td>
+          <td id="valoresResumo">%{{ procntagem_acordo }}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Devido ao(s) Reclamante(s)(Acordo):</td>
+          <td id="valoresResumo">R${{
               procntagem_acordo != 0 && procntagem_acordo != null
                 ? Math.floor(
                   (((parseFloat(valor_corrigido) +
@@ -932,12 +916,11 @@
                     parseFloat(pacelasVencidas)) *
                   100
                 ) / 100
-          }}
-          </b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+          }}</td>
+        </tr>
+        <tr>
+          <td id="textosResumo">Honorários Advocatícios (Acordo):</td>
+          <td id="valoresResumo">R${{
               procntagem_acordo != 0 && procntagem_acordo != null
                 ? Math.floor(
                   ((parseFloat(valorHonorarios) *
@@ -946,12 +929,14 @@
                   100
                 ) / 100
                 : Math.floor(parseFloat(valorHonorarios) * 100) / 100
-          }}</b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br />
-          <br />
-          <p class="inputCalculo" id="totalProcesso">
-            {{
+          }}</td>
+        </tr>
+      </table>
+    <br  v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+      <table id="testeTotal">
+        <tr>
+          <td id="textosResumo">Total do Processo:</td>
+          <td id="valoresResumo">R${{
                 procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
                     (((parseFloat(valor_corrigido) +
@@ -969,13 +954,11 @@
                       parseFloat(valorHonorarios)) *
                     100
                   ) / 100
-            }}
-          </p>
-          <label class="inputCalculo" id="totalProcesso" />
-          <br />
-          <br />
-        </div>
-      </div>
+            }}</td>
+        </tr>
+      </table>
+
+
       <v-row v-for="beneficio of beneficioInacumulavel" :key="beneficio">
         <v-col cols="12" sm="6" md="3">
           <p>Beneficio recebido: {{ beneficio.beneficio }}</p>
@@ -1373,6 +1356,7 @@ export default {
       }
     },
     disableBeneficiosEspecial(obj_beneficioAcumulado){
+
       if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
         return true;
       } else {
@@ -2467,7 +2451,7 @@ export default {
         let dinicial = dtInicial.split("/");
         let recebido = value.salario;
 
-        if (value.data.split("/")[0] != "13Salario") {
+        if (!value.data.split("/")[0].includes("13Salario")) {
           if (
             value.data.split("/")[1] == dinicial[1] &&
             value.data.split("/")[2] == dinicial[2]
@@ -2583,7 +2567,8 @@ export default {
       }
       function manter(dado, dtInicial) {
         let dinicial = dtInicial.split("/");
-        if (dado.data.split("/")[0] != "13Salario") {
+        if (!dado.data.split("/")[0].includes("13Salario")) {
+
           if (
             dado.data.split("/")[1] == dinicial[1] &&
             dado.data.split("/")[2] == dinicial[2]
@@ -2621,9 +2606,10 @@ export default {
         index,
       ) {
         console.log("Index: " + index);
-        let recebido = dado.devido > 0 ? dado.devido : dado.salario;
+        let devido = dado.devido > 0 ? dado.devido : dado.salario;
 
-        if (value.data.split("/")[0] != "13Salario") {
+        if (!value.data.split("/")[0].includes("13Salario")) {
+
           let dinicial = dtInicial.split("/");
           if (
             value.data.split("/")[1] == dinicial[1] &&
@@ -2638,32 +2624,34 @@ export default {
             beneficioAcumulado13Especial++;
           }
         } else {
-          recebido = (recebido / beneficioAcumulado13Especial) * beneficioAcumulado13;
+
+          //dado.salario = Math.floor((dado.salario - ((devido / beneficioAcumulado13Especial) * (beneficioAcumulado13))) * 100) / 100;
+          devido = Math.floor(((devido / beneficioAcumulado13Especial) * ( beneficioAcumulado13)) * 100) / 100;
           beneficioAcumulado13 = 0;
           beneficioAcumulado13Especial = 0;
         }
         return {
           data: dado.data,
           reajusteAcumulado: dado.reajusteAcumulado,
-          devido: dado.devido > 0 ? dado.devido : dado.salario,
+          devido: dado.devido > 0 ?  (Math.floor((dado.devido - devido) * 100) / 100) : (Math.floor((dado.salario - devido) * 100) / 100),
           reajusteRecebido: dado.reajusteAcumulado,
           recebido:
             dado.recebido > 0
-              ? Math.floor((dado.recebido + recebido) * 100) / 100
-              : Math.floor(recebido * 100) / 100,
-          salario: Math.floor((dado.salario - recebido) * 100) / 100,
+              ? Math.floor((dado.recebido) * 100) / 100
+              : 0,
+          salario: Math.floor((dado.salario - devido) * 100) / 100,
 
           correcao: dado.correcao,
           salarioCorrigido:
-            Math.floor((dado.salario - recebido) * dado.correcao * 100) / 100,
+            Math.floor((dado.salario - devido) * dado.correcao * 100) / 100,
           juros: dado.juros,
           salarioJuros:
             Math.floor(
-              (dado.salario - recebido) * dado.juros * dado.correcao * 100
+              (dado.salario - devido) * dado.juros * dado.correcao * 100
             ) / 100,
           salarioTotal:
             Math.floor(
-              (dado.salario - recebido) * (dado.juros + 1) * dado.correcao * 100
+              (dado.salario - devido) * (dado.juros + 1) * dado.correcao * 100
             ) / 100,
         };
         // }
@@ -2717,7 +2705,7 @@ export default {
               let alteracaoConfimada = false;
               // console.log(response.data);
               let beneficioAcumulado = response.data;
-              this.calc_total.forEach((dado) => {
+              this.calc_total.forEach((dado, indexTableCal) => {
                 let dataCalculo = dado.data.split("/");
                 alteracaoConfimada = false;
                 let size = beneficioAcumulado.length - 1;
@@ -2732,11 +2720,16 @@ export default {
                     (dataFinal[0] == dataCalculo[0])
                   );
                   if (
-                    (dataBeneficioAcumulado[0] == dataCalculo[0] ||
-                      dataincial[0] == dataCalculo[0] ||
-                      dataFinal[0] == dataCalculo[0]) &&
-                    dataBeneficioAcumulado[1] == dataCalculo[1] &&
-                    dataBeneficioAcumulado[2] == dataCalculo[2]
+                    (dataBeneficioAcumulado[0] == dataCalculo[0] &&
+                      dataBeneficioAcumulado[1] == dataCalculo[1] &&
+                      dataBeneficioAcumulado[2] == dataCalculo[2]
+                      || (
+                        dataincial[0] == dataBeneficioAcumulado[0] && indexTableCal == 0 && dataincial[1] == dataBeneficioAcumulado[1] && dataincial[2] == dataBeneficioAcumulado[2]
+                      )
+                      || (
+                        dataFinal[0] == dataBeneficioAcumulado[0] && indexTableCal == (this.calc_total.length - 1) && dataFinal[1] == dataBeneficioAcumulado[1] && dataFinal[2] == dataBeneficioAcumulado[2]
+                      )
+                    )
                   ) {
                     //console.log(decontar(value, dado));
                     if (info.beneficio.includes("Seguro Desemprego") || info.beneficio.includes("Auxilio Defesa")) {
@@ -3287,7 +3280,6 @@ export default {
         table,
         th,
         td {
-          border: 1px solid;
           text-align: left;
           margin-left: 0px;
           padding-left: 5px;
@@ -3299,7 +3291,23 @@ export default {
           width: 120%;
         }
 
-        
+        #testeTotal {
+          width: 100%;
+          text-align: center;
+        }
+
+        #textosResumo {
+          width: 50%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #valoresResumo {
+          width: 50%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
         `;
       style = style + "</style>";
 
@@ -3618,4 +3626,22 @@ td {
 #impostoRendaCompetencias {
   width: 20%;
 }
+
+#testeTotal {
+  width: 100%;
+  text-align: center;
+}
+
+#textosResumo {
+  width: 50%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#valoresResumo {
+  width: 50%;
+  text-align: left;
+  border: 1px solid white;
+}
+
 </style>
