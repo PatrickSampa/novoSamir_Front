@@ -164,8 +164,10 @@
         <b-row class="row-one my-3 align-items-center">
           <b-col sm="3" v-if="beneficio === true">
             <v-autocomplete id="beneficio" :items="beneficiosInacumulveisBancoName"
+
               v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?"
               @input="beneficiosEspecialInfo(obj_beneficioAcumulado)">
+
             </v-autocomplete>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
@@ -190,27 +192,28 @@
         <b-row>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">Limite de Minimo e Maximo</label>
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
-              v-model="obj_beneficioAcumulado.limiteMinimoMaximo" :value="obj_beneficioAcumulado.limiteMinimoMaximo"
-              class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
+
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.limiteMinimoMaximo"
+              :value="obj_beneficioAcumulado.limiteMinimoMaximo" class="form-check-input" style="margin-left: 5px"
+              type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">13 Salario</label>
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
-              v-model="obj_beneficioAcumulado.salario13" :value="obj_beneficioAcumulado.salario13"
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salario13" :value="obj_beneficioAcumulado.salario13"
               class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">Salario Minimo</label>
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
-              v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
+
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
               class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">13 Salario Obrigatorio</label>
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
-              v-model="obj_beneficioAcumulado.salario13Obrigatorio" :value="obj_beneficioAcumulado.salario13Obrigatorio"
-              class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
+
+            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salario13Obrigatorio"
+              :value="obj_beneficioAcumulado.salario13Obrigatorio" class="form-check-input" style="margin-left: 5px"
+              type="checkbox" id="beneficio" size="sm" />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">RMI%</label>
@@ -1354,7 +1357,8 @@ export default {
         return obj_beneficioAcumulado;
       }
     },
-    disableBeneficiosEspecial(obj_beneficioAcumulado) {
+    disableBeneficiosEspecial(obj_beneficioAcumulado){
+
       if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
         return true;
       } else {
@@ -2566,6 +2570,7 @@ export default {
       function manter(dado, dtInicial) {
         let dinicial = dtInicial.split("/");
         if (!dado.data.split("/")[0].includes("13Salario")) {
+
           if (
             dado.data.split("/")[1] == dinicial[1] &&
             dado.data.split("/")[2] == dinicial[2]
@@ -2606,6 +2611,7 @@ export default {
         let devido = dado.devido > 0 ? dado.devido : dado.salario;
 
         if (!value.data.split("/")[0].includes("13Salario")) {
+
           let dinicial = dtInicial.split("/");
           if (
             value.data.split("/")[1] == dinicial[1] &&
@@ -2620,6 +2626,7 @@ export default {
             beneficioAcumulado13Especial++;
           }
         } else {
+
           //dado.salario = Math.floor((dado.salario - ((devido / beneficioAcumulado13Especial) * (beneficioAcumulado13))) * 100) / 100;
           devido = Math.floor(((devido / beneficioAcumulado13Especial) * (beneficioAcumulado13)) * 100) / 100;
           beneficioAcumulado13 = 0;
