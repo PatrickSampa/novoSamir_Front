@@ -866,7 +866,7 @@
         </div>
       </div>
       <br />
-      
+
       <table id="testeTotal">
         <tr>
           <td id="textosResumo">Soma do Principal:</td>
@@ -881,18 +881,20 @@
           <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
         </tr>
       </table>
-    <br />
+      <br />
       <table id="testeTotal">
         <tr>
           <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
-          <td id="valoresResumo">R${{Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) - parseFloat(pacelasVencidas))*100)/100}}</td>
+          <td id="valoresResumo">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
+              parseFloat(pacelasVencidas)) * 100) / 100
+          }}</td>
         </tr>
         <tr>
           <td id="textosResumo">Honorários Advocatícios:</td>
           <td id="valoresResumo">R${{ valorHonorarios }}</td>
         </tr>
       </table>
-    <br />
+      <br />
       <table id="testeTotal" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
         <tr>
           <td id="textosResumo">Acordo:</td>
@@ -932,29 +934,29 @@
           }}</td>
         </tr>
       </table>
-    <br  v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+      <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
       <table id="testeTotal">
         <tr>
           <td id="textosResumo">Total do Processo:</td>
           <td id="valoresResumo">R${{
-                procntagem_acordo != 0 && procntagem_acordo != null
-                  ? Math.floor(
-                    (((parseFloat(valor_corrigido) +
-                      parseFloat(valor_juros) -
-                      parseFloat(pacelasVencidas) +
-                      parseFloat(valorHonorarios)) *
-                      parseFloat(procntagem_acordo)) /
-                      100) *
-                    100
-                  ) / 100
-                  : Math.floor(
-                    (parseFloat(valor_corrigido) +
-                      parseFloat(valor_juros) -
-                      parseFloat(pacelasVencidas) +
-                      parseFloat(valorHonorarios)) *
-                    100
-                  ) / 100
-            }}</td>
+              procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
+                  (((parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas) +
+                    parseFloat(valorHonorarios)) *
+                    parseFloat(procntagem_acordo)) /
+                    100) *
+                  100
+                ) / 100
+                : Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas) +
+                    parseFloat(valorHonorarios)) *
+                  100
+                ) / 100
+          }}</td>
         </tr>
       </table>
 
@@ -2344,7 +2346,7 @@ export default {
           })
           .catch((erro) => {
             console.log(erro);
-            console.log("erro beneficioa Acumulado");
+            console.log("erro Alcada");
           });
       });
       //})
@@ -2626,14 +2628,14 @@ export default {
         } else {
 
           //dado.salario = Math.floor((dado.salario - ((devido / beneficioAcumulado13Especial) * (beneficioAcumulado13))) * 100) / 100;
-          devido = Math.floor(((devido / beneficioAcumulado13Especial) * ( beneficioAcumulado13)) * 100) / 100;
+          devido = Math.floor(((devido / beneficioAcumulado13Especial) * (beneficioAcumulado13)) * 100) / 100;
           beneficioAcumulado13 = 0;
           beneficioAcumulado13Especial = 0;
         }
         return {
           data: dado.data,
           reajusteAcumulado: dado.reajusteAcumulado,
-          devido: dado.devido > 0 ?  (Math.floor((dado.devido - devido) * 100) / 100) : (Math.floor((dado.salario - devido) * 100) / 100),
+          devido: dado.devido > 0 ? (Math.floor((dado.devido - devido) * 100) / 100) : (Math.floor((dado.salario - devido) * 100) / 100),
           reajusteRecebido: dado.reajusteAcumulado,
           recebido:
             dado.recebido > 0
@@ -2724,10 +2726,10 @@ export default {
                       dataBeneficioAcumulado[1] == dataCalculo[1] &&
                       dataBeneficioAcumulado[2] == dataCalculo[2]
                       || (
-                        dataincial[0] == dataBeneficioAcumulado[0] && indexTableCal == 0 && dataincial[1] == dataBeneficioAcumulado[1] && dataincial[2] == dataBeneficioAcumulado[2]
+                        dataincial[0] == dataCalculo[0] && indexTableCal == 0 && dataincial[1] == dataBeneficioAcumulado[1] && dataincial[2] == dataBeneficioAcumulado[2]
                       )
                       || (
-                        dataFinal[0] == dataBeneficioAcumulado[0] && indexTableCal == (this.calc_total.length - 1) && dataFinal[1] == dataBeneficioAcumulado[1] && dataFinal[2] == dataBeneficioAcumulado[2]
+                        dataFinal[0] == dataCalculo[0] && indexTableCal == (this.calc_total.length - 1) && dataFinal[1] == dataBeneficioAcumulado[1] && dataFinal[2] == dataBeneficioAcumulado[2]
                       )
                     )
                   ) {
@@ -3643,5 +3645,4 @@ td {
   text-align: left;
   border: 1px solid white;
 }
-
 </style>

@@ -17,7 +17,7 @@
     <div class="logged">
       <span class="pr-3" style="color: black">Beremiz Samir</span>
       <v-avatar color="indigo" size="36">
-        <span class="white--text text-h5">LP</span>
+        <span class="white--text text-h5">SB</span>
       </v-avatar>
       <v-btn icon to="/">
         <v-icon color="black">mdi-export</v-icon>
