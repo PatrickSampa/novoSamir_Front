@@ -377,7 +377,7 @@
       <div class="columnRight">
         <label class="camposInput">Soma do Principal: R$</label>
         <br />
-        <label class="camposInput">Soma do Juros: R$</label>
+        <label class="camposInput">Juros de mora: R$</label>
         <br />
         <label class="camposInput">12 Parcelas Vincendas: R$</label>
         <br />
@@ -589,7 +589,6 @@
         }}
         <label class="inputCalculo" id="n" />
         <br />
-        <br />
       </div>
     </div>
 
@@ -789,11 +788,27 @@
 
     <v-card v-if="!add_taxa" id="areaToPrint">
       <div>
-        <h2 class="centerAGU">AGU</h2>
-        <h3 class="center">PROCURADORIA GERAL FEDERAL</h3>
-        <h3 class="center">
+        <h3 class="centerAGU">AGU</h3>
+        <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
+        <h4 class="center">
           EQUIPE REGIONAL DE CÁLCULOS E PAGAMENTOS PREVIDENCIÁRIOS 1ª REGIÃO
-        </h3>
+        </h4>
+        
+
+        <table id="info-inicial">  
+          <tbody>   
+            <tr id="info-inicial-linha">
+              <td id="info-inicial-coluna">Processo n°</td>
+              <td id="info-inicial-coluna">0000365-83.2018.8.11.0085</td>
+            </tr>
+            <tr id="info-inicial-linha">
+              <td id="info-inicial-coluna">Parte Autora</td>
+              <td id="info-inicial-coluna">teste</td>
+            </tr>
+          </tbody>
+        </table> 
+
+
         <h4 class="center">REVISÃO DE BENEFÍCIOS</h4>
         <div class="rowInputs">
           <div class="column">
@@ -868,41 +883,83 @@
       <br />
 
       <table id="testeTotal">
-        <tr>
-          <td id="textosResumo">Soma do Principal:</td>
-          <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Soma do Juros:</td>
-          <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
-        </tr>
-        <tr v-if="alcadaBoolean == true">
-          <td id="textosResumo">12 Parcelas Vincendas:</td>
-          <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
-        </tr>
-      </table>
-      <br />
-      <table id="testeTotal">
-        <tr>
-          <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
-          <td id="valoresResumo">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
+        <thead>
+          <tr >
+              <th scope="col" id="thead-limpo-menor"></th>
+              <th scope="col" id="thead-limpo">Total no Período de Cálculo</th>
+              <th scope="col" id="thead-limpo">Cálculo para Execução</th>
+          </tr>
+        </thead>   
+        <tbody>   
+          <tr>
+            <td id="textosResumo"></td>
+            <td id="valoresResumo"></td>
+            <td id="valor-percentual-execucao">(100%)</td>
+          </tr>
+          <tr>
+            <td id="textosResumo">Soma do Principal:</td>
+            <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
+          </tr>
+          <tr>
+            <td id="textosResumo">Juros de mora:</td>
+            <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
+          </tr>
+          <tr v-if="alcadaBoolean == true">
+            <td id="textosResumo">12 Parcelas Vincendas:</td>
+            <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
+          </tr>
+        </tbody>
+        </table>
+        <br />
+        <table id="testeTotal">
+        <tbody>
+          <tr>
+            <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
+            <td id="valoresResumo">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
+                parseFloat(pacelasVencidas)) * 100) / 100
+            }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
               parseFloat(pacelasVencidas)) * 100) / 100
           }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Honorários Advocatícios:</td>
-          <td id="valoresResumo">R${{ valorHonorarios }}</td>
-        </tr>
-      </table>
-      <br />
-      <table id="testeTotal" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
-        <tr>
-          <td id="textosResumo">Acordo:</td>
-          <td id="valoresResumo">%{{ procntagem_acordo }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Devido ao(s) Reclamante(s)(Acordo):</td>
-          <td id="valoresResumo">R${{
+          </tr>
+          <tr>
+            <td id="textosResumo">Honorários Advocatícios:</td>
+            <td id="valoresResumo">R${{ valorHonorarios }}</td>
+            <td id="valoresResumoExecucao">R${{ valorHonorarios }}</td>
+          </tr>
+        </tbody>
+        </table>
+        <br />
+        <table id="testeTotal" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+        <tbody>
+          <tr>
+            <td id="textosResumo">Acordo:</td>
+            <td id="valoresResumo">%{{ procntagem_acordo }}</td>
+            <td id="valoresResumoExecucao">%{{ procntagem_acordo }}</td>
+          </tr>
+          <tr>
+            <td id="textosResumo">Devido ao(s) Reclamante(s)(Acordo):</td>
+            <td id="valoresResumo">R${{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                  ? Math.floor(
+                    (((parseFloat(valor_corrigido) +
+                      parseFloat(valor_juros) -
+                      parseFloat(pacelasVencidas)) *
+                      parseFloat(procntagem_acordo)) /
+                      100) *
+                    100
+                  ) / 100
+                  : Math.floor(
+                    (parseFloat(valor_corrigido) +
+                      parseFloat(valor_juros) -
+                      parseFloat(pacelasVencidas)) *
+                    100
+                  ) / 100
+            }}</td>
+            <td id="valoresResumoExecucao">R${{
               procntagem_acordo != 0 && procntagem_acordo != null
                 ? Math.floor(
                   (((parseFloat(valor_corrigido) +
@@ -919,10 +976,20 @@
                   100
                 ) / 100
           }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Honorários Advocatícios (Acordo):</td>
-          <td id="valoresResumo">R${{
+          </tr>
+          <tr>
+            <td id="textosResumo">Honorários Advocatícios (Acordo):</td>
+            <td id="valoresResumo">R${{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                  ? Math.floor(
+                    ((parseFloat(valorHonorarios) *
+                      parseFloat(procntagem_acordo)) /
+                      100) *
+                    100
+                  ) / 100
+                  : Math.floor(parseFloat(valorHonorarios) * 100) / 100
+            }}</td>
+            <td id="valoresResumoExecucao">R${{
               procntagem_acordo != 0 && procntagem_acordo != null
                 ? Math.floor(
                   ((parseFloat(valorHonorarios) *
@@ -932,7 +999,8 @@
                 ) / 100
                 : Math.floor(parseFloat(valorHonorarios) * 100) / 100
           }}</td>
-        </tr>
+          </tr>
+      </tbody>  
       </table>
       <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
       <table id="testeTotal">
@@ -957,6 +1025,25 @@
                   100
                 ) / 100
           }}</td>
+          <td id="valoresResumoExecucao">R${{
+            procntagem_acordo != 0 && procntagem_acordo != null
+              ? Math.floor(
+                (((parseFloat(valor_corrigido) +
+                  parseFloat(valor_juros) -
+                  parseFloat(pacelasVencidas) +
+                  parseFloat(valorHonorarios)) *
+                  parseFloat(procntagem_acordo)) /
+                  100) *
+                100
+              ) / 100
+              : Math.floor(
+                (parseFloat(valor_corrigido) +
+                  parseFloat(valor_juros) -
+                  parseFloat(pacelasVencidas) +
+                  parseFloat(valorHonorarios)) *
+                100
+              ) / 100
+        }}</td>
         </tr>
       </table>
 
@@ -979,6 +1066,159 @@
         </v-col>
       </v-row>
       <img src="" alt="" />
+
+<!-- Adições ao gerador de PDF (09/2022) -->
+<br> 
+<div id="observacoes-div-texto">
+  Cálculo efetuado pelo vencimento do débito. Sem honorários.<br>
+Total para cada competência = Principal + atualização monetária + juros de mora (se for o caso).<br>
+Juros de mora de 12% ao ano até 06/2009 + Lei 11960/09 + juros variáveis, na hipótese de execução.<br>
+ORTN/OTN/BTN até 02/91 + INPC até 12/92 + IRSM ATÉ 02/94 + URV até 06/94 + IPCR até 06/95 + INPC até 04/96.<br>
+IGP-DI até 08/2006 + INPC até 31/05/2009.<br>
+TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
+</div>    
+
+<table id="tabelaResumo">
+  <thead>
+    <tr>
+        <th scope="col" id="thead-centro"><h4>Resumo</h4></th>
+        <th scope="col" id="thead-invisivel"></th>
+        <th scope="col" id="thead-invisivel"></th>
+        <th scope="col" id="thead-invisivel"></th>
+    </tr>
+  </thead>
+</table>
+<div id="linha-horizontal"></div>
+<table id="tabelaResumo">
+  <tbody>   
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">Benefício:</td>
+      <td id="colunaResumoDireita">Exemplo Aposentadoria</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">DER:</td>
+      <td id="colunaResumoDireita">Exemplo -</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">DIB:</td>
+      <td id="colunaResumoDireita">Exemplo 00/00/0000</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">DIP:</td>
+      <td id="colunaResumoDireita">Exemplo 00/00/0000</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">Valor Principal (R$):</td>
+      <td id="colunaResumoDireita">00.000,00</td>
+      <td id="colunaVaziaDireita">(RPV)</td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">Valor Honorários (R$): </td>
+      <td id="colunaResumoDireita">0,00</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+  </tbody>
+  </table>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <table id="tabelaResumo">
+    <thead>
+      <tr>
+          <th scope="col" id="thead-centro"><h4> Análise de Competência do Juizado Especial Federal</h4></th>
+          <th scope="col" id="thead-invisivel"></th>
+          <th scope="col" id="thead-invisivel"></th>
+          <th scope="col" id="thead-invisivel"></th>
+          <th scope="col" id="thead-invisivel"></th>
+      </tr>
+    </thead>
+  </table>
+  <div id="linha-horizontal"></div>
+  <table id="tabelaResumo">
+    <tbody>   
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Total de parcelas devidas até a data do ajuizamento </td>
+        <td id="colunaAnaliseEsquerda">(da/ta/data)</td>
+        <td id="colunaAnaliseDireita">valor, 0000</td>
+        <td id="colunaVazia"></td>
+      </tr>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s)</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">44.081,80</td>
+        <td id="colunaVazia"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="linha-soma"></div>
+  <table id="tabelaResumo">
+    <tbody>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Valor da causa na data do ajuizamento da ação</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">199.629,18</td>
+        <td id="colunaVazia"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="linha-horizontal-separacao"></div>
+  <br>
+  <table id="tabelaResumo">
+    <tbody>
+        <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Limite de 60 salários mínimos em:</td>
+        <td id="colunaAnaliseEsquerda">06/04/2018</td>
+        <td id="colunaAnaliseDireita">57.240,00</td>
+        <td id="colunaVazia"></td>
+      </tr>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Parcela referente à renúncia pela alçada do JEF no ajuizamento</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">142.389,18</td>
+        <td id="colunaVazia"></td>
+      </tr>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">(*) Valor atualizado da renúncia pela alçada do JEF</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">185.249,65</td>
+        <td id="colunaVazia"></td>
+      </tr>
+    </tbody>
+  </table> 
+    <div id="linha-horizontal-separacao"></div>
+  <div id="observacoes-div">
+    <br>
+    Obs: A parcela vincenda ocorre a partir do dia primeiro de cada mês.
+    <br>
+    Obs.: Incompetência: parcelas devidas superam o teto do JEF na data do ajuizamento.
+    <br>
+    Atenção: os valores desta planilha referem-se a cálculo para fins de execução invertida / impugnação.
+    <br>
+    <br>
+  </div>
+
+
 
       <!-- TETO DE ALÇADA -->
       <div v-if="alcadaBoolean == true">
@@ -3299,16 +3539,159 @@ export default {
         }
 
         #textosResumo {
-          width: 50%;
+          width: 42%;
+          text-align: right;
+          border: 1px solid white;
+        }
+        
+        #thead-limpo {
+          border: 1px solid white;
+          width: 29%;
+          font-size: 14px;
+        }
+
+        #thead-limpo-menor {
+          border: 1px solid white;
+          width: 42%;
+        }
+
+        #thead-centro {
+          border: 1px solid white;
+          width: 100%;
+          text-align: center;
+        }
+
+        #thead-invisivel {
+          border: 1px solid white;
+          width: 1%;
+        }
+
+
+        #valoresResumo {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumo2 {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumoExecucao {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valor-percentual-execucao {
+          width: 25%;
+          text-align: center;
+          border: 1px solid white;
+        }
+
+        #tabelaResumo {
+          width: 100%;
+          text-align: center;
+        }
+
+        #colunaVazia {
+          width: 15%;
           text-align: right;
           border: 1px solid white;
         }
 
-        #valoresResumo {
-          width: 50%;
+        #colunaVaziaDireita {
+          width: 45%;
           text-align: left;
           border: 1px solid white;
         }
+
+        #colunaResumoEsquerda {
+          width: 25%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaResumoDireita {
+          width: 15%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-horizontal {
+          width: 57%;
+          border: 1px solid #000;
+          margin-left: 20%;
+          margin-top: 0%;
+        }
+
+        #colunaAnaliseTexto {
+          width: 35%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseEsquerda {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseDireita {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-soma {
+          width: 13%;
+          border: 1px solid #000;
+          margin-left: 69%;
+          margin-top: -4px;
+        }
+
+        #linha-horizontal-separacao {
+          width: 60%;
+          border: 1px solid black;
+          margin-left: 21%;
+          margin-top: -1px;
+          margin-bottom: -10px;
+        }
+
+        #observacoes-div {
+          width: 50%;
+          margin-left: 25%;
+          font-size: small;
+        }
+
+        #observacoes-div-texto {
+          width:90%;
+          margin-left: 10%;
+          font-size: small;
+        }
+        
+        #info-inicial {
+          width: 50%;
+          margin-left: 5%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+        #info-inicial-coluna {
+          width: 15%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+
+        #info-inicial-linha {
+          width: 100%;
+          text-align: left;
+          border: 2px solid green;
+        }
+
 
         `;
       style = style + "</style>";
@@ -3597,7 +3980,9 @@ v-card {
 }
 
 table,
-th,
+th {
+  border: 1px solid white;
+}
 td {
   border: 1px solid;
   text-align: left;
@@ -3641,8 +4026,121 @@ td {
 }
 
 #valoresResumo {
-  width: 50%;
+  width: 25%;
+  text-align: center;
+  border: 1px solid white;
+}
+
+#valoresResumoExecucao {
+  width: 25%;
+  text-align: center;
+  border: 1px solid white;
+}
+
+#valor-percentual-execucao {
+  width: 25%;
+  text-align: center;
+  border: 1px solid white;
+}
+
+#tabelaResumo {
+  width: 100%;
+  text-align: center;
+}
+
+#colunaVazia {
+  width: 15%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#colunaVaziaDireita {
+  width: 45%;
   text-align: left;
   border: 1px solid white;
 }
+
+#colunaResumoEsquerda {
+  width: 25%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#colunaResumoDireita {
+  width: 15%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#linha-horizontal {
+  width: 50%;
+  border: 2px solid #000;
+  margin-left: 25%;
+  margin-top: -1%;
+}
+
+#colunaAnaliseTexto {
+  width: 20%;
+  text-align: left;
+  border: 1px solid white;
+}
+
+#colunaAnaliseEsquerda {
+  width: 2%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#colunaAnaliseDireita {
+  width: 2%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#linha-soma {
+  width: 7%;
+  border: 1px solid #000;
+  margin-left: 68%;
+  margin-top: -7px;
+}
+
+#linha-horizontal-separacao {
+  width: 40%;
+  border: 1px solid #000;
+  margin-left: 30%;
+  margin-top: -2px;
+  margin-bottom: -20px;
+}
+
+#observacoes-div {
+  width: 50%;
+  margin-left: 25%;
+  font-size: small;
+}
+
+#observacoes-div-texto {
+  width: 70%;
+  margin-left: 10%;
+  font-size: small;
+}
+
+#info-inicial {
+  width: 30%;
+  margin-left: 5%;
+  text-align: left;
+  border: 1px solid white;
+}
+
+#info-inicial-coluna {
+  width: 15%;
+  text-align: left;
+  border: 2px solid white;
+}
+
+#info-inicial-linha {
+  width: 100%;
+  text-align: left;
+  border: 2px solid white;
+}
+
 </style>
