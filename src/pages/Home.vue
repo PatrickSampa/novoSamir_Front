@@ -142,6 +142,11 @@
             :value="salario13Obrigatorio" />
           <label for="salario13" class="labels pb-2">13° Salário Obrigatorio</label>
         </v-col>
+        <v-col cols="12" sm="6" md="2">
+          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="selic"
+            :value="selic" />
+          <label for="salario13" class="labels pb-2">Selic</label>
+        </v-col>
       </v-row>
 
       <!-- CHECKBOX  -->
@@ -799,11 +804,11 @@
           <tbody>   
             <tr id="info-inicial-linha">
               <td id="info-inicial-coluna">Processo n°</td>
-              <td id="info-inicial-coluna">0000365-83.2018.8.11.0085</td>
+              <td id="info-inicial-coluna">{{ info_calculo.numeroDoProcesso }}</td>
             </tr>
             <tr id="info-inicial-linha">
               <td id="info-inicial-coluna">Parte Autora</td>
-              <td id="info-inicial-coluna">teste</td>
+              <td id="info-inicial-coluna">{{ info_calculo.nome }}</td>
             </tr>
           </tbody>
         </table> 
@@ -812,21 +817,14 @@
         <h4 class="center">REVISÃO DE BENEFÍCIOS</h4>
         <div class="rowInputs">
           <div class="column">
-            <label class="camposInput"> Processo: </label>
-            <label class="inputToPrint" id="processoForm" />
-            {{ info_calculo.numeroDoProcesso }}
-            <br />
-            <label class="camposInput"> Autor: </label>
-            <label class="inputToPrint" id="autorForm" />
-            {{ info_calculo.nome }}
-            <br />
+            
             <label class="camposInput">Objeto:</label><label class="inputToPrint" id="objetoForm" />
             {{ objetoDoCalculo }}
             <br />
             <label class="camposInput">Vara:</label><label class="inputToPrint" id="varaForm" />
             {{ varaPrevidenciaria }}
             <br />
-            <label class="camposInput">Juros:</label><label class="inputToPrint" id="jurosForm" />
+            <label class="camposInput">N.B: {{ info_calculo.nb }}</label><label class="inputToPrint" id="jurosForm" />
             <br />
           </div>
           <div class="column">
@@ -847,39 +845,7 @@
         </div>
       </div>
       <h4 class="center">RESUMO DO PROCESSO</h4>
-      <div>
-        <div class="resumoProcesso">
-          <div class="columnResumoProcesso">
-            <h6>N.B.</h6>
-            <label class="inputToPrintResumo" id="resumoNB" />
-            {{ info_calculo.nb }}
-          </div>
-          <div class="columnResumoProcessoParte">
-            <h6>Parte</h6>
-            <label class="inputToPrintResumoParte" id="resumoParte" />
-            {{ info_calculo.nome }}
-          </div>
-          <div class="columnResumoProcesso">
-            <h6>Principal R$</h6>
-            <label class="inputToPrintResumo" id="resumoPrincipal" />
-            {{ valor_corrigido }}
-          </div>
-          <div class="columnResumoProcesso">
-            <h6>Juros R$</h6>
-            <label class="inputToPrintResumo" id="resumoJuros" />
-            {{ totaisValorCalculo.valorJuros }}
-          </div>
-          <div class="columnResumoProcesso">
-            <h6>Total R$</h6>
-            <label class="inputToPrintResumo" id="resumoTotal" />
-            {{
-                Math.floor(
-                  (parseFloat(valor_corrigido) + parseFloat(valor_juros)) * 100
-                ) / 100
-            }}
-          </div>
-        </div>
-      </div>
+      
       <br />
 
       <table id="testeTotal">
@@ -894,22 +860,22 @@
           <tr>
             <td id="textosResumo"></td>
             <td id="valoresResumo"></td>
-            <td id="valor-percentual-execucao">(100%)</td>
+            <td id="valor-percentual-execucao">({{formatarPorcentagemAcordo()}}%)</td>
           </tr>
           <tr>
             <td id="textosResumo">Soma do Principal:</td>
             <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
-            <td id="valoresResumoExecucao">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(valor_corrigido * formatarPorcentagemAcordo()) / 100 }}</td>
           </tr>
           <tr>
             <td id="textosResumo">Juros de mora:</td>
             <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
-            <td id="valoresResumoExecucao">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(valor_juros * formatarPorcentagemAcordo()) / 100 }}</td>
           </tr>
           <tr v-if="alcadaBoolean == true">
             <td id="textosResumo">12 Parcelas Vincendas:</td>
             <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
-            <td id="valoresResumoExecucao">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(pacelasVencidas * formatarPorcentagemAcordo()) / 100 }}</td>
           </tr>
         </tbody>
         </table>
@@ -922,102 +888,23 @@
                 parseFloat(pacelasVencidas)) * 100) / 100
             }}</td>
             <td id="valoresResumoExecucao">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
-              parseFloat(pacelasVencidas)) * 100) / 100
+              parseFloat(pacelasVencidas)) * formatarPorcentagemAcordo()) / 100
           }}</td>
           </tr>
           <tr>
             <td id="textosResumo">Honorários Advocatícios:</td>
             <td id="valoresResumo">R${{ valorHonorarios }}</td>
-            <td id="valoresResumoExecucao">R${{ valorHonorarios }}</td>
+            <td id="valoresResumoExecucao">R${{Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100 }}</td>
           </tr>
         </tbody>
         </table>
         <br />
-        <table id="testeTotal" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
-        <tbody>
-          <tr>
-            <td id="textosResumo">Acordo:</td>
-            <td id="valoresResumo">%{{ procntagem_acordo }}</td>
-            <td id="valoresResumoExecucao">%{{ procntagem_acordo }}</td>
-          </tr>
-          <tr>
-            <td id="textosResumo">Devido ao(s) Reclamante(s)(Acordo):</td>
-            <td id="valoresResumo">R${{
-                procntagem_acordo != 0 && procntagem_acordo != null
-                  ? Math.floor(
-                    (((parseFloat(valor_corrigido) +
-                      parseFloat(valor_juros) -
-                      parseFloat(pacelasVencidas)) *
-                      parseFloat(procntagem_acordo)) /
-                      100) *
-                    100
-                  ) / 100
-                  : Math.floor(
-                    (parseFloat(valor_corrigido) +
-                      parseFloat(valor_juros) -
-                      parseFloat(pacelasVencidas)) *
-                    100
-                  ) / 100
-            }}</td>
-            <td id="valoresResumoExecucao">R${{
-              procntagem_acordo != 0 && procntagem_acordo != null
-                ? Math.floor(
-                  (((parseFloat(valor_corrigido) +
-                    parseFloat(valor_juros) -
-                    parseFloat(pacelasVencidas)) *
-                    parseFloat(procntagem_acordo)) /
-                    100) *
-                  100
-                ) / 100
-                : Math.floor(
-                  (parseFloat(valor_corrigido) +
-                    parseFloat(valor_juros) -
-                    parseFloat(pacelasVencidas)) *
-                  100
-                ) / 100
-          }}</td>
-          </tr>
-          <tr>
-            <td id="textosResumo">Honorários Advocatícios (Acordo):</td>
-            <td id="valoresResumo">R${{
-                procntagem_acordo != 0 && procntagem_acordo != null
-                  ? Math.floor(
-                    ((parseFloat(valorHonorarios) *
-                      parseFloat(procntagem_acordo)) /
-                      100) *
-                    100
-                  ) / 100
-                  : Math.floor(parseFloat(valorHonorarios) * 100) / 100
-            }}</td>
-            <td id="valoresResumoExecucao">R${{
-              procntagem_acordo != 0 && procntagem_acordo != null
-                ? Math.floor(
-                  ((parseFloat(valorHonorarios) *
-                    parseFloat(procntagem_acordo)) /
-                    100) *
-                  100
-                ) / 100
-                : Math.floor(parseFloat(valorHonorarios) * 100) / 100
-          }}</td>
-          </tr>
-      </tbody>  
-      </table>
-      <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+
       <table id="testeTotal">
         <tr>
           <td id="textosResumo">Total do Processo:</td>
           <td id="valoresResumo">R${{
-              procntagem_acordo != 0 && procntagem_acordo != null
-                ? Math.floor(
-                  (((parseFloat(valor_corrigido) +
-                    parseFloat(valor_juros) -
-                    parseFloat(pacelasVencidas) +
-                    parseFloat(valorHonorarios)) *
-                    parseFloat(procntagem_acordo)) /
-                    100) *
-                  100
-                ) / 100
-                : Math.floor(
+              Math.floor(
                   (parseFloat(valor_corrigido) +
                     parseFloat(valor_juros) -
                     parseFloat(pacelasVencidas) +
@@ -1026,22 +913,12 @@
                 ) / 100
           }}</td>
           <td id="valoresResumoExecucao">R${{
-            procntagem_acordo != 0 && procntagem_acordo != null
-              ? Math.floor(
-                (((parseFloat(valor_corrigido) +
-                  parseFloat(valor_juros) -
-                  parseFloat(pacelasVencidas) +
-                  parseFloat(valorHonorarios)) *
-                  parseFloat(procntagem_acordo)) /
-                  100) *
-                100
-              ) / 100
-              : Math.floor(
+            Math.floor(
                 (parseFloat(valor_corrigido) +
                   parseFloat(valor_juros) -
                   parseFloat(pacelasVencidas) +
                   parseFloat(valorHonorarios)) *
-                100
+                  formatarPorcentagemAcordo()
               ) / 100
         }}</td>
         </tr>
@@ -1070,12 +947,14 @@
 <!-- Adições ao gerador de PDF (09/2022) -->
 <br> 
 <div id="observacoes-div-texto">
-  Cálculo efetuado pelo vencimento do débito. Sem honorários.<br>
+  Cálculo efetuado pelo vencimento do débito. {{textoHonorarios == null || textoHonorarios == ""? "Sem honorários": "Com honorários(" + textoHonorarios + ")"}}.<br>
 Total para cada competência = Principal + atualização monetária + juros de mora (se for o caso).<br>
-Juros de mora de 12% ao ano até 06/2009 + Lei 11960/09 + juros variáveis, na hipótese de execução.<br>
-ORTN/OTN/BTN até 02/91 + INPC até 12/92 + IRSM ATÉ 02/94 + URV até 06/94 + IPCR até 06/95 + INPC até 04/96.<br>
-IGP-DI até 08/2006 + INPC até 31/05/2009.<br>
-TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
+<b>Juros de mora:</b>
+<br/>
+<p class="describes">{{tipoJuros!= 0?(optionsJuros.find(element => element.value == tipoJuros)).text.split("Descrição:")[1]: ""}}.</p>
+<b>Correção:</b>
+<br/>
+ <p class="describes">{{tipoCorrecao!= 0?(optionsCorrecao.find(element => element.value == tipoCorrecao)).text.split("Descrição:")[1]: ""}}</p>
 </div>    
 
 <table id="tabelaResumo">
@@ -1094,37 +973,39 @@ TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
     <tr>
       <td id="colunaVazia"></td>
       <td id="colunaResumoEsquerda">Benefício:</td>
-      <td id="colunaResumoDireita">Exemplo Aposentadoria</td>
+      <td id="colunaResumoDireita">{{ info_calculo.beneficio }}</td>
       <td id="colunaVaziaDireita"></td>
     </tr>
     <tr>
       <td id="colunaVazia"></td>
       <td id="colunaResumoEsquerda">DER:</td>
-      <td id="colunaResumoDireita">Exemplo -</td>
+      <td id="colunaResumoDireita">-</td>
       <td id="colunaVaziaDireita"></td>
     </tr>
     <tr>
       <td id="colunaVazia"></td>
       <td id="colunaResumoEsquerda">DIB:</td>
-      <td id="colunaResumoDireita">Exemplo 00/00/0000</td>
+      <td id="colunaResumoDireita">{{ this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib }}</td>
       <td id="colunaVaziaDireita"></td>
     </tr>
     <tr>
       <td id="colunaVazia"></td>
       <td id="colunaResumoEsquerda">DIP:</td>
-      <td id="colunaResumoDireita">Exemplo 00/00/0000</td>
+      <td id="colunaResumoDireita">{{ dtFinal }}</td>
       <td id="colunaVaziaDireita"></td>
     </tr>
     <tr>
       <td id="colunaVazia"></td>
       <td id="colunaResumoEsquerda">Valor Principal (R$):</td>
-      <td id="colunaResumoDireita">00.000,00</td>
+      <td id="colunaResumoDireita">{{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
+                parseFloat(pacelasVencidas)) * formatarPorcentagemAcordo()) / 100
+            }}</td>
       <td id="colunaVaziaDireita">(RPV)</td>
     </tr>
     <tr>
       <td id="colunaVazia"></td>
       <td id="colunaResumoEsquerda">Valor Honorários (R$): </td>
-      <td id="colunaResumoDireita">0,00</td>
+      <td id="colunaResumoDireita">{{ Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100 }}</td>
       <td id="colunaVaziaDireita"></td>
     </tr>
   </tbody>
@@ -1154,15 +1035,15 @@ TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
       <tr>
         <td id="colunaVazia"></td>
         <td id="colunaAnaliseTexto">Total de parcelas devidas até a data do ajuizamento </td>
-        <td id="colunaAnaliseEsquerda">(da/ta/data)</td>
-        <td id="colunaAnaliseDireita">valor, 0000</td>
+        <td id="colunaAnaliseEsquerda">({{this.info_calculo.dataAjuizamento}})</td>
+        <td id="colunaAnaliseDireita">{{Math.floor(beforeDateAjuizamento * 100) / 100}}</td>
         <td id="colunaVazia"></td>
       </tr>
       <tr>
         <td id="colunaVazia"></td>
         <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s)</td>
         <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">44.081,80</td>
+        <td id="colunaAnaliseDireita">{{ Math.floor(afterDateAjuizamento * 100) / 100}}</td>
         <td id="colunaVazia"></td>
       </tr>
     </tbody>
@@ -1174,7 +1055,7 @@ TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
         <td id="colunaVazia"></td>
         <td id="colunaAnaliseTexto">Valor da causa na data do ajuizamento da ação</td>
         <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">199.629,18</td>
+        <td id="colunaAnaliseDireita">{{ Math.floor(alcadaValor * 100) / 100 }}</td>
         <td id="colunaVazia"></td>
       </tr>
     </tbody>
@@ -1186,22 +1067,39 @@ TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
         <tr>
         <td id="colunaVazia"></td>
         <td id="colunaAnaliseTexto">Limite de 60 salários mínimos em:</td>
-        <td id="colunaAnaliseEsquerda">06/04/2018</td>
-        <td id="colunaAnaliseDireita">57.240,00</td>
+        <td id="colunaAnaliseEsquerda">{{this.info_calculo.dataAjuizamento}}</td>
+        <td id="colunaAnaliseDireita">{{
+              salariominimosAlcada
+          }}</td>
         <td id="colunaVazia"></td>
       </tr>
       <tr>
         <td id="colunaVazia"></td>
         <td id="colunaAnaliseTexto">Parcela referente à renúncia pela alçada do JEF no ajuizamento</td>
         <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">142.389,18</td>
+        <td id="colunaAnaliseDireita">{{
+              Math.floor(alcadaTotal * 100) / 100
+          }}</td>
         <td id="colunaVazia"></td>
       </tr>
       <tr>
         <td id="colunaVazia"></td>
         <td id="colunaAnaliseTexto">(*) Valor atualizado da renúncia pela alçada do JEF</td>
         <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">185.249,65</td>
+        <td id="colunaAnaliseDireita">{{
+              Math.floor(
+                (Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) /
+                  100 +
+                  Math.floor(
+                    alcadaTotal *
+                    alcadaCorrecaoPorcetagem *
+                    alcadaJurosPorcentagem *
+                    100
+                  ) /
+                  100) *
+                100
+              ) / 100
+          }}</td>
         <td id="colunaVazia"></td>
       </tr>
     </tbody>
@@ -1220,69 +1118,6 @@ TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
 
 
 
-      <!-- TETO DE ALÇADA -->
-      <div v-if="alcadaBoolean == true">
-        <h3 class="center">TETO DE ALÇADA</h3>
-        <h5 class="center">{{ textoPeriodoAlcada }}</h5>
-        <div class="columnAlcadaPrint">
-          <label class="camposInputAlcada">a) Total a ser considerado (Até 12 parcelas vincendas após
-            ajuizamento): R$ {{ Math.floor(alcadaValor * 100) / 100 }}</label>
-          <br />
-          <label class="camposInputAlcada">b) 60 salários mínimos no ajuizamente: R${{
-              salariominimosAlcada
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">c) Eventual renúncia do total: R${{
-              Math.floor(alcadaTotal * 100) / 100
-          }}</label>
-          <br />
-          <br />
-        </div>
-        <h5 class="center">
-          d) Valores renunciados no ajuizamento atualizados:
-        </h5>
-        <div class="columnAlcadaPrint">
-          <label class="camposInputAlcada">d.1) Valor de eventual renúncia: R${{
-              Math.floor(alcadaTotal * 100) / 100
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">d.2) Coeficiente de atualização:
-            {{ alcadaCorrecaoPorcetagem }}</label>
-          <br />
-          <label class="camposInputAlcada">d.3) Valor atualizado da renúncia: R${{
-              Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) / 100
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">d.4) Taxa de juros de mora: {{ alcadaJurosPorcentagem }}</label>
-          <br />
-          <label class="camposInputAlcada">d.5) Juros de mora: R${{
-              Math.floor(
-                alcadaTotal *
-                alcadaCorrecaoPorcetagem *
-                alcadaJurosPorcentagem *
-                100
-              ) / 100
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">d.6) Total: R${{
-              Math.floor(
-                (Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) /
-                  100 +
-                  Math.floor(
-                    alcadaTotal *
-                    alcadaCorrecaoPorcetagem *
-                    alcadaJurosPorcentagem *
-                    100
-                  ) /
-                  100) *
-                100
-              ) / 100
-          }}</label>
-          <br />
-          <br />
-        </div>
-      </div>
-
       <h4 class="center">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
         <div class="column">
@@ -1297,10 +1132,10 @@ TR a partir 06/2009+IPCA-E a partir 03/2015, com juros conforme Poupança.<br>
           </label>
           <label class="inputToPrintAlcada" id="autorPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Jud: {{ info_calculo.dib }} </label><label class="inputToPrintAlcada"
+          <label class="camposInputAlcada">DIB Jud: {{ this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib }} </label><label class="inputToPrintAlcada"
             id="dibJudPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Anterior: {{ info_calculo.dibAnterior }} </label><label
+          <label class="camposInputAlcada">DIB Anterior: {{ this.dibAnterior == null || this.dibAnterior == ""? "Não consta" : this.dibAnterior  }} </label><label
             class="inputToPrintAlcada" id="dibAnteriorPlanilha" />
           <br />
           <label class="camposInputAlcada">RMI Jud.: R${{ salarioInicial }} </label><label class="inputToPrintAlcada"
@@ -1568,6 +1403,9 @@ export default {
       porcentagemRMI: null,
       dataAtual: new Date(),
       salario13Obrigatorio: false,
+      beforeDateAjuizamento: 0,
+      afterDateAjuizamento: 0,
+      selic: false
     };
   },
   computed: {
@@ -1780,7 +1618,7 @@ export default {
             ? this.porcentagemRMI
             : 100;
         const body = {
-          dib: this.dtInicial,
+          inicioCalculo: this.dtInicial,
           dip: this.dtFinal,
           atulizacao: this.atulizacao,
           incioJuros: this.inicio_juros,
@@ -1791,9 +1629,11 @@ export default {
           salarioMinimo: this.salarioMinimo,
           limiteMinimoMaximo: this.limiteMinimoMaximo,
           salario13: this.salario13,
-          dibAnterior: this.verificarDib(),
+          dib: this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib,
           porcentagemRMI: this.porcentagemRMI,
           salario13Obrigatorio: this.salario13Obrigatorio,
+          dibAnterior: this.dibAnterior == null || this.dibAnterior == ""? this.dtInicial : this.dibAnterior ,
+          selic: this.selic
         };
         let timer = 0;
 
@@ -1908,7 +1748,7 @@ export default {
           // })
           .catch((error) => {
             console.log(error);
-            console.log("error");
+            console.log("error Calculo");
           });
       }
     },
@@ -1920,6 +1760,11 @@ export default {
         this.alertTexto = "Obrigatório gerar e examinar a tabela de cálculo.";
         return false;
       }
+    },
+    formatarPorcentagemAcordo(){
+      return this.procntagem_acordo != 0 && this.procntagem_acordo != null
+                ? this.procntagem_acordo
+                : 100
     },
     adicionarLote() {
       if (this.verificadoInformacoes() && this.verificarCalculo()) {
@@ -2300,7 +2145,7 @@ export default {
     calcularLote() {
 
       const body = {
-        dib: this.dtInicial,
+        inicioCalculo: this.dtInicial,
         dip: this.dtFinal,
         atulizacao: this.atulizacao,
         incioJuros: this.inicio_juros,
@@ -2495,11 +2340,12 @@ export default {
         }
       }
       const body = {
-        dib: this.dtInicial,
+        inicioCalculo: this.dtInicial,
         dip: `01/${mesOssada}/${anoOssada}`,
         salario13: this.salario13,
         tipoCorrecao: this.tipoCorrecao,
         atulizacao: `${date[1]}/${date[2]}`,
+        selic: this.selic
       };
       const ossadaUrl = `${baseApiUrl}/salarioMinimo/procuraPorAno/${this.info_calculo.dataAjuizamento.split("/")[2]
         }`;
@@ -2507,10 +2353,11 @@ export default {
         const obj = await res.data;
         const ajuizamento = this.info_calculo.dataAjuizamento.split("/");
         let bodytaxaUnica = {
-          dib: this.info_calculo.dataAjuizamento,
+          inicioCalculo: this.info_calculo.dataAjuizamento,
           tipoJuros: this.tipoJuros,
           tipoCorrecao: this.tipoCorrecao,
           atulizacao: this.atulizacao,
+          selic: this.selic
         };
         axios
           .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
@@ -2540,7 +2387,13 @@ export default {
           .then((response) => {
             console.log(response.data);
             let alcada = response.data;
+            let arrayDateAjuizamento = this.info_calculo.dataAjuizamento.split("/")
+            let dateAjuzamento = new Date(`${arrayDateAjuizamento[1]}-${arrayDateAjuizamento[0]}-${arrayDateAjuizamento[2]}`)
+            console.log(dateAjuzamento);
+            console.log("dateAjuzamento");
             console.log(alcada);
+            this.beforeDateAjuizamento = 0
+            this.afterDateAjuizamento = 0
             this.calc_total.forEach((value) => {
               alcada.forEach((dado) => {
                 if (
@@ -2555,6 +2408,14 @@ export default {
                     salarioTotal:
                       Math.floor(dado.correcao * value.salario * 100) / 100,
                   });
+                  let arrayDataCalculoAlcada = value.data.split("/")
+                  let dataCalculoAlcada = new Date(`${arrayDataCalculoAlcada[1]}-${arrayDataCalculoAlcada[0]}-${arrayDataCalculoAlcada[2]}`)
+                  if(dataCalculoAlcada > dateAjuzamento){
+                    
+                   this.afterDateAjuizamento += Math.floor(dado.correcao * value.salario * 100) / 100;
+                  }else{
+                    this.beforeDateAjuizamento += Math.floor(dado.correcao * value.salario * 100) / 100;
+                  }
                   this.pacelasVencidas +=
                     Math.floor(dado.correcao * value.salario * 100) / 100;
                 }
@@ -2930,7 +2791,7 @@ export default {
             ];
           }
           const body = {
-            dib: info.dib,
+            inicioCalculo: info.dib,
             dip: info.dif,
             rmi: info.rmi,
             salario13: info.salario13,
@@ -2938,6 +2799,7 @@ export default {
             salarioMinimo: info.salarioMinimo,
             porcentagemRmi: info.porcentagemRmi,
             salario13Obrigatorio: info.salario13Obrigatorio,
+            selic: this.selic
           };
 
           axios
@@ -3091,7 +2953,6 @@ export default {
         ) / 100;
       this.calc_total[0].data = dtInicial;
     },
-    //Math.floor( * 100) / 100
     formatacao() {
       this.valor_total = Math.floor(this.valor_total * 100) / 100;
       this.valor_juros = Math.floor(this.valor_juros * 100) / 100;
@@ -3665,11 +3526,18 @@ export default {
           margin-left: 25%;
           font-size: small;
         }
+        
+        .describes{
+          text-overflow: clip ellipsis;
+          margin-right: 10px;
+        }
 
         #observacoes-div-texto {
-          width:90%;
+          width:100%;
           margin-left: 10%;
           font-size: small;
+          height: auto;
+          text-overflow: clip ellipsis;
         }
         
         #info-inicial {
@@ -3753,38 +3621,20 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-    let contJuros = [];
-    let jurosUnicos = [];
-    let contCorrecao = [];
-    let correcaoUnicos = [];
-    axios.get(baseApiUrl + "/juros/listar").then((response) => {
-      jurosUnicos[0] = response.data[0];
-      contJuros[0] = response.data[0].tipo;
-      for (let i of response.data) {
-        if (contJuros.indexOf(i.tipo) == -1) {
-          jurosUnicos.push(i);
-          contJuros.push(i.tipo);
-        }
-      }
-      this.optionsJuros = jurosUnicos.map((obj) => ({
-        text: `Tipo: ${obj.tipo}. Descrição : ${obj.descricao}`,
-        value: obj.tipo,
-      }));
+      axios.get(baseApiUrl + "/describeJuros").then((response) => {
+      response.data.forEach((value) => {
+        this.optionsJuros.push({ text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
+        value: value.type,})
+      })
     });
 
-    axios.get(baseApiUrl + "/correcao/listar").then((response2) => {
-      correcaoUnicos[0] = response2.data[0];
-      contCorrecao[0] = response2.data[0].tipo;
-      for (let i of response2.data) {
-        if (contCorrecao.indexOf(i.tipo) == -1) {
-          correcaoUnicos.push(i);
-          contCorrecao.push(i.tipo);
-        }
-      }
-      this.optionsCorrecao = correcaoUnicos.map((obj) => ({
-        text: `Tipo: ${obj.tipo}. Descrição : ${obj.descricao}`,
-        value: obj.tipo,
-      }));
+    axios.get(baseApiUrl + "/describeCorrecao").then((response2) => {
+      this.optionsCorrecao = [];
+      console.log(response2.body);
+      response2.data.forEach((value) => {
+        this.optionsCorrecao.push({ text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
+        value: value.type,})
+      })
     });
     axios.get(baseApiUrl + "/beneficio/listar").then((res) => {
       res.data.forEach(item => {
