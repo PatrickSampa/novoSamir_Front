@@ -134,7 +134,7 @@
         <v-col cols="12" sm="6" md="3">
           <label for="info_calculo.dib" class="labels">DIB</label>
           <v-text-field v-mask="'##/##/####'" @input="atulizarvalor()" dense outlined id="info_calculo.dib"
-            v-model="info_calculo.dib" type="text" size="sm" placeholder="Ex: 22/10/2020">
+            v-model="info_calculo.dibInicial" type="text" size="sm" placeholder="Ex: 22/10/2020">
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
@@ -947,14 +947,14 @@
 <!-- Adições ao gerador de PDF (09/2022) -->
 <br> 
 <div id="observacoes-div-texto">
-  Cálculo efetuado pelo vencimento do débito. {{textoHonorarios == null || textoHonorarios == ""? "Sem honorários": "Com honorários(" + textoHonorarios + ")"}}.<br>
-Total para cada competência = Principal + atualização monetária + juros de mora (se for o caso).<br>
-<b>Juros de mora:</b>
-<br/>
-<p class="describes">{{tipoJuros!= 0?(optionsJuros.find(element => element.value == tipoJuros)).text.split("Descrição:")[1]: ""}}.</p>
-<b>Correção:</b>
-<br/>
- <p class="describes">{{tipoCorrecao!= 0?(optionsCorrecao.find(element => element.value == tipoCorrecao)).text.split("Descrição:")[1]: ""}}</p>
+    Cálculo efetuado pelo vencimento do débito. {{textoHonorarios == null || textoHonorarios == ""? "Sem honorários": "Com honorários(" + textoHonorarios + ")"}}.<br>
+  Total para cada competência = Principal + atualização monetária + juros de mora (se for o caso).<br>
+  <b>Juros de mora:</b>
+  <br/>
+  <p class="describes">{{tipoJuros!= 0?quebraLinhaDescribe((optionsJuros.find(element => element.value == tipoJuros)).text.split("Descrição:")[1].split("")): ""}}.</p>
+  <b>Correção:</b>
+  <br/>
+  <p class="describes">{{tipoCorrecao!= 0?quebraLinhaDescribe((optionsCorrecao.find(element => element.value == tipoCorrecao)).text.split("Descrição:")[1].split("")): ""}}.</p>
 </div>    
 
 <table id="tabelaResumo">
@@ -1426,6 +1426,21 @@ export default {
     }
   },
   methods: {
+
+    quebraLinhaDescribe(describe) {
+      let arrayDescribe = describe;
+      
+      let newDescribe = "";
+      arrayDescribe.forEach((obj,index) => {
+        console.log(newDescribe)
+        newDescribe += (obj);
+        if((index % 79) == 0){
+          newDescribe += " \n";
+        }
+      })
+      return newDescribe;
+    },
+
     beneficiosEspecialInfo(obj_beneficioAcumulado) {
       if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
         obj_beneficioAcumulado.salario13 = true;
@@ -3078,7 +3093,7 @@ export default {
             "0" + (datafinal[0] - 1) + "/" + datafinal[1] + "/" + datafinal[2];
         } else {
           this.dtFinal =
-            +(datafinal[0] - 1) + "/" + datafinal[1] + "/" + datafinal[2];
+            (datafinal[0] - 1) + "/" + datafinal[1] + "/" + datafinal[2];
         }
       }
       //this.dtFinal = this.info_calculo.dip;
