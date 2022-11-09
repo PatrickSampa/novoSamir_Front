@@ -142,6 +142,11 @@
             :value="salario13Obrigatorio" />
           <label for="salario13" class="labels pb-2">13° Salário Obrigatorio</label>
         </v-col>
+        <v-col cols="12" sm="6" md="2">
+          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="selic"
+            :value="selic" />
+          <label for="salario13" class="labels pb-2">Selic</label>
+        </v-col>
       </v-row>
 
       <!-- CHECKBOX  -->
@@ -377,7 +382,7 @@
       <div class="columnRight">
         <label class="camposInput">Soma do Principal: R$</label>
         <br />
-        <label class="camposInput">Soma do Juros: R$</label>
+        <label class="camposInput">Juros de mora: R$</label>
         <br />
         <label class="camposInput">12 Parcelas Vincendas: R$</label>
         <br />
@@ -589,7 +594,6 @@
         }}
         <label class="inputCalculo" id="n" />
         <br />
-        <br />
       </div>
     </div>
 
@@ -789,29 +793,38 @@
 
     <v-card v-if="!add_taxa" id="areaToPrint">
       <div>
-        <h2 class="centerAGU">AGU</h2>
-        <h3 class="center">PROCURADORIA GERAL FEDERAL</h3>
-        <h3 class="center">
+        <h3 class="centerAGU">AGU</h3>
+        <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
+        <h4 class="center">
           EQUIPE REGIONAL DE CÁLCULOS E PAGAMENTOS PREVIDENCIÁRIOS 1ª REGIÃO
-        </h3>
+        </h4>
+        
+
+        <table id="info-inicial">  
+          <tbody>   
+            <tr id="info-inicial-linha">
+              <td id="info-inicial-coluna">Processo n°</td>
+              <td id="info-inicial-coluna">{{ info_calculo.numeroDoProcesso }}</td>
+            </tr>
+            <tr id="info-inicial-linha">
+              <td id="info-inicial-coluna">Parte Autora</td>
+              <td id="info-inicial-coluna">{{ info_calculo.nome }}</td>
+            </tr>
+          </tbody>
+        </table> 
+
+
         <h4 class="center">REVISÃO DE BENEFÍCIOS</h4>
         <div class="rowInputs">
           <div class="column">
-            <label class="camposInput"> Processo: </label>
-            <label class="inputToPrint" id="processoForm" />
-            {{ info_calculo.numeroDoProcesso }}
-            <br />
-            <label class="camposInput"> Autor: </label>
-            <label class="inputToPrint" id="autorForm" />
-            {{ info_calculo.nome }}
-            <br />
+            
             <label class="camposInput">Objeto:</label><label class="inputToPrint" id="objetoForm" />
             {{ objetoDoCalculo }}
             <br />
             <label class="camposInput">Vara:</label><label class="inputToPrint" id="varaForm" />
             {{ varaPrevidenciaria }}
             <br />
-            <label class="camposInput">Juros:</label><label class="inputToPrint" id="jurosForm" />
+            <label class="camposInput">N.B: {{ info_calculo.nb }}</label><label class="inputToPrint" id="jurosForm" />
             <br />
           </div>
           <div class="column">
@@ -832,124 +845,66 @@
         </div>
       </div>
       <h4 class="center">RESUMO DO PROCESSO</h4>
-      <div>
-        <div class="resumoProcesso">
-          <div class="columnResumoProcesso">
-            <h6>N.B.</h6>
-            <label class="inputToPrintResumo" id="resumoNB" />
-            {{ info_calculo.nb }}
-          </div>
-          <div class="columnResumoProcessoParte">
-            <h6>Parte</h6>
-            <label class="inputToPrintResumoParte" id="resumoParte" />
-            {{ info_calculo.nome }}
-          </div>
-          <div class="columnResumoProcesso">
-            <h6>Principal R$</h6>
-            <label class="inputToPrintResumo" id="resumoPrincipal" />
-            {{ valor_corrigido }}
-          </div>
-          <div class="columnResumoProcesso">
-            <h6>Juros R$</h6>
-            <label class="inputToPrintResumo" id="resumoJuros" />
-            {{ totaisValorCalculo.valorJuros }}
-          </div>
-          <div class="columnResumoProcesso">
-            <h6>Total R$</h6>
-            <label class="inputToPrintResumo" id="resumoTotal" />
-            {{
-                Math.floor(
-                  (parseFloat(valor_corrigido) + parseFloat(valor_juros)) * 100
-                ) / 100
-            }}
-          </div>
-        </div>
-      </div>
+      
       <br />
 
       <table id="testeTotal">
-        <tr>
-          <td id="textosResumo">Soma do Principal:</td>
-          <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Soma do Juros:</td>
-          <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
-        </tr>
-        <tr v-if="alcadaBoolean == true">
-          <td id="textosResumo">12 Parcelas Vincendas:</td>
-          <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
-        </tr>
-      </table>
-      <br />
-      <table id="testeTotal">
-        <tr>
-          <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
-          <td id="valoresResumo">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
-              parseFloat(pacelasVencidas)) * 100) / 100
+        <thead>
+          <tr >
+              <th scope="col" id="thead-limpo-menor"></th>
+              <th scope="col" id="thead-limpo">Total no Período de Cálculo</th>
+              <th scope="col" id="thead-limpo">Cálculo para Execução</th>
+          </tr>
+        </thead>   
+        <tbody>   
+          <tr>
+            <td id="textosResumo"></td>
+            <td id="valoresResumo"></td>
+            <td id="valor-percentual-execucao">({{formatarPorcentagemAcordo()}}%)</td>
+          </tr>
+          <tr>
+            <td id="textosResumo">Soma do Principal:</td>
+            <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(valor_corrigido * formatarPorcentagemAcordo()) / 100 }}</td>
+          </tr>
+          <tr>
+            <td id="textosResumo">Juros de mora:</td>
+            <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(valor_juros * formatarPorcentagemAcordo()) / 100 }}</td>
+          </tr>
+          <tr v-if="alcadaBoolean == true">
+            <td id="textosResumo">12 Parcelas Vincendas:</td>
+            <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor(pacelasVencidas * formatarPorcentagemAcordo()) / 100 }}</td>
+          </tr>
+        </tbody>
+        </table>
+        <br />
+        <table id="testeTotal">
+        <tbody>
+          <tr>
+            <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
+            <td id="valoresResumo">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
+                parseFloat(pacelasVencidas)) * 100) / 100
+            }}</td>
+            <td id="valoresResumoExecucao">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
+              parseFloat(pacelasVencidas)) * formatarPorcentagemAcordo()) / 100
           }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Honorários Advocatícios:</td>
-          <td id="valoresResumo">R${{ valorHonorarios }}</td>
-        </tr>
-      </table>
-      <br />
-      <table id="testeTotal" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
-        <tr>
-          <td id="textosResumo">Acordo:</td>
-          <td id="valoresResumo">%{{ procntagem_acordo }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Devido ao(s) Reclamante(s)(Acordo):</td>
-          <td id="valoresResumo">R${{
-              procntagem_acordo != 0 && procntagem_acordo != null
-                ? Math.floor(
-                  (((parseFloat(valor_corrigido) +
-                    parseFloat(valor_juros) -
-                    parseFloat(pacelasVencidas)) *
-                    parseFloat(procntagem_acordo)) /
-                    100) *
-                  100
-                ) / 100
-                : Math.floor(
-                  (parseFloat(valor_corrigido) +
-                    parseFloat(valor_juros) -
-                    parseFloat(pacelasVencidas)) *
-                  100
-                ) / 100
-          }}</td>
-        </tr>
-        <tr>
-          <td id="textosResumo">Honorários Advocatícios (Acordo):</td>
-          <td id="valoresResumo">R${{
-              procntagem_acordo != 0 && procntagem_acordo != null
-                ? Math.floor(
-                  ((parseFloat(valorHonorarios) *
-                    parseFloat(procntagem_acordo)) /
-                    100) *
-                  100
-                ) / 100
-                : Math.floor(parseFloat(valorHonorarios) * 100) / 100
-          }}</td>
-        </tr>
-      </table>
-      <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+          </tr>
+          <tr>
+            <td id="textosResumo">Honorários Advocatícios:</td>
+            <td id="valoresResumo">R${{ valorHonorarios }}</td>
+            <td id="valoresResumoExecucao">R${{Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100 }}</td>
+          </tr>
+        </tbody>
+        </table>
+        <br />
+
       <table id="testeTotal">
         <tr>
           <td id="textosResumo">Total do Processo:</td>
           <td id="valoresResumo">R${{
-              procntagem_acordo != 0 && procntagem_acordo != null
-                ? Math.floor(
-                  (((parseFloat(valor_corrigido) +
-                    parseFloat(valor_juros) -
-                    parseFloat(pacelasVencidas) +
-                    parseFloat(valorHonorarios)) *
-                    parseFloat(procntagem_acordo)) /
-                    100) *
-                  100
-                ) / 100
-                : Math.floor(
+              Math.floor(
                   (parseFloat(valor_corrigido) +
                     parseFloat(valor_juros) -
                     parseFloat(pacelasVencidas) +
@@ -957,6 +912,15 @@
                   100
                 ) / 100
           }}</td>
+          <td id="valoresResumoExecucao">R${{
+            Math.floor(
+                (parseFloat(valor_corrigido) +
+                  parseFloat(valor_juros) -
+                  parseFloat(pacelasVencidas) +
+                  parseFloat(valorHonorarios)) *
+                  formatarPorcentagemAcordo()
+              ) / 100
+        }}</td>
         </tr>
       </table>
 
@@ -980,51 +944,149 @@
       </v-row>
       <img src="" alt="" />
 
-      <!-- TETO DE ALÇADA -->
-      <div v-if="alcadaBoolean == true">
-        <h3 class="center">TETO DE ALÇADA</h3>
-        <h5 class="center">{{ textoPeriodoAlcada }}</h5>
-        <div class="columnAlcadaPrint">
-          <label class="camposInputAlcada">a) Total a ser considerado (Até 12 parcelas vincendas após
-            ajuizamento): R$ {{ Math.floor(alcadaValor * 100) / 100 }}</label>
-          <br />
-          <label class="camposInputAlcada">b) 60 salários mínimos no ajuizamente: R${{
+<!-- Adições ao gerador de PDF (09/2022) -->
+<br> 
+<div id="observacoes-div-texto">
+  Cálculo efetuado pelo vencimento do débito. {{textoHonorarios == null || textoHonorarios == ""? "Sem honorários": "Com honorários(" + textoHonorarios + ")"}}.<br>
+Total para cada competência = Principal + atualização monetária + juros de mora (se for o caso).<br>
+<b>Juros de mora:</b>
+<br/>
+<p class="describes">{{tipoJuros!= 0?(optionsJuros.find(element => element.value == tipoJuros)).text.split("Descrição:")[1]: ""}}.</p>
+<b>Correção:</b>
+<br/>
+ <p class="describes">{{tipoCorrecao!= 0?(optionsCorrecao.find(element => element.value == tipoCorrecao)).text.split("Descrição:")[1]: ""}}</p>
+</div>    
+
+<table id="tabelaResumo">
+  <thead>
+    <tr>
+        <th scope="col" id="thead-centro"><h4>Resumo</h4></th>
+        <th scope="col" id="thead-invisivel"></th>
+        <th scope="col" id="thead-invisivel"></th>
+        <th scope="col" id="thead-invisivel"></th>
+    </tr>
+  </thead>
+</table>
+<div id="linha-horizontal"></div>
+<table id="tabelaResumo">
+  <tbody>   
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">Benefício:</td>
+      <td id="colunaResumoDireita">{{ info_calculo.beneficio }}</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">DER:</td>
+      <td id="colunaResumoDireita">-</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">DIB:</td>
+      <td id="colunaResumoDireita">{{ this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib }}</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">DIP:</td>
+      <td id="colunaResumoDireita">{{ dtFinal }}</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">Valor Principal (R$):</td>
+      <td id="colunaResumoDireita">{{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
+                parseFloat(pacelasVencidas)) * formatarPorcentagemAcordo()) / 100
+            }}</td>
+      <td id="colunaVaziaDireita">(RPV)</td>
+    </tr>
+    <tr>
+      <td id="colunaVazia"></td>
+      <td id="colunaResumoEsquerda">Valor Honorários (R$): </td>
+      <td id="colunaResumoDireita">{{ Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100 }}</td>
+      <td id="colunaVaziaDireita"></td>
+    </tr>
+  </tbody>
+  </table>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <table id="tabelaResumo">
+    <thead>
+      <tr>
+          <th scope="col" id="thead-centro"><h4> Análise de Competência do Juizado Especial Federal</h4></th>
+          <th scope="col" id="thead-invisivel"></th>
+          <th scope="col" id="thead-invisivel"></th>
+          <th scope="col" id="thead-invisivel"></th>
+          <th scope="col" id="thead-invisivel"></th>
+      </tr>
+    </thead>
+  </table>
+  <div id="linha-horizontal"></div>
+  <table id="tabelaResumo">
+    <tbody>   
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Total de parcelas devidas até a data do ajuizamento </td>
+        <td id="colunaAnaliseEsquerda">({{this.info_calculo.dataAjuizamento}})</td>
+        <td id="colunaAnaliseDireita">{{Math.floor(beforeDateAjuizamento * 100) / 100}}</td>
+        <td id="colunaVazia"></td>
+      </tr>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s)</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">{{ Math.floor(afterDateAjuizamento * 100) / 100}}</td>
+        <td id="colunaVazia"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="linha-soma"></div>
+  <table id="tabelaResumo">
+    <tbody>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Valor da causa na data do ajuizamento da ação</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">{{ Math.floor(alcadaValor * 100) / 100 }}</td>
+        <td id="colunaVazia"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="linha-horizontal-separacao"></div>
+  <br>
+  <table id="tabelaResumo">
+    <tbody>
+        <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Limite de 60 salários mínimos em:</td>
+        <td id="colunaAnaliseEsquerda">{{this.info_calculo.dataAjuizamento}}</td>
+        <td id="colunaAnaliseDireita">{{
               salariominimosAlcada
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">c) Eventual renúncia do total: R${{
+          }}</td>
+        <td id="colunaVazia"></td>
+      </tr>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">Parcela referente à renúncia pela alçada do JEF no ajuizamento</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">{{
               Math.floor(alcadaTotal * 100) / 100
-          }}</label>
-          <br />
-          <br />
-        </div>
-        <h5 class="center">
-          d) Valores renunciados no ajuizamento atualizados:
-        </h5>
-        <div class="columnAlcadaPrint">
-          <label class="camposInputAlcada">d.1) Valor de eventual renúncia: R${{
-              Math.floor(alcadaTotal * 100) / 100
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">d.2) Coeficiente de atualização:
-            {{ alcadaCorrecaoPorcetagem }}</label>
-          <br />
-          <label class="camposInputAlcada">d.3) Valor atualizado da renúncia: R${{
-              Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) / 100
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">d.4) Taxa de juros de mora: {{ alcadaJurosPorcentagem }}</label>
-          <br />
-          <label class="camposInputAlcada">d.5) Juros de mora: R${{
-              Math.floor(
-                alcadaTotal *
-                alcadaCorrecaoPorcetagem *
-                alcadaJurosPorcentagem *
-                100
-              ) / 100
-          }}</label>
-          <br />
-          <label class="camposInputAlcada">d.6) Total: R${{
+          }}</td>
+        <td id="colunaVazia"></td>
+      </tr>
+      <tr>
+        <td id="colunaVazia"></td>
+        <td id="colunaAnaliseTexto">(*) Valor atualizado da renúncia pela alçada do JEF</td>
+        <td id="colunaAnaliseEsquerda"></td>
+        <td id="colunaAnaliseDireita">{{
               Math.floor(
                 (Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) /
                   100 +
@@ -1037,11 +1099,24 @@
                   100) *
                 100
               ) / 100
-          }}</label>
-          <br />
-          <br />
-        </div>
-      </div>
+          }}</td>
+        <td id="colunaVazia"></td>
+      </tr>
+    </tbody>
+  </table> 
+    <div id="linha-horizontal-separacao"></div>
+  <div id="observacoes-div">
+    <br>
+    Obs: A parcela vincenda ocorre a partir do dia primeiro de cada mês.
+    <br>
+    Obs.: Incompetência: parcelas devidas superam o teto do JEF na data do ajuizamento.
+    <br>
+    Atenção: os valores desta planilha referem-se a cálculo para fins de execução invertida / impugnação.
+    <br>
+    <br>
+  </div>
+
+
 
       <h4 class="center">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
@@ -1057,10 +1132,10 @@
           </label>
           <label class="inputToPrintAlcada" id="autorPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Jud: {{ info_calculo.dib }} </label><label class="inputToPrintAlcada"
+          <label class="camposInputAlcada">DIB Jud: {{ this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib }} </label><label class="inputToPrintAlcada"
             id="dibJudPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Anterior: {{ info_calculo.dibAnterior }} </label><label
+          <label class="camposInputAlcada">DIB Anterior: {{ this.dibAnterior == null || this.dibAnterior == ""? "Não consta" : this.dibAnterior  }} </label><label
             class="inputToPrintAlcada" id="dibAnteriorPlanilha" />
           <br />
           <label class="camposInputAlcada">RMI Jud.: R${{ salarioInicial }} </label><label class="inputToPrintAlcada"
@@ -1328,6 +1403,9 @@ export default {
       porcentagemRMI: null,
       dataAtual: new Date(),
       salario13Obrigatorio: false,
+      beforeDateAjuizamento: 0,
+      afterDateAjuizamento: 0,
+      selic: false
     };
   },
   computed: {
@@ -1540,7 +1618,7 @@ export default {
             ? this.porcentagemRMI
             : 100;
         const body = {
-          dib: this.dtInicial,
+          inicioCalculo: this.dtInicial,
           dip: this.dtFinal,
           atulizacao: this.atulizacao,
           incioJuros: this.inicio_juros,
@@ -1551,9 +1629,11 @@ export default {
           salarioMinimo: this.salarioMinimo,
           limiteMinimoMaximo: this.limiteMinimoMaximo,
           salario13: this.salario13,
-          dibAnterior: this.verificarDib(),
+          dib: this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib,
           porcentagemRMI: this.porcentagemRMI,
           salario13Obrigatorio: this.salario13Obrigatorio,
+          dibAnterior: this.dibAnterior == null || this.dibAnterior == ""? this.dtInicial : this.dibAnterior ,
+          selic: this.selic
         };
         let timer = 0;
 
@@ -1668,7 +1748,7 @@ export default {
           // })
           .catch((error) => {
             console.log(error);
-            console.log("error");
+            console.log("error Calculo");
           });
       }
     },
@@ -1680,6 +1760,11 @@ export default {
         this.alertTexto = "Obrigatório gerar e examinar a tabela de cálculo.";
         return false;
       }
+    },
+    formatarPorcentagemAcordo(){
+      return this.procntagem_acordo != 0 && this.procntagem_acordo != null
+                ? this.procntagem_acordo
+                : 100
     },
     adicionarLote() {
       if (this.verificadoInformacoes() && this.verificarCalculo()) {
@@ -2060,7 +2145,7 @@ export default {
     calcularLote() {
 
       const body = {
-        dib: this.dtInicial,
+        inicioCalculo: this.dtInicial,
         dip: this.dtFinal,
         atulizacao: this.atulizacao,
         incioJuros: this.inicio_juros,
@@ -2255,11 +2340,12 @@ export default {
         }
       }
       const body = {
-        dib: this.dtInicial,
+        inicioCalculo: this.dtInicial,
         dip: `01/${mesOssada}/${anoOssada}`,
         salario13: this.salario13,
         tipoCorrecao: this.tipoCorrecao,
         atulizacao: `${date[1]}/${date[2]}`,
+        selic: this.selic
       };
       const ossadaUrl = `${baseApiUrl}/salarioMinimo/procuraPorAno/${this.info_calculo.dataAjuizamento.split("/")[2]
         }`;
@@ -2267,10 +2353,11 @@ export default {
         const obj = await res.data;
         const ajuizamento = this.info_calculo.dataAjuizamento.split("/");
         let bodytaxaUnica = {
-          dib: this.info_calculo.dataAjuizamento,
+          inicioCalculo: this.info_calculo.dataAjuizamento,
           tipoJuros: this.tipoJuros,
           tipoCorrecao: this.tipoCorrecao,
           atulizacao: this.atulizacao,
+          selic: this.selic
         };
         axios
           .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
@@ -2300,7 +2387,13 @@ export default {
           .then((response) => {
             console.log(response.data);
             let alcada = response.data;
+            let arrayDateAjuizamento = this.info_calculo.dataAjuizamento.split("/")
+            let dateAjuzamento = new Date(`${arrayDateAjuizamento[1]}-${arrayDateAjuizamento[0]}-${arrayDateAjuizamento[2]}`)
+            console.log(dateAjuzamento);
+            console.log("dateAjuzamento");
             console.log(alcada);
+            this.beforeDateAjuizamento = 0
+            this.afterDateAjuizamento = 0
             this.calc_total.forEach((value) => {
               alcada.forEach((dado) => {
                 if (
@@ -2315,6 +2408,14 @@ export default {
                     salarioTotal:
                       Math.floor(dado.correcao * value.salario * 100) / 100,
                   });
+                  let arrayDataCalculoAlcada = value.data.split("/")
+                  let dataCalculoAlcada = new Date(`${arrayDataCalculoAlcada[1]}-${arrayDataCalculoAlcada[0]}-${arrayDataCalculoAlcada[2]}`)
+                  if(dataCalculoAlcada > dateAjuzamento){
+                    
+                   this.afterDateAjuizamento += Math.floor(dado.correcao * value.salario * 100) / 100;
+                  }else{
+                    this.beforeDateAjuizamento += Math.floor(dado.correcao * value.salario * 100) / 100;
+                  }
                   this.pacelasVencidas +=
                     Math.floor(dado.correcao * value.salario * 100) / 100;
                 }
@@ -2690,7 +2791,7 @@ export default {
             ];
           }
           const body = {
-            dib: info.dib,
+            inicioCalculo: info.dib,
             dip: info.dif,
             rmi: info.rmi,
             salario13: info.salario13,
@@ -2698,6 +2799,7 @@ export default {
             salarioMinimo: info.salarioMinimo,
             porcentagemRmi: info.porcentagemRmi,
             salario13Obrigatorio: info.salario13Obrigatorio,
+            selic: this.selic
           };
 
           axios
@@ -2851,7 +2953,6 @@ export default {
         ) / 100;
       this.calc_total[0].data = dtInicial;
     },
-    //Math.floor( * 100) / 100
     formatacao() {
       this.valor_total = Math.floor(this.valor_total * 100) / 100;
       this.valor_juros = Math.floor(this.valor_juros * 100) / 100;
@@ -3299,16 +3400,166 @@ export default {
         }
 
         #textosResumo {
-          width: 50%;
+          width: 42%;
+          text-align: right;
+          border: 1px solid white;
+        }
+        
+        #thead-limpo {
+          border: 1px solid white;
+          width: 29%;
+          font-size: 14px;
+        }
+
+        #thead-limpo-menor {
+          border: 1px solid white;
+          width: 42%;
+        }
+
+        #thead-centro {
+          border: 1px solid white;
+          width: 100%;
+          text-align: center;
+        }
+
+        #thead-invisivel {
+          border: 1px solid white;
+          width: 1%;
+        }
+
+
+        #valoresResumo {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumo2 {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumoExecucao {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valor-percentual-execucao {
+          width: 25%;
+          text-align: center;
+          border: 1px solid white;
+        }
+
+        #tabelaResumo {
+          width: 100%;
+          text-align: center;
+        }
+
+        #colunaVazia {
+          width: 15%;
           text-align: right;
           border: 1px solid white;
         }
 
-        #valoresResumo {
-          width: 50%;
+        #colunaVaziaDireita {
+          width: 45%;
           text-align: left;
           border: 1px solid white;
         }
+
+        #colunaResumoEsquerda {
+          width: 25%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaResumoDireita {
+          width: 15%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-horizontal {
+          width: 57%;
+          border: 1px solid #000;
+          margin-left: 20%;
+          margin-top: 0%;
+        }
+
+        #colunaAnaliseTexto {
+          width: 35%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseEsquerda {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseDireita {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-soma {
+          width: 13%;
+          border: 1px solid #000;
+          margin-left: 69%;
+          margin-top: -4px;
+        }
+
+        #linha-horizontal-separacao {
+          width: 60%;
+          border: 1px solid black;
+          margin-left: 21%;
+          margin-top: -1px;
+          margin-bottom: -10px;
+        }
+
+        #observacoes-div {
+          width: 50%;
+          margin-left: 25%;
+          font-size: small;
+        }
+        
+        .describes{
+          text-overflow: clip ellipsis;
+          margin-right: 10px;
+        }
+
+        #observacoes-div-texto {
+          width:100%;
+          margin-left: 10%;
+          font-size: small;
+          height: auto;
+          text-overflow: clip ellipsis;
+        }
+        
+        #info-inicial {
+          width: 50%;
+          margin-left: 5%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+        #info-inicial-coluna {
+          width: 15%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+
+        #info-inicial-linha {
+          width: 100%;
+          text-align: left;
+          border: 2px solid green;
+        }
+
 
         `;
       style = style + "</style>";
@@ -3370,38 +3621,20 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-    let contJuros = [];
-    let jurosUnicos = [];
-    let contCorrecao = [];
-    let correcaoUnicos = [];
-    axios.get(baseApiUrl + "/juros/listar").then((response) => {
-      jurosUnicos[0] = response.data[0];
-      contJuros[0] = response.data[0].tipo;
-      for (let i of response.data) {
-        if (contJuros.indexOf(i.tipo) == -1) {
-          jurosUnicos.push(i);
-          contJuros.push(i.tipo);
-        }
-      }
-      this.optionsJuros = jurosUnicos.map((obj) => ({
-        text: `Tipo: ${obj.tipo}. Descrição : ${obj.descricao}`,
-        value: obj.tipo,
-      }));
+      axios.get(baseApiUrl + "/describeJuros").then((response) => {
+      response.data.forEach((value) => {
+        this.optionsJuros.push({ text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
+        value: value.type,})
+      })
     });
 
-    axios.get(baseApiUrl + "/correcao/listar").then((response2) => {
-      correcaoUnicos[0] = response2.data[0];
-      contCorrecao[0] = response2.data[0].tipo;
-      for (let i of response2.data) {
-        if (contCorrecao.indexOf(i.tipo) == -1) {
-          correcaoUnicos.push(i);
-          contCorrecao.push(i.tipo);
-        }
-      }
-      this.optionsCorrecao = correcaoUnicos.map((obj) => ({
-        text: `Tipo: ${obj.tipo}. Descrição : ${obj.descricao}`,
-        value: obj.tipo,
-      }));
+    axios.get(baseApiUrl + "/describeCorrecao").then((response2) => {
+      this.optionsCorrecao = [];
+      console.log(response2.body);
+      response2.data.forEach((value) => {
+        this.optionsCorrecao.push({ text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
+        value: value.type,})
+      })
     });
     axios.get(baseApiUrl + "/beneficio/listar").then((res) => {
       res.data.forEach(item => {
@@ -3597,7 +3830,9 @@ v-card {
 }
 
 table,
-th,
+th {
+  border: 1px solid white;
+}
 td {
   border: 1px solid;
   text-align: left;
@@ -3641,8 +3876,121 @@ td {
 }
 
 #valoresResumo {
-  width: 50%;
+  width: 25%;
+  text-align: center;
+  border: 1px solid white;
+}
+
+#valoresResumoExecucao {
+  width: 25%;
+  text-align: center;
+  border: 1px solid white;
+}
+
+#valor-percentual-execucao {
+  width: 25%;
+  text-align: center;
+  border: 1px solid white;
+}
+
+#tabelaResumo {
+  width: 100%;
+  text-align: center;
+}
+
+#colunaVazia {
+  width: 15%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#colunaVaziaDireita {
+  width: 45%;
   text-align: left;
   border: 1px solid white;
 }
+
+#colunaResumoEsquerda {
+  width: 25%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#colunaResumoDireita {
+  width: 15%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#linha-horizontal {
+  width: 50%;
+  border: 2px solid #000;
+  margin-left: 25%;
+  margin-top: -1%;
+}
+
+#colunaAnaliseTexto {
+  width: 20%;
+  text-align: left;
+  border: 1px solid white;
+}
+
+#colunaAnaliseEsquerda {
+  width: 2%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#colunaAnaliseDireita {
+  width: 2%;
+  text-align: right;
+  border: 1px solid white;
+}
+
+#linha-soma {
+  width: 7%;
+  border: 1px solid #000;
+  margin-left: 68%;
+  margin-top: -7px;
+}
+
+#linha-horizontal-separacao {
+  width: 40%;
+  border: 1px solid #000;
+  margin-left: 30%;
+  margin-top: -2px;
+  margin-bottom: -20px;
+}
+
+#observacoes-div {
+  width: 50%;
+  margin-left: 25%;
+  font-size: small;
+}
+
+#observacoes-div-texto {
+  width: 70%;
+  margin-left: 10%;
+  font-size: small;
+}
+
+#info-inicial {
+  width: 30%;
+  margin-left: 5%;
+  text-align: left;
+  border: 1px solid white;
+}
+
+#info-inicial-coluna {
+  width: 15%;
+  text-align: left;
+  border: 2px solid white;
+}
+
+#info-inicial-linha {
+  width: 100%;
+  text-align: left;
+  border: 2px solid white;
+}
+
 </style>
