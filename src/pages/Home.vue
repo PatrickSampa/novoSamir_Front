@@ -21,130 +21,300 @@
       </v-tabs>
     </v-card>
     <v-card>
-      <bloco-informacoes v-if="!add_taxa" @calculo="atualizarTodosDados($event)" :exibir="{
-        tudo: BlocoDeInformacoes_tudo,
-        processos: BlocoDeInformacoes_processos,
-      }" @dados="BlocoDeInformacoes_tudo = $event" @processos="BlocoDeInformacoes_processos = $event">
+      <bloco-informacoes
+        v-if="!add_taxa"
+        @calculo="atualizarTodosDados($event)"
+        :exibir="{
+          tudo: BlocoDeInformacoes_tudo,
+          processos: BlocoDeInformacoes_processos,
+        }"
+        @dados="BlocoDeInformacoes_tudo = $event"
+        @processos="BlocoDeInformacoes_processos = $event"
+      >
       </bloco-informacoes>
     </v-card>
     <v-card class="pa-3 my-3" v-if="add_taxa == false">
       <v-row>
         <v-col cols="12" sm="6" md="3">
-          <label for="data-inicial" class="labels pb-3">Data Inicial <b class="item-obrigatorio">*</b></label>
+          <label for="data-inicial" class="labels pb-3"
+            >Data Inicial <b class="item-obrigatorio">*</b></label
+          >
 
-          <v-text-field v-mask="'##/##/####'" v-model="dtInicial" id="data-inicial" dense outlined required>
+          <v-text-field
+            v-mask="'##/##/####'"
+            v-model="dtInicial"
+            id="data-inicial"
+            dense
+            outlined
+            required
+          >
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <label for="data_final" class="labels pb-3">Data Final <b class="item-obrigatorio">*</b></label>
-          <v-text-field v-mask="'##/##/####'" v-model="dtFinal" id="data-final" dense outlined required></v-text-field>
+          <label for="data_final" class="labels pb-3"
+            >Data Final <b class="item-obrigatorio">*</b></label
+          >
+          <v-text-field
+            v-mask="'##/##/####'"
+            v-model="dtFinal"
+            id="data-final"
+            dense
+            outlined
+            required
+          ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <label for="valor-devido R$" class="labels pb-3">Valor Devido <b class="item-obrigatorio">*</b></label>
-          <v-text-field type="number" v-model="salarioInicial" id="valor-devido" dense placeholder="nada"
-            @input="salarioInicial = formataçao(salarioInicial)" outlined required></v-text-field>
+          <label for="valor-devido R$" class="labels pb-3"
+            >Valor Devido <b class="item-obrigatorio">*</b></label
+          >
+          <v-text-field
+            type="number"
+            v-model="salarioInicial"
+            id="valor-devido"
+            dense
+            placeholder="nada"
+            @input="salarioInicial = formataçao(salarioInicial)"
+            outlined
+            required
+          ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <label for="inicio_Juros" class="labels pb-3">Início do juros <b class="item-obrigatorio">*</b></label>
-          <v-text-field v-mask="'##/##/####'" v-model="inicio_juros" id="data-final" dense outlined required>
+          <label for="inicio_Juros" class="labels pb-3"
+            >Início do juros <b class="item-obrigatorio">*</b></label
+          >
+          <v-text-field
+            v-mask="'##/##/####'"
+            v-model="inicio_juros"
+            id="data-final"
+            dense
+            outlined
+            required
+          >
           </v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" sm="6" md="3">
-          <label for="honorarios_Advocativos" class="labels pb-3">Honorários Advocatício Data</label>
-          <v-text-field v-mask="'##/##/####'" v-model="DataHonorarios" id="data-final" dense outlined></v-text-field>
+          <label for="honorarios_Advocativos" class="labels pb-3"
+            >Honorários Advocatício Data</label
+          >
+          <v-text-field
+            v-mask="'##/##/####'"
+            v-model="DataHonorarios"
+            id="data-final"
+            dense
+            outlined
+          ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <label for="honorarios_Advocativos" class="labels pb-3">Honorários Advocatício Porcentagem %</label>
-          <v-text-field type="number" v-model="porcentagemHonorarios" id="data-final" dense outlined></v-text-field>
+          <label for="honorarios_Advocativos" class="labels pb-3"
+            >Honorários Advocatício Porcentagem %</label
+          >
+          <v-text-field
+            type="number"
+            v-model="porcentagemHonorarios"
+            id="data-final"
+            dense
+            outlined
+          ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <label for="honorarios_Advocativos" class="labels pb-3">Acordo %</label>
-          <v-text-field type="number" v-model="procntagem_acordo" id="data-final" dense outlined></v-text-field>
+          <label for="honorarios_Advocativos" class="labels pb-3"
+            >Acordo %</label
+          >
+          <v-text-field
+            type="number"
+            v-model="procntagem_acordo"
+            id="data-final"
+            dense
+            outlined
+          ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <label for="porcentagemRMI" class="labels pb-3">Porcentagem RMI%</label>
-          <v-text-field type="number" v-model="porcentagemRMI" id="porcentagemRMI" dense outlined></v-text-field>
+          <label for="porcentagemRMI" class="labels pb-3"
+            >Porcentagem RMI%</label
+          >
+          <v-text-field
+            type="number"
+            v-model="porcentagemRMI"
+            id="porcentagemRMI"
+            dense
+            outlined
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" sm="6" md="2">
-          <label class="labels pb-3">Juros <b class="item-obrigatorio">*</b></label>
-          <v-select outlined placeholder="Escolha uma opção" :items="optionsJuros" v-model="tipoJuros"></v-select>
+          <label class="labels pb-3"
+            >Juros <b class="item-obrigatorio">*</b></label
+          >
+          <v-select
+            outlined
+            placeholder="Escolha uma opção"
+            :items="optionsJuros"
+            v-model="tipoJuros"
+          ></v-select>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <label class="labels pb-3">Correção <b class="item-obrigatorio">*</b></label>
-          <v-select outlined placeholder="Escolha uma opção" :items="optionsCorrecao" v-model="tipoCorrecao"></v-select>
+          <label class="labels pb-3"
+            >Correção <b class="item-obrigatorio">*</b></label
+          >
+          <v-select
+            outlined
+            placeholder="Escolha uma opção"
+            :items="optionsCorrecao"
+            v-model="tipoCorrecao"
+          ></v-select>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <label for="atualizacao" class="labels pb-2">Atualização <b class="item-obrigatorio">*</b></label>
-          <v-text-field v-mask="'##/####'" v-model="atulizacao" id="atualizacao" placeholder="Ex: 06/2022" dense
-            outlined required>
+          <label for="atualizacao" class="labels pb-2"
+            >Atualização <b class="item-obrigatorio">*</b></label
+          >
+          <v-text-field
+            v-mask="'##/####'"
+            v-model="atulizacao"
+            id="atualizacao"
+            placeholder="Ex: 06/2022"
+            dense
+            outlined
+            required
+          >
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <label for="dibAnterior" class="labels pb-2">DIB-Anterior</label>
-          <v-text-field v-mask="'##/##/####'" v-model="dibAnterior" id="dibAnterior" placeholder="Ex: 17/06/2022" dense
-            outlined>
+          <v-text-field
+            v-mask="'##/##/####'"
+            v-model="dibAnterior"
+            id="dibAnterior"
+            placeholder="Ex: 17/06/2022"
+            dense
+            outlined
+          >
           </v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" sm="6" md="3">
-          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="limiteMinimoMaximo"
-            :value="limiteMinimoMaximo" />
-          <label for="limiteMinimoMaximo" class="labels pb-2">Limite Minimo e Máximo</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            style="margin-right: 5px"
+            v-model="limiteMinimoMaximo"
+            :value="limiteMinimoMaximo"
+          />
+          <label for="limiteMinimoMaximo" class="labels pb-2"
+            >Limite Minimo e Máximo</label
+          >
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salarioMinimo"
-            :value="salarioMinimo" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            style="margin-right: 5px"
+            v-model="salarioMinimo"
+            :value="salarioMinimo"
+          />
           <label for="salarioMinimo" class="labels pb-2">Salário Mínimo</label>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <input type="checkbox" class="form-check-input" style="margin-right: 5px" :value="alcadaBoolean"
-            v-model="alcadaBoolean" id="flexCheckDefault" />
+          <input
+            type="checkbox"
+            class="form-check-input"
+            style="margin-right: 5px"
+            :value="alcadaBoolean"
+            v-model="alcadaBoolean"
+            id="flexCheckDefault"
+          />
           <label for="alcadaBoolean" class="labels pb-2">Alçada</label>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="boolJuros"
-            :value="boolJuros" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            style="margin-right: 5px"
+            v-model="boolJuros"
+            :value="boolJuros"
+          />
           <label for="boolJuros" class="labels pb-2">Juros</label>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salario13"
-            :value="salario13" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            style="margin-right: 5px"
+            v-model="salario13"
+            :value="salario13"
+          />
           <label for="salario13" class="labels pb-2">13° Salário</label>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" sm="6" md="3">
           <label for="beneficio" class="labels">Qual Benefício?</label>
-          <v-autocomplete @input="atulizarvalor()" dense outlined id="beneficio" value="info_calculo.beneficio"
-            :items="beneficiosInacumulveisBancoName" v-model="info_calculo.beneficio" type="text" size="sm"
-            placeholder="57 - APOSENTADORIA POR  TEMPO DE CONTRIBUIÇÃO DE PROFESSOR">
+          <v-autocomplete
+            @input="atulizarvalor()"
+            dense
+            outlined
+            id="beneficio"
+            value="info_calculo.beneficio"
+            :items="beneficiosInacumulveisBancoName"
+            v-model="info_calculo.beneficio"
+            type="text"
+            size="sm"
+            placeholder="57 - APOSENTADORIA POR  TEMPO DE CONTRIBUIÇÃO DE PROFESSOR"
+          >
           </v-autocomplete>
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <label for="info_calculo.nb" class="labels">N.B</label>
-          <v-text-field @input="atulizarvalor()" dense outlined id="info_calculo.nb" v-model="info_calculo.nb"
-            type="number" size="sm" placeholder="Ex: 01100110 01110101 01100011 01101011">
+          <v-text-field
+            @input="atulizarvalor()"
+            dense
+            outlined
+            id="info_calculo.nb"
+            v-model="info_calculo.nb"
+            type="number"
+            size="sm"
+            placeholder="Ex: 01100110 01110101 01100011 01101011"
+          >
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <label for="info_calculo.dib" class="labels">DIB</label>
-          <v-text-field v-mask="'##/##/####'" @input="atulizarvalor()" dense outlined id="info_calculo.dib"
-            v-model="info_calculo.dib" type="text" size="sm" placeholder="Ex: 22/10/2020">
+          <v-text-field
+            v-mask="'##/##/####'"
+            @input="atulizarvalor()"
+            dense
+            outlined
+            id="info_calculo.dib"
+            v-model="info_calculo.dibInicial"
+            type="text"
+            size="sm"
+            placeholder="Ex: 22/10/2020"
+          >
           </v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salario13Obrigatorio"
-            :value="salario13Obrigatorio" />
-          <label for="salario13" class="labels pb-2">13° Salário Obrigatorio</label>
+          <input
+            class="form-check-input"
+            type="checkbox"
+            style="margin-right: 5px"
+            v-model="salario13Obrigatorio"
+            :value="salario13Obrigatorio"
+          />
+          <label for="salario13" class="labels pb-2"
+            >13° Salário Obrigatorio</label
+          >
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="selic"
-            :value="selic" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            style="margin-right: 5px"
+            v-model="selic"
+            :value="selic"
+          />
           <label for="salario13" class="labels pb-2">Selic</label>
         </v-col>
       </v-row>
@@ -153,77 +323,148 @@
 
       <b-row class="row-one my-3 align-items-center">
         <b-col sm="2">
-          <input class="form-check-input" style="margin-right: 5px" type="checkbox" :value="beneficio"
-            v-model="beneficio" id="flexCheckDefault" />
+          <input
+            class="form-check-input"
+            style="margin-right: 5px"
+            type="checkbox"
+            :value="beneficio"
+            v-model="beneficio"
+            id="flexCheckDefault"
+          />
           <label class="form-check-label labels" for="flexCheckDefault">
             Recebeu Benefício
           </label>
         </b-col>
         <b-col sm="2" v-if="beneficio === true">
-          <b-button id="button-beneficio" color="primary" @click="pushBeneficiosAcumulados()">Adicionar Beneficio
+          <b-button
+            id="button-beneficio"
+            color="primary"
+            @click="pushBeneficiosAcumulados()"
+            >Adicionar Beneficio
           </b-button>
         </b-col>
       </b-row>
 
-      <b-card v-for="obj_beneficioAcumulado of arrayBenficios" :key="obj_beneficioAcumulado">
+      <b-card
+        v-for="obj_beneficioAcumulado of arrayBenficios"
+        :key="obj_beneficioAcumulado"
+      >
         <b-row class="row-one my-3 align-items-center">
           <b-col sm="3" v-if="beneficio === true">
-            <v-autocomplete id="beneficio" :items="beneficiosInacumulveisBancoName"
-
-              v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?"
-              @input="beneficiosEspecialInfo(obj_beneficioAcumulado)">
-
+            <v-autocomplete
+              id="beneficio"
+              :items="beneficiosInacumulveisBancoName"
+              v-model="obj_beneficioAcumulado.beneficio"
+              type="text"
+              size="sm"
+              placeholder="Qual Benefício?"
+              @input="beneficiosEspecialInfo(obj_beneficioAcumulado)"
+            >
             </v-autocomplete>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
-            <label for="beneficio_inicial" class="labels">Início do Benefício</label>
-            <b-form-input v-mask="'##/##/####'" id="beneficio_inicial" v-model="obj_beneficioAcumulado.dib" type="text"
-              size="sm">
+            <label for="beneficio_inicial" class="labels"
+              >Início do Benefício</label
+            >
+            <b-form-input
+              v-mask="'##/##/####'"
+              id="beneficio_inicial"
+              v-model="obj_beneficioAcumulado.dib"
+              type="text"
+              size="sm"
+            >
             </b-form-input>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio_final" class="labels">Fim do Benefício</label>
-            <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.dif" id="beneficio_final" type="text"
-              size="sm">
+            <b-form-input
+              v-mask="'##/##/####'"
+              v-model="obj_beneficioAcumulado.dif"
+              id="beneficio_final"
+              type="text"
+              size="sm"
+            >
             </b-form-input>
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">RMI</label>
-            <b-form-input type="number" v-model="obj_beneficioAcumulado.rmi" id="beneficio" size="sm"
-              placeholder="Ex:1000">
+            <b-form-input
+              type="number"
+              v-model="obj_beneficioAcumulado.rmi"
+              id="beneficio"
+              size="sm"
+              placeholder="Ex:1000"
+            >
             </b-form-input>
           </b-col>
         </b-row>
         <b-row>
           <b-col sm="3" v-if="beneficio === true">
-            <label for="beneficio" class="labels">Limite de Minimo e Maximo</label>
+            <label for="beneficio" class="labels"
+              >Limite de Minimo e Maximo</label
+            >
 
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.limiteMinimoMaximo"
-              :value="obj_beneficioAcumulado.limiteMinimoMaximo" class="form-check-input" style="margin-left: 5px"
-              type="checkbox" id="beneficio" size="sm" />
+            <input
+              :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
+              v-model="obj_beneficioAcumulado.limiteMinimoMaximo"
+              :value="obj_beneficioAcumulado.limiteMinimoMaximo"
+              class="form-check-input"
+              style="margin-left: 5px"
+              type="checkbox"
+              id="beneficio"
+              size="sm"
+            />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">13 Salario</label>
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salario13" :value="obj_beneficioAcumulado.salario13"
-              class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
+            <input
+              :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
+              v-model="obj_beneficioAcumulado.salario13"
+              :value="obj_beneficioAcumulado.salario13"
+              class="form-check-input"
+              style="margin-left: 5px"
+              type="checkbox"
+              id="beneficio"
+              size="sm"
+            />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">Salario Minimo</label>
 
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
-              class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
+            <input
+              :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
+              v-model="obj_beneficioAcumulado.salarioMinimo"
+              :value="obj_beneficioAcumulado.salarioMinimo"
+              class="form-check-input"
+              style="margin-left: 5px"
+              type="checkbox"
+              id="beneficio"
+              size="sm"
+            />
           </b-col>
           <b-col sm="3" v-if="beneficio === true">
             <label for="beneficio" class="labels">13 Salario Obrigatorio</label>
 
-            <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)" v-model="obj_beneficioAcumulado.salario13Obrigatorio"
-              :value="obj_beneficioAcumulado.salario13Obrigatorio" class="form-check-input" style="margin-left: 5px"
-              type="checkbox" id="beneficio" size="sm" />
+            <input
+              :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
+              v-model="obj_beneficioAcumulado.salario13Obrigatorio"
+              :value="obj_beneficioAcumulado.salario13Obrigatorio"
+              class="form-check-input"
+              style="margin-left: 5px"
+              type="checkbox"
+              id="beneficio"
+              size="sm"
+            />
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
             <label for="beneficio" class="labels">RMI%</label>
-            <b-form-input type="number" v-model="obj_beneficioAcumulado.porcentagemRmi" id="beneficio" size="sm"
-              placeholder="Ex:1000">
+            <b-form-input
+              type="number"
+              v-model="obj_beneficioAcumulado.porcentagemRmi"
+              id="beneficio"
+              size="sm"
+              placeholder="Ex:1000"
+            >
             </b-form-input>
           </b-col>
         </b-row>
@@ -240,41 +481,87 @@
       </v-row>
       <v-row class="my-3">
         <v-col cols="1" class="mr-6">
-          <v-btn depressed color="primary" @click="zeraDadosDocalculo(), (mode = 'table'), calculo()">Calcular</v-btn>
+          <v-btn
+            depressed
+            color="primary"
+            @click="zeraDadosDocalculo(), (mode = 'table'), calculo()"
+            >Calcular</v-btn
+          >
         </v-col>
         <v-col cols="1">
-          <v-btn depressed color="secondary" @click="(mode = ''), redirectToCalculo()">cancelar</v-btn>
+          <v-btn
+            depressed
+            color="secondary"
+            @click="(mode = ''), redirectToCalculo()"
+            >cancelar</v-btn
+          >
         </v-col>
         <v-col cols="1">
-          <v-btn depressed color="primary" style="margin-left: 25px" :href="info_calculo.urlProcesso" target="_blank">
-            Consultar Processo</v-btn>
+          <v-btn
+            depressed
+            color="primary"
+            style="margin-left: 25px"
+            :href="info_calculo.urlProcesso"
+            target="_blank"
+          >
+            Consultar Processo</v-btn
+          >
         </v-col>
 
         <v-col cols="3">
-          <v-btn depressed color="primary" style="margin-left: 145px" @click="adicionarLote()" target="_blank">Adicionar
-            ao Lote</v-btn>
+          <v-btn
+            depressed
+            color="primary"
+            style="margin-left: 145px"
+            @click="adicionarLote()"
+            target="_blank"
+            >Adicionar ao Lote</v-btn
+          >
         </v-col>
         <v-col cols="3">
-          <v-btn depressed color=red style="margin-left: 145px" target="_blank" @click="deletarLote()">Deletar lote
+          <v-btn
+            depressed
+            color="red"
+            style="margin-left: 145px"
+            target="_blank"
+            @click="deletarLote()"
+            >Deletar lote
           </v-btn>
         </v-col>
         <v-col cols="2">
-          <v-btn depressed color="primary" @click="mode = 'table'" target="_blank">Calcular Lote</v-btn>
+          <v-btn
+            depressed
+            color="primary"
+            @click="mode = 'table'"
+            target="_blank"
+            >Calcular Lote</v-btn
+          >
         </v-col>
       </v-row>
     </v-card>
     <h3 class="mt-5">Beneficios para calculo em lote</h3>
     <template>
-      <v-data-table :headers="headersCalculoLote" :items="calculoLote" class="elevation-1">
+      <v-data-table
+        :headers="headersCalculoLote"
+        :items="calculoLote"
+        class="elevation-1"
+      >
         <template v-slot:item="{ item }">
           <tr>
-            <td class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="tranferir(item.id)">
+            <td
+              class="py-3"
+              style="color: rgb(107, 107, 218); cursor: pointer"
+              @click="tranferir(item.id)"
+            >
               {{ item.numeroDoProcesso }}
             </td>
             <td>{{ item.nome }}</td>
             <td>{{ item.tipo }}</td>
             <td>
-              <v-icon v-if="item.nomeBeneficioBeneficioAcumulado[0]" color="red">
+              <v-icon
+                v-if="item.nomeBeneficioBeneficioAcumulado[0]"
+                color="red"
+              >
                 mdi-check-outline
               </v-icon>
             </td>
@@ -301,44 +588,72 @@
       <div v-if="add_taxa == false" class="column">
         <label class="camposInput">
           Processo:
-          <input v-model="info_calculo.numeroDoProcesso" @input="atulizarvalor()"
-            placeholder="XXXX-XX.XXXX.XXX.XXXX" /></label>
+          <input
+            v-model="info_calculo.numeroDoProcesso"
+            @input="atulizarvalor()"
+            placeholder="XXXX-XX.XXXX.XXX.XXXX"
+        /></label>
         <label class="inputToPrint" id="processoForm" />
         <br />
         <label class="camposInput">
           Autor:
-          <input v-model="info_calculo.nome" @input="atulizarvalor()" placeholder="Jennifer Walters" /></label>
+          <input
+            v-model="info_calculo.nome"
+            @input="atulizarvalor()"
+            placeholder="Jennifer Walters"
+        /></label>
         <label class="inputToPrint" id="autorForm" />
         <br />
-        <label class="camposInput">Objeto:
-          <input v-model="objetoDoCalculo" placeholder="Ex.: CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO" /></label><label
-          class="inputToPrint" id="objetoForm" />
+        <label class="camposInput"
+          >Objeto:
+          <input
+            v-model="objetoDoCalculo"
+            placeholder="Ex.: CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO" /></label
+        ><label class="inputToPrint" id="objetoForm" />
         <br />
-        <label class="camposInput">Vara:
-          <input v-model="varaPrevidenciaria" placeholder="Ex.: Previdenciária" /></label><label class="inputToPrint"
-          id="varaForm" />
+        <label class="camposInput"
+          >Vara:
+          <input
+            v-model="varaPrevidenciaria"
+            placeholder="Ex.: Previdenciária" /></label
+        ><label class="inputToPrint" id="varaForm" />
         <br />
-        <label class="camposInput">Juros: <input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label><label
-          class="inputToPrint" id="jurosForm" />
+        <label class="camposInput"
+          >Juros: <input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label
+        ><label class="inputToPrint" id="jurosForm" />
         <br />
       </div>
       <div class="column">
-        <label class="camposInput">Ajuizamento:
-          <input v-mask="'##/##/####'" v-model="info_calculo.dataAjuizamento" @input="atulizarvalor()"
-            placeholder="XX/XX/XXXX" /></label><label class="inputToPrint" id="ajuizamentoForm" />
+        <label class="camposInput"
+          >Ajuizamento:
+          <input
+            v-mask="'##/##/####'"
+            v-model="info_calculo.dataAjuizamento"
+            @input="atulizarvalor()"
+            placeholder="XX/XX/XXXX" /></label
+        ><label class="inputToPrint" id="ajuizamentoForm" />
         <br />
-        <label class="camposInput">Início do Juros:
-          <input v-mask="'##/##/####'" v-model="inicio_juros" placeholder="XX/XXXX" /></label><label
-          class="inputToPrint" id="inicioJurosForm" />
+        <label class="camposInput"
+          >Início do Juros:
+          <input
+            v-mask="'##/##/####'"
+            v-model="inicio_juros"
+            placeholder="XX/XXXX" /></label
+        ><label class="inputToPrint" id="inicioJurosForm" />
         <br />
         <!-- Criar Função -->
-        <label class="camposInput">Valido até:
-          <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label class="inputToPrint"
-          id="calculadoEmForm" />
+        <label class="camposInput"
+          >Valido até:
+          <input
+            v-mask="'##/####'"
+            placeholder="XX/XXXX"
+            v-model="atulizacao" /></label
+        ><label class="inputToPrint" id="calculadoEmForm" />
         <br />
-        <label class="camposInput">Honorário:
-          <input placeholder="Ex.:" v-model="textoHonorarios" /></label><label class="inputToPrint"
-          id="honorarioForm" />
+        <label class="camposInput"
+          >Honorário:
+          <input placeholder="Ex.:" v-model="textoHonorarios" /></label
+        ><label class="inputToPrint" id="honorarioForm" />
         <br />
       </div>
     </div>
@@ -347,17 +662,30 @@
       <div class="resumoProcesso">
         <div class="columnResumoProcesso">
           <h6>N.B.</h6>
-          <input type="number" v-model="info_calculo.nb" @input="atulizarvalor()" placeholder="XXX.XXX.XXX-X" />
+          <input
+            type="number"
+            v-model="info_calculo.nb"
+            @input="atulizarvalor()"
+            placeholder="XXX.XXX.XXX-X"
+          />
           <label class="inputToPrintResumo" id="resumoNB" />
         </div>
         <div class="columnResumoProcessoParte">
           <h6>Parte</h6>
-          <input v-model="info_calculo.nome" @input="atulizarvalor()" placeholder="Ex.: Matthew M. Murdock" />
+          <input
+            v-model="info_calculo.nome"
+            @input="atulizarvalor()"
+            placeholder="Ex.: Matthew M. Murdock"
+          />
           <label class="inputToPrintResumoParte" id="resumoParte" />
         </div>
         <div class="columnResumoProcesso">
           <h6>Principal R$</h6>
-          <input type="number" v-model="valor_corrigido" placeholder="XX.XXX,XX" />
+          <input
+            type="number"
+            v-model="valor_corrigido"
+            placeholder="XX.XXX,XX"
+          />
           <label class="inputToPrintResumo" id="resumoPrincipal" />
         </div>
         <div class="columnResumoProcesso">
@@ -369,10 +697,11 @@
           <h6>Total R$</h6>
           <b>
             {{
-                Math.floor(
-                  (parseFloat(valor_corrigido) + parseFloat(valor_juros)) * 100
-                ) / 100
-            }}</b>
+              Math.floor(
+                (parseFloat(valor_corrigido) + parseFloat(valor_juros)) * 100
+              ) / 100
+            }}</b
+          >
           <label class="inputToPrintResumo" id="resumoTotal" />
         </div>
       </div>
@@ -392,13 +721,23 @@
         <label class="camposInput">Honorários Advocatícios: R$</label>
         <br />
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-        <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Acordo: %</label>
+        <label
+          class="camposInput"
+          v-if="procntagem_acordo != 0 && procntagem_acordo != null"
+          >Acordo: %</label
+        >
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-        <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Devido ao(s) Reclamante(s)
-          (Acordo): R$</label>
+        <label
+          class="camposInput"
+          v-if="procntagem_acordo != 0 && procntagem_acordo != null"
+          >Devido ao(s) Reclamante(s) (Acordo): R$</label
+        >
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-        <label v-if="procntagem_acordo != 0 && procntagem_acordo != null" class="camposInput">Honorários Advocatícios
-          (Acordo): R$</label>
+        <label
+          v-if="procntagem_acordo != 0 && procntagem_acordo != null"
+          class="camposInput"
+          >Honorários Advocatícios (Acordo): R$</label
+        >
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
         <br />
         <label class="camposInput">Total do Processo: R$</label>
@@ -407,86 +746,104 @@
       </div>
 
       <div class="column">
-        <input type="number" v-model="valor_corrigido" placeholder="XX.XXX,XX" />
+        <input
+          type="number"
+          v-model="valor_corrigido"
+          placeholder="XX.XXX,XX"
+        />
         <label class="inputCalculo" id="somaPrincipal" />
         <br />
         <input type="number" v-model="valor_juros" placeholder="XX.XXX,XX" />
         <label class="inputCalculo" id="somaJuros" />
         <br />
-        <input type="number" placeholder="XX.XXX,XX" v-model="pacelasVencidas" />
+        <input
+          type="number"
+          placeholder="XX.XXX,XX"
+          v-model="pacelasVencidas"
+        />
         <label class="inputCalculo" id="parcelasVincendas" />
         <br />
         <br />
 
         {{
-            Math.floor(
-              (parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) *
+          Math.floor(
+            (parseFloat(valor_corrigido) +
+              parseFloat(valor_juros) -
+              parseFloat(pacelasVencidas)) *
               100
-            ) / 100
+          ) / 100
         }}
         <br />
-        <input type="number" v-model="valorHonorarios" placeholder="XX.XXX,XX" id="honorariosAdvocativos" />
+        <input
+          type="number"
+          v-model="valorHonorarios"
+          placeholder="XX.XXX,XX"
+          id="honorariosAdvocativos"
+        />
         <label class="inputCalculo" />
         <br />
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-        <input type="number" v-if="procntagem_acordo != 0 && procntagem_acordo != null" v-model="procntagem_acordo"
-          placeholder="XX.XXX,XX" />
+        <input
+          type="number"
+          v-if="procntagem_acordo != 0 && procntagem_acordo != null"
+          v-model="procntagem_acordo"
+          placeholder="XX.XXX,XX"
+        />
         <label class="inputCalculo" id="honorariosAdvocativos" />
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
 
-        <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+        <b v-if="procntagem_acordo != 0 && procntagem_acordo != null"
+          >{{
             procntagem_acordo != 0 && procntagem_acordo != null
               ? Math.floor(
-                (((parseFloat(valor_corrigido) +
-                  parseFloat(valor_juros) -
-                  parseFloat(pacelasVencidas)) *
-                  parseFloat(procntagem_acordo)) /
-                  100) *
-                100
-              ) / 100
+                  (((parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                    parseFloat(procntagem_acordo)) /
+                    100) *
+                    100
+                ) / 100
               : Math.floor(
-                (parseFloat(valor_corrigido) +
-                  parseFloat(valor_juros) -
-                  parseFloat(pacelasVencidas)) *
-                100
-              ) / 100
-        }}
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                    100
+                ) / 100
+          }}
         </b>
         <label class="inputCalculo" id="honorariosAdvocativos" />
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
 
         <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
-            procntagem_acordo != 0 && procntagem_acordo != null
-              ? Math.floor(
+          procntagem_acordo != 0 && procntagem_acordo != null
+            ? Math.floor(
                 ((parseFloat(valorHonorarios) * parseFloat(procntagem_acordo)) /
                   100) *
-                100
+                  100
               ) / 100
-              : Math.floor(parseFloat(valorHonorarios) * 100) / 100
+            : Math.floor(parseFloat(valorHonorarios) * 100) / 100
         }}</b>
         <label class="inputCalculo" id="honorariosAdvocativos" />
         <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
         <br />
 
         {{
-            procntagem_acordo != 0 && procntagem_acordo != null
-              ? Math.floor(
+          procntagem_acordo != 0 && procntagem_acordo != null
+            ? Math.floor(
                 (((parseFloat(valor_corrigido) +
                   parseFloat(valor_juros) -
                   parseFloat(pacelasVencidas) +
                   parseFloat(valorHonorarios)) *
                   parseFloat(procntagem_acordo)) /
                   100) *
-                100
+                  100
               ) / 100
-              : Math.floor(
+            : Math.floor(
                 (parseFloat(valor_corrigido) +
                   parseFloat(valor_juros) -
                   parseFloat(pacelasVencidas) +
                   parseFloat(valorHonorarios)) *
-                100
+                  100
               ) / 100
         }}
 
@@ -494,7 +851,11 @@
         <br />
       </div>
     </div>
-    <v-row class="mx-3" v-for="beneficio of beneficioInacumulavel" :key="beneficio.dib">
+    <v-row
+      class="mx-3"
+      v-for="beneficio of beneficioInacumulavel"
+      :key="beneficio.dib"
+    >
       <v-col cols="12" sm="6" md="3">
         <p>Beneficio recebido: {{ beneficio.beneficio }}</p>
       </v-col>
@@ -517,21 +878,37 @@
       <h3 class="center">TETO DE ALÇADA</h3>
       <h5 class="center">{{ textoPeriodoAlcada }}</h5>
       <div class="columnRightAlcada">
-        <label class="camposInputAlcada">a) Total a ser considerado (Até 12 parcelas vincendas após
-          ajuizamento): R$</label>
+        <label class="camposInputAlcada"
+          >a) Total a ser considerado (Até 12 parcelas vincendas após
+          ajuizamento): R$</label
+        >
         <br />
-        <label class="camposInputAlcada">b) 60 salários mínimos no ajuizamente: R$</label>
+        <label class="camposInputAlcada"
+          >b) 60 salários mínimos no ajuizamente: R$</label
+        >
         <br />
-        <label class="camposInputAlcada">c) Eventual renúncia do total: R$</label>
+        <label class="camposInputAlcada"
+          >c) Eventual renúncia do total: R$</label
+        >
         <br />
         <br />
       </div>
       <div class="column">
-        <input type="number" @input="parcelasDevida()" class="inputTetoAlcada" v-model="alcadaValor"
-          placeholder="X,XX" /><label class="inputCalculo" id="c" />
+        <input
+          type="number"
+          @input="parcelasDevida()"
+          class="inputTetoAlcada"
+          v-model="alcadaValor"
+          placeholder="X,XX"
+        /><label class="inputCalculo" id="c" />
         <br />
-        <input type="number" @input="parcelasDevida()" class="inputTetoAlcada" v-model="salariominimosAlcada"
-          placeholder="X,XX" /><label class="inputCalculo" id="d" />
+        <input
+          type="number"
+          @input="parcelasDevida()"
+          class="inputTetoAlcada"
+          v-model="salariominimosAlcada"
+          placeholder="X,XX"
+        /><label class="inputCalculo" id="d" />
         <br />
         {{ alcadaTotal }}
         <label class="inputCalculo" id="e" />
@@ -540,11 +917,17 @@
       </div>
       <h5 class="center">d) Valores renunciados no ajuizamento atualizados:</h5>
       <div class="columnRightAlcada">
-        <label class="camposInputAlcada">d.1) Valor de eventual renúncia: R$</label>
+        <label class="camposInputAlcada"
+          >d.1) Valor de eventual renúncia: R$</label
+        >
         <br />
-        <label class="camposInputAlcada">d.2) Coeficiente de atualização:</label>
+        <label class="camposInputAlcada"
+          >d.2) Coeficiente de atualização:</label
+        >
         <br />
-        <label class="camposInputAlcada">d.3) Valor atualizado da renúncia: R$</label>
+        <label class="camposInputAlcada"
+          >d.3) Valor atualizado da renúncia: R$</label
+        >
         <br />
         <label class="camposInputAlcada">d.4) Taxa de juros de mora:</label>
         <br />
@@ -558,39 +941,49 @@
         {{ alcadaTotal }}
         <label class="inputCalculo" id="i" />
         <br />
-        <input type="number" @input="parcelasDevida()" class="inputTetoAlcada" v-model="alcadaCorrecaoPorcetagem"
-          placeholder="X,XX" /><label class="inputCalculo" id="j" />
+        <input
+          type="number"
+          @input="parcelasDevida()"
+          class="inputTetoAlcada"
+          v-model="alcadaCorrecaoPorcetagem"
+          placeholder="X,XX"
+        /><label class="inputCalculo" id="j" />
         <br />
         {{ Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) / 100 }}
 
         <label class="inputCalculo" id="k" />
         <br />
-        <input type="number" @input="parcelasDevida()" class="inputTetoAlcada" v-model="alcadaJurosPorcentagem"
-          placeholder="X,XX" /><label class="inputCalculo" id="l" />
+        <input
+          type="number"
+          @input="parcelasDevida()"
+          class="inputTetoAlcada"
+          v-model="alcadaJurosPorcentagem"
+          placeholder="X,XX"
+        /><label class="inputCalculo" id="l" />
         <br />
         {{
-            Math.floor(
-              alcadaTotal *
+          Math.floor(
+            alcadaTotal *
               alcadaCorrecaoPorcetagem *
               alcadaJurosPorcentagem *
               100
-            ) / 100
+          ) / 100
         }}
 
         <label class="inputCalculo" id="m" />
         <br />
         {{
-            Math.floor(
-              (Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) / 100 +
-                Math.floor(
-                  alcadaTotal *
+          Math.floor(
+            (Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) / 100 +
+              Math.floor(
+                alcadaTotal *
                   alcadaCorrecaoPorcetagem *
                   alcadaJurosPorcentagem *
                   100
-                ) /
+              ) /
                 100) *
               100
-            ) / 100
+          ) / 100
         }}
         <label class="inputCalculo" id="n" />
         <br />
@@ -602,101 +995,186 @@
       <div class="column">
         <label class="camposInputAlcada">
           Parte:
-          <input v-model="info_calculo.nome" @input="atulizarvalor()"
-            placeholder="Nome + (CPF 000.000.000-00)" /></label>
+          <input
+            v-model="info_calculo.nome"
+            @input="atulizarvalor()"
+            placeholder="Nome + (CPF 000.000.000-00)"
+        /></label>
         <label class="inputToPrint" id="partePlanilha" />
         <br />
         <label class="camposInputAlcada">
           Espécie:
-          <input v-model="info_calculo.beneficio" @input="atulizarvalor()" placeholder="XX(XXXXXXXXXX)" /></label>
+          <input
+            v-model="info_calculo.beneficio"
+            @input="atulizarvalor()"
+            placeholder="XX(XXXXXXXXXX)"
+        /></label>
         <label class="inputToPrintAlcada" id="autorPlanilha" />
         <br />
-        <label class="camposInputAlcada">DIB Jud:
-          <input v-mask="'##/##/####'" v-model="info_calculo.dib" placeholder="00/00/0000" /></label><label
-          class="inputToPrint" id="dibJudPlanilha" />
+        <label class="camposInputAlcada"
+          >DIB Jud:
+          <input
+            v-mask="'##/##/####'"
+            v-model="info_calculo.dib"
+            placeholder="00/00/0000" /></label
+        ><label class="inputToPrint" id="dibJudPlanilha" />
         <br />
-        <label class="camposInputAlcada">DIB Anterior:
-          <input v-mask="'##/##/####'" v-model="info_calculo.dibAnterior" @input="atulizarvalor()"
-            placeholder="00/00/0000" /></label><label class="inputToPrint" id="dibAnteriorPlanilha" />
+        <label class="camposInputAlcada"
+          >DIB Anterior:
+          <input
+            v-mask="'##/##/####'"
+            v-model="info_calculo.dibAnterior"
+            @input="atulizarvalor()"
+            placeholder="00/00/0000" /></label
+        ><label class="inputToPrint" id="dibAnteriorPlanilha" />
         <br />
-        <label class="camposInputAlcada">RMI Jud.:
-          <input type="number" v-model="salarioInicial" placeholder="00/00" /></label><label class="inputToPrint"
-          id="rmiJudPlanilha" />
+        <label class="camposInputAlcada"
+          >RMI Jud.:
+          <input
+            type="number"
+            v-model="salarioInicial"
+            placeholder="00/00" /></label
+        ><label class="inputToPrint" id="rmiJudPlanilha" />
         <br />
       </div>
       <div class="column">
-        <label class="camposInputAlcada">%RMI: <input type="number" placeholder="000,00"
-            v-model="porcentagemRMI" /></label><label class="inputToPrint" id="porCententagemRmiPlanilha" />
+        <label class="camposInputAlcada"
+          >%RMI:
+          <input
+            type="number"
+            placeholder="000,00"
+            v-model="porcentagemRMI" /></label
+        ><label class="inputToPrint" id="porCententagemRmiPlanilha" />
         <br />
-        <label class="camposInputAlcada">Período (Data de Início):
-          <input v-mask="'##/##/####'" v-model="dtInicial" placeholder="XX/XX/XXXX" /></label><label
-          class="inputToPrint" id="dataInicialPlanilha" />
+        <label class="camposInputAlcada"
+          >Período (Data de Início):
+          <input
+            v-mask="'##/##/####'"
+            v-model="dtInicial"
+            placeholder="XX/XX/XXXX" /></label
+        ><label class="inputToPrint" id="dataInicialPlanilha" />
         <br />
         <!-- Criar Função -->
-        <label class="camposInputAlcada">Período (Data de Fim):
-          <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="inputToPrint"
-          id="dataFinalPlanilha" />
+        <label class="camposInputAlcada"
+          >Período (Data de Fim):
+          <input
+            v-mask="'##/##/####'"
+            placeholder="XX/XX/XXXX"
+            v-model="dtFinal" /></label
+        ><label class="inputToPrint" id="dataFinalPlanilha" />
         <br />
-        <label for="13salario" class="labels pb-2" style="margin-left: 18px">13º Salário
+        <label for="13salario" class="labels pb-2" style="margin-left: 18px"
+          >13º Salário
         </label>
-        <input class="form-check-input" type="checkbox" style="margin-left: 5px" v-model="salario13"
-          :value="salario13" />
+        <input
+          class="form-check-input"
+          type="checkbox"
+          style="margin-left: 5px"
+          v-model="salario13"
+          :value="salario13"
+        />
         <br />
       </div>
     </div>
     <br />
     <br />
     <br />
-    <v-data-table dense v-if="mode === 'table'" :headers="headers" :items="calc_total"
-      :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
+    <v-data-table
+      dense
+      v-if="mode === 'table'"
+      :headers="headers"
+      :items="calc_total"
+      :items-per-page="calc_total.length"
+      item-key="name"
+      class="elevation-1"
+      hide-default-footer
+    >
       <template v-slot:item="{ item }">
         <tr>
           <td>
             <the-mask
-              @input="item.data = formatarDataTable(item.data), acrescentarTaxaTablePrincipal(item), item.correcao = 0"
-              :mask="['XXAaaaaaa/##/####', '##/##/####']" v-model="item.data" />
+              @input="
+                (item.data = formatarDataTable(item.data)),
+                  acrescentarTaxaTablePrincipal(item),
+                  (item.correcao = 0)
+              "
+              :mask="['XXAaaaaaa/##/####', '##/##/####']"
+              v-model="item.data"
+            />
           </td>
           <td>
-            <input type="number" v-model="item.reajusteAcumulado">
+            <input type="number" v-model="item.reajusteAcumulado" />
           </td>
           <td v-if="beneficioInacumulavel[0]">
-            <input type="number" v-model="item.devido" @input="item = totaisSalarioTablePrincipal(item)"
-              :disabled="disableLinhaTable(item.data)">
+            <input
+              type="number"
+              v-model="item.devido"
+              @input="item = totaisSalarioTablePrincipal(item)"
+              :disabled="disableLinhaTable(item.data)"
+            />
           </td>
           <td v-if="beneficioInacumulavel[0]">
-            <input type="number" v-model="item.reajusteRecebido" @input="item = totaisSalarioTablePrincipal(item)"
-              :disabled="disableLinhaTable(item.data)">
+            <input
+              type="number"
+              v-model="item.reajusteRecebido"
+              @input="item = totaisSalarioTablePrincipal(item)"
+              :disabled="disableLinhaTable(item.data)"
+            />
           </td>
           <td v-if="beneficioInacumulavel[0]">
-            <input type="number" v-model="item.recebido" @input="item = totaisSalarioTablePrincipal(item)"
-              :disabled="disableLinhaTable(item.data)">
+            <input
+              type="number"
+              v-model="item.recebido"
+              @input="item = totaisSalarioTablePrincipal(item)"
+              :disabled="disableLinhaTable(item.data)"
+            />
           </td>
           <td>
-            <input type="number" @input="item = totaisSalarioTablePrincipal(item)" v-model="item.salario"
-              :disabled="disableLinhaTable(item.data)">
+            <input
+              type="number"
+              @input="item = totaisSalarioTablePrincipal(item)"
+              v-model="item.salario"
+              :disabled="disableLinhaTable(item.data)"
+            />
           </td>
           <td>
-            <input v-model="item.correcao" :disabled="disableLinhaTable(item.data)">
+            <input
+              v-model="item.correcao"
+              :disabled="disableLinhaTable(item.data)"
+            />
           </td>
           <td>
-            <input type="number" v-model="item.salarioCorrigido" disabled>
+            <input type="number" v-model="item.salarioCorrigido" disabled />
           </td>
           <td>
-            <input type="number" v-model="item.juros" :disabled="disableLinhaTable(item.data)">
+            <input
+              type="number"
+              v-model="item.juros"
+              :disabled="disableLinhaTable(item.data)"
+            />
           </td>
           <td>
-            <input type="number" v-model="item.salarioJuros" disabled>
+            <input type="number" v-model="item.salarioJuros" disabled />
           </td>
           <td>
-            <input type="number" v-model="item.salarioTotal" disabled>
+            <input type="number" v-model="item.salarioTotal" disabled />
           </td>
           <td>
-            <v-icon @click="removerItemTablePrincipal(item)" color="red">mdi-delete</v-icon>
+            <v-icon @click="removerItemTablePrincipal(item)" color="red"
+              >mdi-delete</v-icon
+            >
           </td>
         </tr>
       </template>
     </v-data-table>
-    <v-btn color="primary" v-if="mode === 'table'" @click="adicionarLinha()" primary> Adicionar Linha</v-btn>
+    <v-btn
+      color="primary"
+      v-if="mode === 'table'"
+      @click="adicionarLinha()"
+      primary
+    >
+      Adicionar Linha</v-btn
+    >
 
     <div id="tabelaImpostoRenda">
       <h4 class="center">
@@ -714,11 +1192,11 @@
           <td><input type="number" v-model="iPvalorAnoAtual" /></td>
           <td>
             {{
-                procntagem_acordo != 0 && procntagem_acordo != null
-                  ? Math.floor(
+              procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
                     parseFloat(iPvalorAnoAtual) * parseFloat(procntagem_acordo)
                   ) / 100
-                  : 0
+                : 0
             }}
           </td>
           <td><input type="number" v-model="competenciaAnoAtual" /></td>
@@ -728,12 +1206,12 @@
           <td><input type="number" v-model="iPvalorAnoAnterior" /></td>
           <td>
             {{
-                procntagem_acordo != 0 && procntagem_acordo != null
-                  ? Math.floor(
+              procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
                     parseFloat(iPvalorAnoAnterior) *
-                    parseFloat(procntagem_acordo)
+                      parseFloat(procntagem_acordo)
                   ) / 100
-                  : 0
+                : 0
             }}
           </td>
           <td><input type="number" v-model="competenciaAnoAnterior" /></td>
@@ -745,12 +1223,12 @@
           </td>
           <td>
             {{
-                procntagem_acordo != 0 && procntagem_acordo != null
-                  ? Math.floor(
+              procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
                     parseFloat(parseFloat(pacelasVencidas)) *
-                    parseFloat(procntagem_acordo)
+                      parseFloat(procntagem_acordo)
                   ) / 100
-                  : 0
+                : 0
             }}
           </td>
           <td></td>
@@ -759,27 +1237,27 @@
           <td>TOTAL EM R$</td>
           <td>
             {{
-                parseFloat(iPvalorAnoAnterior) +
-                parseFloat(iPvalorAnoAtual) -
-                parseFloat(pacelasVencidas)
+              parseFloat(iPvalorAnoAnterior) +
+              parseFloat(iPvalorAnoAtual) -
+              parseFloat(pacelasVencidas)
             }}
           </td>
           <td>
             {{
-                procntagem_acordo != 0 && procntagem_acordo != null
-                  ? Math.floor(
+              procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
                     parseFloat(
                       parseFloat(iPvalorAnoAnterior) +
-                      parseFloat(iPvalorAnoAtual) -
-                      parseFloat(pacelasVencidas)
+                        parseFloat(iPvalorAnoAtual) -
+                        parseFloat(pacelasVencidas)
                     ) * parseFloat(procntagem_acordo)
                   ) / 100
-                  : 0
+                : 0
             }}
           </td>
           <td>
             {{
-                parseInt(competenciaAnoAnterior) + parseInt(competenciaAnoAtual)
+              parseInt(competenciaAnoAnterior) + parseInt(competenciaAnoAtual)
             }}
           </td>
         </tr>
@@ -798,132 +1276,178 @@
         <h4 class="center">
           EQUIPE REGIONAL DE CÁLCULOS E PAGAMENTOS PREVIDENCIÁRIOS 1ª REGIÃO
         </h4>
-        
 
-        <table id="info-inicial">  
-          <tbody>   
+        <table id="info-inicial">
+          <tbody>
             <tr id="info-inicial-linha">
               <td id="info-inicial-coluna">Processo n°</td>
-              <td id="info-inicial-coluna">{{ info_calculo.numeroDoProcesso }}</td>
+              <td id="info-inicial-coluna">
+                {{ info_calculo.numeroDoProcesso }}
+              </td>
             </tr>
             <tr id="info-inicial-linha">
               <td id="info-inicial-coluna">Parte Autora</td>
               <td id="info-inicial-coluna">{{ info_calculo.nome }}</td>
             </tr>
           </tbody>
-        </table> 
-
+        </table>
 
         <h4 class="center">REVISÃO DE BENEFÍCIOS</h4>
         <div class="rowInputs">
           <div class="column">
-            
-            <label class="camposInput">Objeto:</label><label class="inputToPrint" id="objetoForm" />
+            <label class="camposInput">Objeto:</label
+            ><label class="inputToPrint" id="objetoForm" />
             {{ objetoDoCalculo }}
             <br />
-            <label class="camposInput">Vara:</label><label class="inputToPrint" id="varaForm" />
+            <label class="camposInput">Vara:</label
+            ><label class="inputToPrint" id="varaForm" />
             {{ varaPrevidenciaria }}
             <br />
-            <label class="camposInput">N.B: {{ info_calculo.nb }}</label><label class="inputToPrint" id="jurosForm" />
+            <label class="camposInput">N.B: {{ info_calculo.nb }}</label
+            ><label class="inputToPrint" id="jurosForm" />
             <br />
           </div>
           <div class="column">
-            <label class="camposInput">Ajuizamento:</label><label class="inputToPrint" id="ajuizamentoForm" />
+            <label class="camposInput">Ajuizamento:</label
+            ><label class="inputToPrint" id="ajuizamentoForm" />
             {{ info_calculo.dataAjuizamento }}
             <br />
-            <label class="camposInput">Início do Juros:</label><label class="inputToPrint" id="inicioJurosForm" />
+            <label class="camposInput">Início do Juros:</label
+            ><label class="inputToPrint" id="inicioJurosForm" />
             {{ inicio_juros }}
             <br />
-            <label class="camposInput">Valido até: {{ atulizacao }}</label><label class="inputToPrint"
-              id="calculadoEmForm" />
+            <label class="camposInput">Valido até: {{ atulizacao }}</label
+            ><label class="inputToPrint" id="calculadoEmForm" />
             <!--Função-->
             <br />
-            <label class="camposInput">Honorário:</label><label class="inputToPrint" id="honorarioForm" />
+            <label class="camposInput">Honorário:</label
+            ><label class="inputToPrint" id="honorarioForm" />
             {{ textoHonorarios }}
             <br />
           </div>
         </div>
       </div>
       <h4 class="center">RESUMO DO PROCESSO</h4>
-      
+
       <br />
 
       <table id="testeTotal">
         <thead>
-          <tr >
-              <th scope="col" id="thead-limpo-menor"></th>
-              <th scope="col" id="thead-limpo">Total no Período de Cálculo</th>
-              <th scope="col" id="thead-limpo">Cálculo para Execução</th>
+          <tr>
+            <th scope="col" id="thead-limpo-menor"></th>
+            <th scope="col" id="thead-limpo">Total no Período de Cálculo</th>
+            <th scope="col" id="thead-limpo">Cálculo para Execução</th>
           </tr>
-        </thead>   
-        <tbody>   
+        </thead>
+        <tbody>
           <tr>
             <td id="textosResumo"></td>
             <td id="valoresResumo"></td>
-            <td id="valor-percentual-execucao">({{formatarPorcentagemAcordo()}}%)</td>
+            <td id="valor-percentual-execucao">
+              ({{ formatarPorcentagemAcordo() }}%)
+            </td>
           </tr>
           <tr>
             <td id="textosResumo">Soma do Principal:</td>
-            <td id="valoresResumo">R${{ Math.floor(valor_corrigido * 100) / 100 }}</td>
-            <td id="valoresResumoExecucao">R${{ Math.floor(valor_corrigido * formatarPorcentagemAcordo()) / 100 }}</td>
+            <td id="valoresResumo">
+              R${{ Math.floor(valor_corrigido * 100) / 100 }}
+            </td>
+            <td id="valoresResumoExecucao">
+              R${{
+                Math.floor(valor_corrigido * formatarPorcentagemAcordo()) / 100
+              }}
+            </td>
           </tr>
           <tr>
             <td id="textosResumo">Juros de mora:</td>
-            <td id="valoresResumo">R${{ Math.floor(valor_juros * 100) / 100 }}</td>
-            <td id="valoresResumoExecucao">R${{ Math.floor(valor_juros * formatarPorcentagemAcordo()) / 100 }}</td>
+            <td id="valoresResumo">
+              R${{ Math.floor(valor_juros * 100) / 100 }}
+            </td>
+            <td id="valoresResumoExecucao">
+              R${{
+                Math.floor(valor_juros * formatarPorcentagemAcordo()) / 100
+              }}
+            </td>
           </tr>
           <tr v-if="alcadaBoolean == true">
             <td id="textosResumo">12 Parcelas Vincendas:</td>
-            <td id="valoresResumo">R${{ Math.floor(pacelasVencidas * 100) / 100 }}</td>
-            <td id="valoresResumoExecucao">R${{ Math.floor(pacelasVencidas * formatarPorcentagemAcordo()) / 100 }}</td>
+            <td id="valoresResumo">
+              R${{ Math.floor(pacelasVencidas * 100) / 100 }}
+            </td>
+            <td id="valoresResumoExecucao">
+              R${{
+                Math.floor(pacelasVencidas * formatarPorcentagemAcordo()) / 100
+              }}
+            </td>
           </tr>
         </tbody>
-        </table>
-        <br />
-        <table id="testeTotal">
+      </table>
+      <br />
+      <table id="testeTotal">
         <tbody>
           <tr>
             <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
-            <td id="valoresResumo">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) * 100) / 100
-            }}</td>
-            <td id="valoresResumoExecucao">R${{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
-              parseFloat(pacelasVencidas)) * formatarPorcentagemAcordo()) / 100
-          }}</td>
+            <td id="valoresResumo">
+              R${{
+                Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                    100
+                ) / 100
+              }}
+            </td>
+            <td id="valoresResumoExecucao">
+              R${{
+                Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                    formatarPorcentagemAcordo()
+                ) / 100
+              }}
+            </td>
           </tr>
           <tr>
             <td id="textosResumo">Honorários Advocatícios:</td>
             <td id="valoresResumo">R${{ valorHonorarios }}</td>
-            <td id="valoresResumoExecucao">R${{Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100 }}</td>
+            <td id="valoresResumoExecucao">
+              R${{
+                Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100
+              }}
+            </td>
           </tr>
         </tbody>
-        </table>
-        <br />
+      </table>
+      <br />
 
       <table id="testeTotal">
         <tr>
           <td id="textosResumo">Total do Processo:</td>
-          <td id="valoresResumo">R${{
+          <td id="valoresResumo">
+            R${{
               Math.floor(
-                  (parseFloat(valor_corrigido) +
-                    parseFloat(valor_juros) -
-                    parseFloat(pacelasVencidas) +
-                    parseFloat(valorHonorarios)) *
+                (parseFloat(valor_corrigido) +
+                  parseFloat(valor_juros) -
+                  parseFloat(pacelasVencidas) +
+                  parseFloat(valorHonorarios)) *
                   100
-                ) / 100
-          }}</td>
-          <td id="valoresResumoExecucao">R${{
-            Math.floor(
+              ) / 100
+            }}
+          </td>
+          <td id="valoresResumoExecucao">
+            R${{
+              Math.floor(
                 (parseFloat(valor_corrigido) +
                   parseFloat(valor_juros) -
                   parseFloat(pacelasVencidas) +
                   parseFloat(valorHonorarios)) *
                   formatarPorcentagemAcordo()
               ) / 100
-        }}</td>
+            }}
+          </td>
         </tr>
       </table>
-
 
       <v-row v-for="beneficio of beneficioInacumulavel" :key="beneficio">
         <v-col cols="12" sm="6" md="3">
@@ -944,186 +1468,252 @@
       </v-row>
       <img src="" alt="" />
 
-<!-- Adições ao gerador de PDF (09/2022) -->
-<br> 
-<div id="observacoes-div-texto">
-  Cálculo efetuado pelo vencimento do débito. {{textoHonorarios == null || textoHonorarios == ""? "Sem honorários": "Com honorários(" + textoHonorarios + ")"}}.<br>
-Total para cada competência = Principal + atualização monetária + juros de mora (se for o caso).<br>
-<b>Juros de mora:</b>
-<br/>
-<p class="describes">{{tipoJuros!= 0?(optionsJuros.find(element => element.value == tipoJuros)).text.split("Descrição:")[1]: ""}}.</p>
-<b>Correção:</b>
-<br/>
- <p class="describes">{{tipoCorrecao!= 0?(optionsCorrecao.find(element => element.value == tipoCorrecao)).text.split("Descrição:")[1]: ""}}</p>
-</div>    
+      <!-- Adições ao gerador de PDF (09/2022) -->
+      <br />
+      <div id="observacoes-div-texto">
+        Cálculo efetuado pelo vencimento do débito.
+        {{
+          textoHonorarios == null || textoHonorarios == ""
+            ? "Sem honorários"
+            : "Com honorários(" + textoHonorarios + ")"
+        }}.<br />
+        Total para cada competência = Principal + atualização monetária + juros
+        de mora (se for o caso).<br />
+        <b>Juros de mora:</b>
+        <br />
+        <p class="describes">
+          {{
+            tipoJuros != 0
+              ? quebraLinhaDescribe(
+                  optionsJuros
+                    .find((element) => element.value == tipoJuros)
+                    .text.split("Descrição:")[1]
+                    .split("")
+                )
+              : ""
+          }}.
+        </p>
+        <b>Correção:</b>
+        <br />
+        <p class="describes">
+          {{
+            tipoCorrecao != 0
+              ? quebraLinhaDescribe(
+                  optionsCorrecao
+                    .find((element) => element.value == tipoCorrecao)
+                    .text.split("Descrição:")[1]
+                    .split("")
+                )
+              : ""
+          }}.
+        </p>
+      </div>
 
-<table id="tabelaResumo">
-  <thead>
-    <tr>
-        <th scope="col" id="thead-centro"><h4>Resumo</h4></th>
-        <th scope="col" id="thead-invisivel"></th>
-        <th scope="col" id="thead-invisivel"></th>
-        <th scope="col" id="thead-invisivel"></th>
-    </tr>
-  </thead>
-</table>
-<div id="linha-horizontal"></div>
-<table id="tabelaResumo">
-  <tbody>   
-    <tr>
-      <td id="colunaVazia"></td>
-      <td id="colunaResumoEsquerda">Benefício:</td>
-      <td id="colunaResumoDireita">{{ info_calculo.beneficio }}</td>
-      <td id="colunaVaziaDireita"></td>
-    </tr>
-    <tr>
-      <td id="colunaVazia"></td>
-      <td id="colunaResumoEsquerda">DER:</td>
-      <td id="colunaResumoDireita">-</td>
-      <td id="colunaVaziaDireita"></td>
-    </tr>
-    <tr>
-      <td id="colunaVazia"></td>
-      <td id="colunaResumoEsquerda">DIB:</td>
-      <td id="colunaResumoDireita">{{ this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib }}</td>
-      <td id="colunaVaziaDireita"></td>
-    </tr>
-    <tr>
-      <td id="colunaVazia"></td>
-      <td id="colunaResumoEsquerda">DIP:</td>
-      <td id="colunaResumoDireita">{{ dtFinal }}</td>
-      <td id="colunaVaziaDireita"></td>
-    </tr>
-    <tr>
-      <td id="colunaVazia"></td>
-      <td id="colunaResumoEsquerda">Valor Principal (R$):</td>
-      <td id="colunaResumoDireita">{{ Math.floor((parseFloat(valor_corrigido) + parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) * formatarPorcentagemAcordo()) / 100
-            }}</td>
-      <td id="colunaVaziaDireita">(RPV)</td>
-    </tr>
-    <tr>
-      <td id="colunaVazia"></td>
-      <td id="colunaResumoEsquerda">Valor Honorários (R$): </td>
-      <td id="colunaResumoDireita">{{ Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100 }}</td>
-      <td id="colunaVaziaDireita"></td>
-    </tr>
-  </tbody>
-  </table>
+      <table id="tabelaResumo">
+        <thead>
+          <tr>
+            <th scope="col" id="thead-centro"><h4>Resumo</h4></th>
+            <th scope="col" id="thead-invisivel"></th>
+            <th scope="col" id="thead-invisivel"></th>
+            <th scope="col" id="thead-invisivel"></th>
+          </tr>
+        </thead>
+      </table>
+      <div id="linha-horizontal"></div>
+      <table id="tabelaResumo">
+        <tbody>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaResumoEsquerda">Benefício:</td>
+            <td id="colunaResumoDireita">{{ info_calculo.beneficio }}</td>
+            <td id="colunaVaziaDireita"></td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaResumoEsquerda">DER:</td>
+            <td id="colunaResumoDireita">-</td>
+            <td id="colunaVaziaDireita"></td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaResumoEsquerda">DIB:</td>
+            <td id="colunaResumoDireita">
+              {{
+                this.info_calculo.dib == null || this.info_calculo.dib == ""
+                  ? this.dtInicial
+                  : this.info_calculo.dib
+              }}
+            </td>
+            <td id="colunaVaziaDireita"></td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaResumoEsquerda">DIP:</td>
+            <td id="colunaResumoDireita">{{ dtFinal }}</td>
+            <td id="colunaVaziaDireita"></td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaResumoEsquerda">Valor Principal (R$):</td>
+            <td id="colunaResumoDireita">
+              {{
+                Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                    formatarPorcentagemAcordo()
+                ) / 100
+              }}
+            </td>
+            <td id="colunaVaziaDireita">({{ rpvOuPrecatorio }})</td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaResumoEsquerda">Valor Honorários (R$):</td>
+            <td id="colunaResumoDireita">
+              {{
+                Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100
+              }}
+            </td>
+            <td id="colunaVaziaDireita"></td>
+          </tr>
+        </tbody>
+      </table>
 
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
 
-  <table id="tabelaResumo">
-    <thead>
-      <tr>
-          <th scope="col" id="thead-centro"><h4> Análise de Competência do Juizado Especial Federal</h4></th>
-          <th scope="col" id="thead-invisivel"></th>
-          <th scope="col" id="thead-invisivel"></th>
-          <th scope="col" id="thead-invisivel"></th>
-          <th scope="col" id="thead-invisivel"></th>
-      </tr>
-    </thead>
-  </table>
-  <div id="linha-horizontal"></div>
-  <table id="tabelaResumo">
-    <tbody>   
-      <tr>
-        <td id="colunaVazia"></td>
-        <td id="colunaAnaliseTexto">Total de parcelas devidas até a data do ajuizamento </td>
-        <td id="colunaAnaliseEsquerda">({{this.info_calculo.dataAjuizamento}})</td>
-        <td id="colunaAnaliseDireita">{{Math.floor(beforeDateAjuizamento * 100) / 100}}</td>
-        <td id="colunaVazia"></td>
-      </tr>
-      <tr>
-        <td id="colunaVazia"></td>
-        <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s)</td>
-        <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">{{ Math.floor(afterDateAjuizamento * 100) / 100}}</td>
-        <td id="colunaVazia"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div id="linha-soma"></div>
-  <table id="tabelaResumo">
-    <tbody>
-      <tr>
-        <td id="colunaVazia"></td>
-        <td id="colunaAnaliseTexto">Valor da causa na data do ajuizamento da ação</td>
-        <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">{{ Math.floor(alcadaValor * 100) / 100 }}</td>
-        <td id="colunaVazia"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div id="linha-horizontal-separacao"></div>
-  <br>
-  <table id="tabelaResumo">
-    <tbody>
-        <tr>
-        <td id="colunaVazia"></td>
-        <td id="colunaAnaliseTexto">Limite de 60 salários mínimos em:</td>
-        <td id="colunaAnaliseEsquerda">{{this.info_calculo.dataAjuizamento}}</td>
-        <td id="colunaAnaliseDireita">{{
-              salariominimosAlcada
-          }}</td>
-        <td id="colunaVazia"></td>
-      </tr>
-      <tr>
-        <td id="colunaVazia"></td>
-        <td id="colunaAnaliseTexto">Parcela referente à renúncia pela alçada do JEF no ajuizamento</td>
-        <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">{{
-              Math.floor(alcadaTotal * 100) / 100
-          }}</td>
-        <td id="colunaVazia"></td>
-      </tr>
-      <tr>
-        <td id="colunaVazia"></td>
-        <td id="colunaAnaliseTexto">(*) Valor atualizado da renúncia pela alçada do JEF</td>
-        <td id="colunaAnaliseEsquerda"></td>
-        <td id="colunaAnaliseDireita">{{
-              Math.floor(
-                (Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) /
-                  100 +
-                  Math.floor(
-                    alcadaTotal *
-                    alcadaCorrecaoPorcetagem *
-                    alcadaJurosPorcentagem *
+      <table id="tabelaResumo">
+        <thead>
+          <tr>
+            <th scope="col" id="thead-centro">
+              <h4>Análise de Competência do Juizado Especial Federal</h4>
+            </th>
+            <th scope="col" id="thead-invisivel"></th>
+            <th scope="col" id="thead-invisivel"></th>
+            <th scope="col" id="thead-invisivel"></th>
+            <th scope="col" id="thead-invisivel"></th>
+          </tr>
+        </thead>
+      </table>
+      <div id="linha-horizontal"></div>
+      <table id="tabelaResumo">
+        <tbody>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaAnaliseTexto">
+              Total de parcelas devidas até a data do ajuizamento
+            </td>
+            <td id="colunaAnaliseEsquerda">
+              ({{ this.info_calculo.dataAjuizamento }})
+            </td>
+            <td id="colunaAnaliseDireita">
+              {{ Math.floor(beforeDateAjuizamento * 100) / 100 }}
+            </td>
+            <td id="colunaVazia"></td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s)</td>
+            <td id="colunaAnaliseEsquerda"></td>
+            <td id="colunaAnaliseDireita">
+              {{ Math.floor(afterDateAjuizamento * 100) / 100 }}
+            </td>
+            <td id="colunaVazia"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="linha-soma"></div>
+      <table id="tabelaResumo">
+        <tbody>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaAnaliseTexto">
+              Valor da causa na data do ajuizamento da ação
+            </td>
+            <td id="colunaAnaliseEsquerda"></td>
+            <td id="colunaAnaliseDireita">
+              {{ Math.floor(alcadaValor * 100) / 100 }}
+            </td>
+            <td id="colunaVazia"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="linha-horizontal-separacao"></div>
+      <br />
+      <table id="tabelaResumo">
+        <tbody>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaAnaliseTexto">Limite de 60 salários mínimos em:</td>
+            <td id="colunaAnaliseEsquerda">
+              {{ this.info_calculo.dataAjuizamento }}
+            </td>
+            <td id="colunaAnaliseDireita">{{ salariominimosAlcada }}</td>
+            <td id="colunaVazia"></td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaAnaliseTexto">
+              Parcela referente à renúncia pela alçada do JEF no ajuizamento
+            </td>
+            <td id="colunaAnaliseEsquerda"></td>
+            <td id="colunaAnaliseDireita">
+              {{ Math.floor(alcadaTotal * 100) / 100 }}
+            </td>
+            <td id="colunaVazia"></td>
+          </tr>
+          <tr>
+            <td id="colunaVazia"></td>
+            <td id="colunaAnaliseTexto">
+              (*) Valor atualizado da renúncia pela alçada do JEF
+            </td>
+            <td id="colunaAnaliseEsquerda"></td>
+            <td id="colunaAnaliseDireita">
+              {{
+                Math.floor(
+                  (Math.floor(alcadaTotal * alcadaCorrecaoPorcetagem * 100) /
+                    100 +
+                    Math.floor(
+                      alcadaTotal *
+                        alcadaCorrecaoPorcetagem *
+                        alcadaJurosPorcentagem *
+                        100
+                    ) /
+                      100) *
                     100
-                  ) /
-                  100) *
-                100
-              ) / 100
-          }}</td>
-        <td id="colunaVazia"></td>
-      </tr>
-    </tbody>
-  </table> 
-    <div id="linha-horizontal-separacao"></div>
-  <div id="observacoes-div">
-    <br>
-    Obs: A parcela vincenda ocorre a partir do dia primeiro de cada mês.
-    <br>
-    Obs.: Incompetência: parcelas devidas superam o teto do JEF na data do ajuizamento.
-    <br>
-    Atenção: os valores desta planilha referem-se a cálculo para fins de execução invertida / impugnação.
-    <br>
-    <br>
-  </div>
-
-
+                ) / 100
+              }}
+            </td>
+            <td id="colunaVazia"></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="linha-horizontal-separacao"></div>
+      <div id="observacoes-div">
+        <br />
+        Obs: A parcela vincenda ocorre a partir do dia primeiro de cada mês.
+        <br />
+        Obs.: Incompetência: parcelas devidas superam o teto do JEF na data do
+        ajuizamento.
+        <br />
+        Atenção: os valores desta planilha referem-se a cálculo para fins de
+        execução invertida / impugnação.
+        <br />
+        <br />
+      </div>
 
       <h4 class="center">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
         <div class="column">
           <label class="camposInputAlcada">
             Parte:
-            {{ info_calculo.nome }} (CPF {{ info_calculo.cpf }})</label>
+            {{ info_calculo.nome }} (CPF {{ info_calculo.cpf }})</label
+          >
           <label class="inputToPrintAlcada" id="partePlanilha" />
           <br />
           <label class="camposInputAlcada">
@@ -1132,39 +1722,62 @@ Total para cada competência = Principal + atualização monetária + juros de m
           </label>
           <label class="inputToPrintAlcada" id="autorPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Jud: {{ this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib }} </label><label class="inputToPrintAlcada"
-            id="dibJudPlanilha" />
+          <label class="camposInputAlcada"
+            >DIB Jud:
+            {{
+              this.info_calculo.dib == null || this.info_calculo.dib == ""
+                ? this.dtInicial
+                : this.info_calculo.dib
+            }} </label
+          ><label class="inputToPrintAlcada" id="dibJudPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Anterior: {{ this.dibAnterior == null || this.dibAnterior == ""? "Não consta" : this.dibAnterior  }} </label><label
-            class="inputToPrintAlcada" id="dibAnteriorPlanilha" />
+          <label class="camposInputAlcada"
+            >DIB Anterior:
+            {{
+              this.dibAnterior == null || this.dibAnterior == ""
+                ? "Não consta"
+                : this.dibAnterior
+            }} </label
+          ><label class="inputToPrintAlcada" id="dibAnteriorPlanilha" />
           <br />
-          <label class="camposInputAlcada">RMI Jud.: R${{ salarioInicial }} </label><label class="inputToPrintAlcada"
-            id="rmiJudPlanilha" />
+          <label class="camposInputAlcada"
+            >RMI Jud.: R${{ salarioInicial }} </label
+          ><label class="inputToPrintAlcada" id="rmiJudPlanilha" />
           <br />
         </div>
         <div class="column">
-          <label class="camposInputAlcada" id="porCententagemRmiPlanilha">%RMI: {{ porcentagemRMI == 0 ? 100 :
-              porcentagemRMI
-          }}
+          <label class="camposInputAlcada" id="porCententagemRmiPlanilha"
+            >%RMI: {{ porcentagemRMI == 0 ? 100 : porcentagemRMI }}
           </label>
           <br />
-          <label class="camposInputAlcada">Período (Data de Início): {{ dtInicial }} </label><label
-            class="inputToPrintAlcada" id="dataInicialPlanilha" />
+          <label class="camposInputAlcada"
+            >Período (Data de Início): {{ dtInicial }} </label
+          ><label class="inputToPrintAlcada" id="dataInicialPlanilha" />
           <br />
           <!-- Criar Função -->
-          <label class="camposInputAlcada">Período (Data de Fim): {{ dtFinal }} </label><label
-            class="inputToPrintAlcada" id="dataFinalPlanilha" />
+          <label class="camposInputAlcada"
+            >Período (Data de Fim): {{ dtFinal }} </label
+          ><label class="inputToPrintAlcada" id="dataFinalPlanilha" />
           <br />
-          <label for="13salario" class="labels pb-2" style="margin-left: 18px">13º Salário: {{ exibirBoolean(salario13)
-          }}
+          <label for="13salario" class="labels pb-2" style="margin-left: 18px"
+            >13º Salário: {{ exibirBoolean(salario13) }}
           </label>
           <br />
         </div>
       </div>
       <br />
 
-      <v-data-table id="areaToPrint" dense v-if="mode === 'table'" :headers="headers" :items="calc_total"
-        :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
+      <v-data-table
+        id="areaToPrint"
+        dense
+        v-if="mode === 'table'"
+        :headers="headers"
+        :items="calc_total"
+        :items-per-page="calc_total.length"
+        item-key="name"
+        class="elevation-1"
+        hide-default-footer
+      >
       </v-data-table>
       <br />
       <br />
@@ -1184,12 +1797,12 @@ Total para cada competência = Principal + atualização monetária + juros de m
             <td>{{ Math.floor(iPvalorAnoAtual * 100) / 100 }}</td>
             <td>
               {{
-                  procntagem_acordo != 0 && procntagem_acordo != null
-                    ? Math.floor(
+                procntagem_acordo != 0 && procntagem_acordo != null
+                  ? Math.floor(
                       parseFloat(iPvalorAnoAtual) *
-                      parseFloat(procntagem_acordo)
+                        parseFloat(procntagem_acordo)
                     ) / 100
-                    : 0
+                  : 0
               }}
             </td>
             <td>{{ competenciaAnoAtual }}</td>
@@ -1199,12 +1812,12 @@ Total para cada competência = Principal + atualização monetária + juros de m
             <td>{{ Math.floor(iPvalorAnoAnterior * 100) / 100 }}</td>
             <td>
               {{
-                  procntagem_acordo != 0 && procntagem_acordo != null
-                    ? Math.floor(
+                procntagem_acordo != 0 && procntagem_acordo != null
+                  ? Math.floor(
                       parseFloat(iPvalorAnoAnterior) *
-                      parseFloat(procntagem_acordo)
+                        parseFloat(procntagem_acordo)
                     ) / 100
-                    : 0
+                  : 0
               }}
             </td>
             <td>{{ competenciaAnoAnterior }}</td>
@@ -1216,12 +1829,12 @@ Total para cada competência = Principal + atualização monetária + juros de m
             </td>
             <td>
               {{
-                  procntagem_acordo != 0 && procntagem_acordo != null
-                    ? Math.floor(
+                procntagem_acordo != 0 && procntagem_acordo != null
+                  ? Math.floor(
                       parseFloat(parseFloat(pacelasVencidas)) *
-                      parseFloat(procntagem_acordo)
+                        parseFloat(procntagem_acordo)
                     ) / 100
-                    : 0
+                  : 0
               }}
             </td>
             <td></td>
@@ -1230,30 +1843,30 @@ Total para cada competência = Principal + atualização monetária + juros de m
             <td>TOTAL EM R$</td>
             <td>
               {{
-                  Math.floor(
-                    (parseFloat(iPvalorAnoAnterior) +
-                      parseFloat(iPvalorAnoAtual) -
-                      parseFloat(pacelasVencidas)) *
+                Math.floor(
+                  (parseFloat(iPvalorAnoAnterior) +
+                    parseFloat(iPvalorAnoAtual) -
+                    parseFloat(pacelasVencidas)) *
                     100
-                  ) / 100
+                ) / 100
               }}
             </td>
             <td>
               {{
-                  procntagem_acordo != 0 && procntagem_acordo != null
-                    ? Math.floor(
+                procntagem_acordo != 0 && procntagem_acordo != null
+                  ? Math.floor(
                       parseFloat(
                         parseFloat(iPvalorAnoAnterior) +
-                        parseFloat(iPvalorAnoAtual) -
-                        parseFloat(pacelasVencidas)
+                          parseFloat(iPvalorAnoAtual) -
+                          parseFloat(pacelasVencidas)
                       ) * parseFloat(procntagem_acordo)
                     ) / 100
-                    : 0
+                  : 0
               }}
             </td>
             <td>
               {{
-                  parseInt(competenciaAnoAnterior) + parseInt(competenciaAnoAtual)
+                parseInt(competenciaAnoAnterior) + parseInt(competenciaAnoAtual)
               }}
             </td>
           </tr>
@@ -1264,11 +1877,22 @@ Total para cada competência = Principal + atualização monetária + juros de m
 
     <v-label v-if="alcadaArray[0]">Tabela de Alcada</v-label>
 
-    <v-data-table id="areaToPrint" dense v-if="alcadaArray[0]" :headers="headersAlcada" :items="alcadaArray"
-      :items-per-page="alcadaArray.length" item-key="data" class="elevation-1" hide-default-footer>
+    <v-data-table
+      id="areaToPrint"
+      dense
+      v-if="alcadaArray[0]"
+      :headers="headersAlcada"
+      :items="alcadaArray"
+      :items-per-page="alcadaArray.length"
+      item-key="data"
+      class="elevation-1"
+      hide-default-footer
+    >
     </v-data-table>
     <div v-if="add_taxa == false" v-show="mode === 'table'">
-      <b-button variant="primary" @click="printDiv()"><i class="fa fa-file"></i></b-button>
+      <b-button variant="primary" @click="printDiv()"
+        ><i class="fa fa-file"></i
+      ></b-button>
     </div>
   </v-container>
 </template>
@@ -1405,29 +2029,59 @@ export default {
       salario13Obrigatorio: false,
       beforeDateAjuizamento: 0,
       afterDateAjuizamento: 0,
-      selic: false
+      selic: false,
+      salarioMinimoAnoAtual: 0,
     };
   },
   computed: {
-
     totaisValorCalculo() {
-      this.totaisSalario()
+      this.totaisSalario();
       return {
         valorCorrecao: this.valor_corrigido,
         valorJuros: this.valor_juros,
         valorTotal: this.total_processos,
         impostoAtual: this.iPvalorAnoAtual,
         impostoAnterior: this.iPvalorAnoAnterior,
-      }
+      };
     },
     honorariosCalculo() {
       this.honorarios();
       return this.valorHonorarios;
-    }
+    },
+    rpvOuPrecatorio() {
+      let valorAnalissar = Math.floor(
+                  (parseFloat(this.valor_corrigido) +
+                    parseFloat(this.valor_juros) -
+                    parseFloat(this.pacelasVencidas)) *
+                    this.formatarPorcentagemAcordo()
+                ) / 100
+      if (valorAnalissar < this.salarioMinimoAnoAtual) {
+        return "RPV";
+      } else {
+        return "Precatório";
+      }
+    },
   },
   methods: {
+    quebraLinhaDescribe(describe) {
+      let arrayDescribe = describe;
+
+      let newDescribe = "";
+      arrayDescribe.forEach((obj, index) => {
+        newDescribe += obj;
+        if (index % 79 == 0) {
+          newDescribe += " \n";
+        }
+      });
+      return newDescribe;
+    },
+
     beneficiosEspecialInfo(obj_beneficioAcumulado) {
-      if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
+      if (
+        obj_beneficioAcumulado.beneficio != null &&
+        (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") ||
+          obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))
+      ) {
         obj_beneficioAcumulado.salario13 = true;
         obj_beneficioAcumulado.salario13Obrigatorio = true;
         return obj_beneficioAcumulado;
@@ -1435,24 +2089,32 @@ export default {
         return obj_beneficioAcumulado;
       }
     },
-    disableBeneficiosEspecial(obj_beneficioAcumulado){
-
-      if (obj_beneficioAcumulado.beneficio != null && (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") || obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))) {
+    disableBeneficiosEspecial(obj_beneficioAcumulado) {
+      if (
+        obj_beneficioAcumulado.beneficio != null &&
+        (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") ||
+          obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))
+      ) {
         return true;
       } else {
         return false;
       }
     },
     removerItemTablePrincipal(item) {
-      this.calc_total = this.calc_total.filter(obj => { return obj != item })
+      this.calc_total = this.calc_total.filter((obj) => {
+        return obj != item;
+      });
     },
     acrescentarTaxaTablePrincipal(item) {
       item.data = this.formatarDataTable(item.data);
-      if (!this.disableLinhaTable(item.data) && (item.correcao == 0 || item.correcao == null)) {
-        this.calc_total = this.calc_total.filter(async obj => {
+      if (
+        !this.disableLinhaTable(item.data) &&
+        (item.correcao == 0 || item.correcao == null)
+      ) {
+        this.calc_total = this.calc_total.filter(async (obj) => {
           if (obj.correcao == null || obj.correcao == 0) {
             let bodytaxaUnica = {
-              dib: item.data,
+              inicioCalculo: item.data,
               tipoJuros: this.tipoJuros,
               tipoCorrecao: this.tipoCorrecao,
               atulizacao: this.atulizacao,
@@ -1465,8 +2127,8 @@ export default {
                 let juros = await taxaUnicaData.juros;
                 return {
                   correcao,
-                  juros
-                }
+                  juros,
+                };
               })
               .catch((error) => {
                 console.log(error);
@@ -1474,50 +2136,69 @@ export default {
                 return {
                   correcao: 1,
                   juros: 1,
-                }
+                };
               });
             obj.juros = await taxas.juros;
             obj.correcao = await taxas.correcao;
-            return obj
+            return obj;
           } else {
-            return obj
+            return obj;
           }
-        })
+        });
       }
     },
     totaisSalarioTablePrincipal(item) {
       if (item.devido == 0 || item.devido == null) {
-        item.salarioCorrigido = Math.floor(item.salario * item.correcao * 100) / 100;
+        item.salarioCorrigido =
+          Math.floor(item.salario * item.correcao * 100) / 100;
         item.salarioJuros = Math.floor(item.salario * item.juros * 100) / 100;
-        item.salarioTotal = Math.floor(item.salario * item.correcao * (1 + item.juros) * 100) / 100;
+        item.salarioTotal =
+          Math.floor(item.salario * item.correcao * (1 + item.juros) * 100) /
+          100;
         return item;
       } else {
-        item.salario = (item.devido - item.recebido);
-        item.salarioCorrigido = Math.floor(item.salario * item.correcao * 100) / 100;
+        item.salario = item.devido - item.recebido;
+        item.salarioCorrigido =
+          Math.floor(item.salario * item.correcao * 100) / 100;
         item.salarioJuros = Math.floor(item.salario * item.juros * 100) / 100;
-        item.salarioTotal = Math.floor(item.salario * item.correcao * (1 + item.juros) * 100) / 100;
+        item.salarioTotal =
+          Math.floor(item.salario * item.correcao * (1 + item.juros) * 100) /
+          100;
         return item;
       }
     },
     formatarDataTable(data) {
-      let tamanhoData = data.toString().split('').length;
-      let tamanhoDataVerificacao = data.toString().split('/').length;
+      let tamanhoData = data.toString().split("").length;
+      let tamanhoDataVerificacao = data.toString().split("/").length;
       if (tamanhoDataVerificacao == 3) {
         return data;
       } else if (tamanhoData == 8 && tamanhoDataVerificacao == 1) {
-        let newData = data.toString().split('');
-        let dataFormatada = newData[0] + newData[1] + "/" + newData[2] + newData[3] + "/" + newData[4] + newData[5] + newData[6] + newData[7]
-        return dataFormatada
+        let newData = data.toString().split("");
+        let dataFormatada =
+          newData[0] +
+          newData[1] +
+          "/" +
+          newData[2] +
+          newData[3] +
+          "/" +
+          newData[4] +
+          newData[5] +
+          newData[6] +
+          newData[7];
+        return dataFormatada;
       } else {
         return data;
       }
     },
     disableLinhaTable(data) {
-      let tamanhoDataVerificacao = data.toString().split('/');
-      if (tamanhoDataVerificacao.length == 3 && parseInt(tamanhoDataVerificacao[2]) >= 1995) {
-        return false
+      let tamanhoDataVerificacao = data.toString().split("/");
+      if (
+        tamanhoDataVerificacao.length == 3 &&
+        parseInt(tamanhoDataVerificacao[2]) >= 1995
+      ) {
+        return false;
       } else {
-        return true
+        return true;
       }
     },
     //FUNCAO SEM SENTIDO MAS EVITA BUG DE ATUALIZAO ENTAO NAO MEXA!!!!
@@ -1527,7 +2208,7 @@ export default {
       this.valor_total -= valor;
       console.log(this.info_calculo);
       this.infos = this.info_calculo;
-      this.info_calculo = this.infos
+      this.info_calculo = this.infos;
       this.valor_juros += 100;
       this.valor_juros -= 100;
     },
@@ -1559,30 +2240,33 @@ export default {
         this.alcadaValor - this.salariominimosAlcada < 0
           ? 0
           : Math.floor((this.alcadaValor - this.salariominimosAlcada) * 100) /
-          100;
+            100;
       this.pacelasVencidas =
         Math.floor(
           (Math.floor(this.alcadaTotal * this.alcadaCorrecaoPorcetagem * 100) /
             100 +
             Math.floor(this.alcadaTotal * this.alcadaJurosPorcentagem * 100) /
-            100) *
-          100
+              100) *
+            100
         ) / 100;
     },
     verificarDib() {
       if (!this.dibAnterior) {
-        return this.info_calculo.dib
+        return this.info_calculo.dib;
       }
       let arrayDib = this.info_calculo.dib.split("/");
       let arraydibAnterior = this.dibAnterior.split("/");
       if (parseInt(arrayDib[2] <= parseInt(arraydibAnterior[2]))) {
-        if (parseInt(arrayDib[2]) == parseInt(arraydibAnterior[2]) && parseInt(arrayDib[1]) > parseInt(arraydibAnterior[1])) {
+        if (
+          parseInt(arrayDib[2]) == parseInt(arraydibAnterior[2]) &&
+          parseInt(arrayDib[1]) > parseInt(arraydibAnterior[1])
+        ) {
           return this.dibAnterior;
         } else {
           if (this.info_calculo.dib == this.dtInicial) {
             return null;
           } else {
-            return this.info_calculo.dib
+            return this.info_calculo.dib;
           }
         }
       } else {
@@ -1609,12 +2293,12 @@ export default {
       }
     },
     calculo() {
-      console.log("dib: " + this.verificarDib())
+      console.log("dib: " + this.verificarDib());
       if (this.verificadoInformacoes()) {
         this.porcentagemRMI =
           this.porcentagemRMI != 0 &&
-            this.porcentagemRMI != null &&
-            this.porcentagemRMI != ""
+          this.porcentagemRMI != null &&
+          this.porcentagemRMI != ""
             ? this.porcentagemRMI
             : 100;
         const body = {
@@ -1629,11 +2313,17 @@ export default {
           salarioMinimo: this.salarioMinimo,
           limiteMinimoMaximo: this.limiteMinimoMaximo,
           salario13: this.salario13,
-          dib: this.info_calculo.dib == null || this.info_calculo.dib == ""? this.dtInicial : this.info_calculo.dib,
+          dib:
+            this.info_calculo.dib == null || this.info_calculo.dib == ""
+              ? this.dtInicial
+              : this.info_calculo.dib,
           porcentagemRMI: this.porcentagemRMI,
           salario13Obrigatorio: this.salario13Obrigatorio,
-          dibAnterior: this.dibAnterior == null || this.dibAnterior == ""? this.dtInicial : this.dibAnterior ,
-          selic: this.selic
+          dibAnterior:
+            this.dibAnterior == null || this.dibAnterior == ""
+              ? this.dtInicial
+              : this.dibAnterior,
+          selic: this.selic,
         };
         let timer = 0;
 
@@ -1652,8 +2342,8 @@ export default {
               let beneficioProvisorio;
               this.beneficiosInacumulveisBanco.forEach((value) => {
                 if (
-                  (parseInt(value.name.split("-")[0]) ==
-                    parseInt(this.info_calculo.beneficio.split("-")[0]))
+                  parseInt(value.name.split("-")[0]) ==
+                  parseInt(this.info_calculo.beneficio.split("-")[0])
                 ) {
                   console.log("Beneficio provisorio: " + value.name);
                   beneficioProvisorio = value;
@@ -1666,7 +2356,11 @@ export default {
                     parseInt(value.beneficio.split("-")[0])
                   ) {
                     this.beneficioInacumulavel.push(value);
-                  } else if ((value.beneficio.includes("Seguro Desemprego") || value.beneficio.includes("Auxilio Defesa")) && index == beneficioProvisorio.inacumulavel.length - 1) {
+                  } else if (
+                    (value.beneficio.includes("Seguro Desemprego") ||
+                      value.beneficio.includes("Auxilio Defesa")) &&
+                    index == beneficioProvisorio.inacumulavel.length - 1
+                  ) {
                     this.beneficioInacumulavel.push(value);
                   }
                   timer = 500;
@@ -1761,10 +2455,10 @@ export default {
         return false;
       }
     },
-    formatarPorcentagemAcordo(){
+    formatarPorcentagemAcordo() {
       return this.procntagem_acordo != 0 && this.procntagem_acordo != null
-                ? this.procntagem_acordo
-                : 100
+        ? this.procntagem_acordo
+        : 100;
     },
     adicionarLote() {
       if (this.verificadoInformacoes() && this.verificarCalculo()) {
@@ -1786,7 +2480,9 @@ export default {
           salario13BeneficioAcumulado.push(value.salario13);
           salarioMinimoBeneficioAcumulado.push(value.salarioMinimo);
           limiteMinimoMaximoBeneficioAcumulado.push(value.limiteMinimoMaximo);
-          Salario13ObrigatorioBeneficioAcumulado.push(value.salario13Obrigatorio);
+          Salario13ObrigatorioBeneficioAcumulado.push(
+            value.salario13Obrigatorio
+          );
         });
         const calculoData = [];
         const calculo_reajusteAcumulado = [];
@@ -2011,7 +2707,6 @@ export default {
           this.$alert("Nome errado");
         }
       });
-
     },
     atulizarInfosLote(dado) {
       this.zeraDadosDocalculo();
@@ -2040,7 +2735,10 @@ export default {
               dado.limiteMinimoMaximoBeneficioAcumulado[index],
             salario13: dado.salario13BeneficioAcumulado[index],
             salarioMinimo: dado.salarioMinimoBeneficioAcumulado[index],
-            salario13Obrigatorio: dado.Salario13ObrigatorioBeneficioAcumulado == null ? false : dado.Salario13ObrigatorioBeneficioAcumulado[index],
+            salario13Obrigatorio:
+              dado.Salario13ObrigatorioBeneficioAcumulado == null
+                ? false
+                : dado.Salario13ObrigatorioBeneficioAcumulado[index],
             porcentagemRmi: dado.porcentagemRmiBeneficioAcumulado[index],
           });
         });
@@ -2108,7 +2806,9 @@ export default {
       this.info_calculo.dataAjuizamento = dado.dataDeAjuizamento;
       this.info_calculo.nb = dado.numeroDoBeneficio;
       this.info_calculo.beneficio = this.refatoreNameBeneficio(dado.beneficio);
-      console.log("this.info_calculo.beneficio: " + this.info_calculo.beneficio)
+      console.log(
+        "this.info_calculo.beneficio: " + this.info_calculo.beneficio
+      );
       this.beneficioInacumulavel = beneficioAcumuladoLote;
       this.procntagem_acordo = dado.acordo;
       this.dibAnterior = dado.dibAnterior;
@@ -2127,14 +2827,17 @@ export default {
       this.competenciaAnoAnterior = dado.competenciaAnoAnterior;
       this.competenciaAnoAtual = dado.competenciaAnoAtual;
       this.porcentagemRMI = dado.porcentagemRMI;
-      this.info_calculo.dib = dado.dib == null || dado.dib == "" ? dado.termoInicial : dado.dib;
+      this.info_calculo.dib =
+        dado.dib == null || dado.dib == "" ? dado.termoInicial : dado.dib;
     },
     refatoreNameBeneficio(beneficio) {
       let benficioVerdadeiro = beneficio;
       this.beneficiosInacumulveisBanco.forEach((value) => {
         if (
-          (parseInt(value.name.split("-")[0]) ==
-            parseInt(beneficio.split("-")[0])) || beneficio.includes("Seguro Desemprego") || beneficio.includes("Auxilio Defesa")
+          parseInt(value.name.split("-")[0]) ==
+            parseInt(beneficio.split("-")[0]) ||
+          beneficio.includes("Seguro Desemprego") ||
+          beneficio.includes("Auxilio Defesa")
         ) {
           console.log("benefio e " + value.name);
           benficioVerdadeiro = value.name;
@@ -2143,7 +2846,6 @@ export default {
       return benficioVerdadeiro;
     },
     calcularLote() {
-
       const body = {
         inicioCalculo: this.dtInicial,
         dip: this.dtFinal,
@@ -2309,14 +3011,14 @@ export default {
         function () {
           doc.save(
             "Relatorio - " +
-            dado.nome +
-            " " +
-            data.getDate() +
-            "/" +
-            data.getMonth() +
-            "/" +
-            data.getFullYear() +
-            ".pdf"
+              dado.nome +
+              " " +
+              data.getDate() +
+              "/" +
+              data.getMonth() +
+              "/" +
+              data.getFullYear() +
+              ".pdf"
           );
         }
       );
@@ -2345,10 +3047,11 @@ export default {
         salario13: this.salario13,
         tipoCorrecao: this.tipoCorrecao,
         atulizacao: `${date[1]}/${date[2]}`,
-        selic: this.selic
+        selic: this.selic,
       };
-      const ossadaUrl = `${baseApiUrl}/salarioMinimo/procuraPorAno/${this.info_calculo.dataAjuizamento.split("/")[2]
-        }`;
+      const ossadaUrl = `${baseApiUrl}/salarioMinimo/procuraPorAno/${
+        this.info_calculo.dataAjuizamento.split("/")[2]
+      }`;
       axios(ossadaUrl).then(async (res) => {
         const obj = await res.data;
         const ajuizamento = this.info_calculo.dataAjuizamento.split("/");
@@ -2357,7 +3060,7 @@ export default {
           tipoJuros: this.tipoJuros,
           tipoCorrecao: this.tipoCorrecao,
           atulizacao: this.atulizacao,
-          selic: this.selic
+          selic: this.selic,
         };
         axios
           .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
@@ -2387,13 +3090,16 @@ export default {
           .then((response) => {
             console.log(response.data);
             let alcada = response.data;
-            let arrayDateAjuizamento = this.info_calculo.dataAjuizamento.split("/")
-            let dateAjuzamento = new Date(`${arrayDateAjuizamento[1]}-${arrayDateAjuizamento[0]}-${arrayDateAjuizamento[2]}`)
+            let arrayDateAjuizamento =
+              this.info_calculo.dataAjuizamento.split("/");
+            let dateAjuzamento = new Date(
+              `${arrayDateAjuizamento[1]}-${arrayDateAjuizamento[0]}-${arrayDateAjuizamento[2]}`
+            );
             console.log(dateAjuzamento);
             console.log("dateAjuzamento");
             console.log(alcada);
-            this.beforeDateAjuizamento = 0
-            this.afterDateAjuizamento = 0
+            this.beforeDateAjuizamento = 0;
+            this.afterDateAjuizamento = 0;
             this.calc_total.forEach((value) => {
               alcada.forEach((dado) => {
                 if (
@@ -2408,13 +3114,16 @@ export default {
                     salarioTotal:
                       Math.floor(dado.correcao * value.salario * 100) / 100,
                   });
-                  let arrayDataCalculoAlcada = value.data.split("/")
-                  let dataCalculoAlcada = new Date(`${arrayDataCalculoAlcada[1]}-${arrayDataCalculoAlcada[0]}-${arrayDataCalculoAlcada[2]}`)
-                  if(dataCalculoAlcada > dateAjuzamento){
-                    
-                   this.afterDateAjuizamento += Math.floor(dado.correcao * value.salario * 100) / 100;
-                  }else{
-                    this.beforeDateAjuizamento += Math.floor(dado.correcao * value.salario * 100) / 100;
+                  let arrayDataCalculoAlcada = value.data.split("/");
+                  let dataCalculoAlcada = new Date(
+                    `${arrayDataCalculoAlcada[1]}-${arrayDataCalculoAlcada[0]}-${arrayDataCalculoAlcada[2]}`
+                  );
+                  if (dataCalculoAlcada > dateAjuzamento) {
+                    this.afterDateAjuizamento +=
+                      Math.floor(dado.correcao * value.salario * 100) / 100;
+                  } else {
+                    this.beforeDateAjuizamento +=
+                      Math.floor(dado.correcao * value.salario * 100) / 100;
                   }
                   this.pacelasVencidas +=
                     Math.floor(dado.correcao * value.salario * 100) / 100;
@@ -2486,7 +3195,7 @@ export default {
       let dinicial = parseInt(dtInicial.split("/")[0]);
       var dfinal =
         dtFinal.split("/")[0] >= 30 ||
-          (dtFinal.split("/")[1] == 2 && dtFinal.split("/")[0] >= 28)
+        (dtFinal.split("/")[1] == 2 && dtFinal.split("/")[0] >= 28)
           ? 30
           : parseInt(dtFinal.split("/")[0]);
       let inical_calculo;
@@ -2587,8 +3296,8 @@ export default {
                   ? 1
                   : 30 - dib.split("/")[0] + 1
                 : dinicial[0] >= 30 || (dinicial[0] >= 28 && dinicial[0] == 2)
-                  ? 1
-                  : 30 - dinicial[0] + 1;
+                ? 1
+                : 30 - dinicial[0] + 1;
             recebido = (recebido / 30) * dias;
           } else {
             let dias =
@@ -2608,17 +3317,17 @@ export default {
                   (dtFinal.split("/")[0] >= 28 && dtFinal.split("/")[2] == 2)
                   ? 30
                   : dtFinal.split("/")[0]
-                    ? 30
-                    : dtFinal.split("/")[0]
+                  ? 30
+                  : dtFinal.split("/")[0]
                 : dif.split("/")[0] >= 30 ||
                   (dif.split("/")[0] >= 28 && dif.split("/")[2] == 2)
-                  ? 30
-                  : dif.split("/")[0];
+                ? 30
+                : dif.split("/")[0];
             recebido = (recebido / 30) * dias;
           } else {
             let dias =
               dtFinal.split("/")[0] >= 30 ||
-                (dtFinal.split("/")[0] >= 28 && dtFinal.split("/")[2] == 2)
+              (dtFinal.split("/")[0] >= 28 && dtFinal.split("/")[2] == 2)
                 ? 30
                 : dtFinal.split("/")[0];
             recebido = (recebido / 30) * dias;
@@ -2626,15 +3335,15 @@ export default {
         } else if (index == size) {
           let dias =
             dif.split("/")[0] >= 30 ||
-              (dif.split("/")[0] >= 28 && dif.split("/")[2] == 2)
+            (dif.split("/")[0] >= 28 && dif.split("/")[2] == 2)
               ? 30
               : dif.split("/")[0];
           recebido = (recebido / 30) * dias;
         } else if (index == 0) {
           let dias =
             parseInt(dib.split("/")[0]) >= 30 ||
-              (parseInt(dib.split("/")[0]) >= 28 &&
-                parseInt(dib.split("/")[1]) == 2)
+            (parseInt(dib.split("/")[0]) >= 28 &&
+              parseInt(dib.split("/")[1]) == 2)
               ? 1
               : 30 - dib.split("/")[0] + 1;
           recebido = (recebido / 30) * dias;
@@ -2671,13 +3380,14 @@ export default {
       function manter(dado, dtInicial) {
         let dinicial = dtInicial.split("/");
         if (!dado.data.split("/")[0].includes("13Salario")) {
-
           if (
             dado.data.split("/")[1] == dinicial[1] &&
             dado.data.split("/")[2] == dinicial[2]
           ) {
             beneficioAcumulado13Especial =
-              dinicial[0] >= 15 ? beneficioAcumulado13Especial++ : beneficioAcumulado13Especial;
+              dinicial[0] >= 15
+                ? beneficioAcumulado13Especial++
+                : beneficioAcumulado13Especial;
           } else {
             beneficioAcumulado13Especial++;
           }
@@ -2701,18 +3411,11 @@ export default {
         };
       }
 
-      function decontarExpecial(
-        value,
-        dado,
-        dtInicial,
-        dtFinal,
-        index,
-      ) {
+      function decontarExpecial(value, dado, dtInicial, dtFinal, index) {
         console.log("Index: " + index);
         let devido = dado.devido > 0 ? dado.devido : dado.salario;
 
         if (!value.data.split("/")[0].includes("13Salario")) {
-
           let dinicial = dtInicial.split("/");
           if (
             value.data.split("/")[1] == dinicial[1] &&
@@ -2727,21 +3430,26 @@ export default {
             beneficioAcumulado13Especial++;
           }
         } else {
-
           //dado.salario = Math.floor((dado.salario - ((devido / beneficioAcumulado13Especial) * (beneficioAcumulado13))) * 100) / 100;
-          devido = Math.floor(((devido / beneficioAcumulado13Especial) * (beneficioAcumulado13)) * 100) / 100;
+          devido =
+            Math.floor(
+              (devido / beneficioAcumulado13Especial) *
+                beneficioAcumulado13 *
+                100
+            ) / 100;
           beneficioAcumulado13 = 0;
           beneficioAcumulado13Especial = 0;
         }
         return {
           data: dado.data,
           reajusteAcumulado: dado.reajusteAcumulado,
-          devido: dado.devido > 0 ? (Math.floor((dado.devido - devido) * 100) / 100) : (Math.floor((dado.salario - devido) * 100) / 100),
+          devido:
+            dado.devido > 0
+              ? Math.floor((dado.devido - devido) * 100) / 100
+              : Math.floor((dado.salario - devido) * 100) / 100,
           reajusteRecebido: dado.reajusteAcumulado,
           recebido:
-            dado.recebido > 0
-              ? Math.floor((dado.recebido) * 100) / 100
-              : 0,
+            dado.recebido > 0 ? Math.floor(dado.recebido * 100) / 100 : 0,
           salario: Math.floor((dado.salario - devido) * 100) / 100,
 
           correcao: dado.correcao,
@@ -2799,7 +3507,7 @@ export default {
             salarioMinimo: info.salarioMinimo,
             porcentagemRmi: info.porcentagemRmi,
             salario13Obrigatorio: info.salario13Obrigatorio,
-            selic: this.selic
+            selic: this.selic,
           };
 
           axios
@@ -2817,26 +3525,30 @@ export default {
                   let dataBeneficioAcumulado = value.data.split("/");
                   console.log(
                     "sizeCalTotal : " +
-                    dataFinal[0] +
-                    " index: " +
-                    dataCalculo[0] +
-                    " comparacao: " +
-                    (dataFinal[0] == dataCalculo[0])
+                      dataFinal[0] +
+                      " index: " +
+                      dataCalculo[0] +
+                      " comparacao: " +
+                      (dataFinal[0] == dataCalculo[0])
                   );
                   if (
                     (dataBeneficioAcumulado[0] == dataCalculo[0] &&
                       dataBeneficioAcumulado[1] == dataCalculo[1] &&
-                      dataBeneficioAcumulado[2] == dataCalculo[2]
-                      || (
-                        dataincial[0] == dataCalculo[0] && indexTableCal == 0 && dataincial[1] == dataBeneficioAcumulado[1] && dataincial[2] == dataBeneficioAcumulado[2]
-                      )
-                      || (
-                        dataFinal[0] == dataCalculo[0] && indexTableCal == (this.calc_total.length - 1) && dataFinal[1] == dataBeneficioAcumulado[1] && dataFinal[2] == dataBeneficioAcumulado[2]
-                      )
-                    )
+                      dataBeneficioAcumulado[2] == dataCalculo[2]) ||
+                    (dataincial[0] == dataCalculo[0] &&
+                      indexTableCal == 0 &&
+                      dataincial[1] == dataBeneficioAcumulado[1] &&
+                      dataincial[2] == dataBeneficioAcumulado[2]) ||
+                    (dataFinal[0] == dataCalculo[0] &&
+                      indexTableCal == this.calc_total.length - 1 &&
+                      dataFinal[1] == dataBeneficioAcumulado[1] &&
+                      dataFinal[2] == dataBeneficioAcumulado[2])
                   ) {
                     //console.log(decontar(value, dado));
-                    if (info.beneficio.includes("Seguro Desemprego") || info.beneficio.includes("Auxilio Defesa")) {
+                    if (
+                      info.beneficio.includes("Seguro Desemprego") ||
+                      info.beneficio.includes("Auxilio Defesa")
+                    ) {
                       newArrayCalculo.push(
                         decontarExpecial(
                           value,
@@ -2982,7 +3694,7 @@ export default {
       this.valor_juros = 0;
       this.valor_corrigido = 0;
       this.iPvalorAnoAtual = 0;
-      this.competenciaAnoAnterior = 0
+      this.competenciaAnoAnterior = 0;
       this.competenciaAnoAtual = 0;
       this.iPvalorAnoAtual = 0;
       let dataAtual = new Date();
@@ -3015,7 +3727,7 @@ export default {
             this.valor_juros +
             this.valorHonorarios -
             this.pacelasVencidas) *
-          100
+            100
         ) / 100;
       this.formatacao();
     },
@@ -3043,7 +3755,9 @@ export default {
     atualizarTodosDados(info) {
       this.alcadaArray = [];
       this.info_calculo = info;
-      this.info_calculo.beneficio = this.refatoreNameBeneficio(this.info_calculo.beneficio);
+      this.info_calculo.beneficio = this.refatoreNameBeneficio(
+        this.info_calculo.beneficio
+      );
       this.headers = [
         { value: "data", text: "Data" },
         { value: "reajusteAcumulado", text: "Reajuste" },
@@ -3078,7 +3792,7 @@ export default {
             "0" + (datafinal[0] - 1) + "/" + datafinal[1] + "/" + datafinal[2];
         } else {
           this.dtFinal =
-            +(datafinal[0] - 1) + "/" + datafinal[1] + "/" + datafinal[2];
+            datafinal[0] - 1 + "/" + datafinal[1] + "/" + datafinal[2];
         }
       }
       //this.dtFinal = this.info_calculo.dip;
@@ -3190,7 +3904,7 @@ export default {
       };
       this.arrayBenficios.push(obj_beneficioAcumulado);
     },
-    atualizarCalculadora() { },
+    atualizarCalculadora() {},
     printDiv() {
       var divToPrint = document.getElementById("areaToPrint");
 
@@ -3608,7 +4322,7 @@ export default {
       return taxas;
     },
     redirectToCalculo() {
-      this.$router.push("/processos").catch(() => { });
+      this.$router.push("/processos").catch(() => {});
     },
   },
 
@@ -3621,28 +4335,39 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-      axios.get(baseApiUrl + "/describeJuros").then((response) => {
+    axios.get(baseApiUrl + "/describeJuros").then((response) => {
       response.data.forEach((value) => {
-        this.optionsJuros.push({ text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
-        value: value.type,})
-      })
+        this.optionsJuros.push({
+          text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
+          value: value.type,
+        });
+      });
     });
 
     axios.get(baseApiUrl + "/describeCorrecao").then((response2) => {
       this.optionsCorrecao = [];
-      console.log(response2.body);
+      // console.log(response2.body);
       response2.data.forEach((value) => {
-        this.optionsCorrecao.push({ text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
-        value: value.type,})
-      })
+        this.optionsCorrecao.push({
+          text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
+          value: value.type,
+        });
+      });
     });
     axios.get(baseApiUrl + "/beneficio/listar").then((res) => {
-      res.data.forEach(item => {
-        this.beneficiosInacumulveisBancoName.push(item.name)
-      })
-      console.log(this.beneficiosInacumulveisBancoName);
+      res.data.forEach((item) => {
+        this.beneficiosInacumulveisBancoName.push(item.name);
+      });
+      // console.log(this.beneficiosInacumulveisBancoName);
       this.beneficiosInacumulveisBanco = res.data;
     });
+    let anoAtual = new Date().getFullYear();
+    axios
+      .get(baseApiUrl + "salarioMinimo/procuraPorAno/" + anoAtual)
+      .then((res) => {
+        console.log(res.data[res.data.length - 1]);
+        this.salarioMinimoAnoAtual = res.data[res.data.length - 1].valor * 60;
+      });
   },
 };
 </script>
@@ -3992,5 +4717,4 @@ td {
   text-align: left;
   border: 2px solid white;
 }
-
 </style>
