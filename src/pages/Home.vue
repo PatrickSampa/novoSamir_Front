@@ -2118,6 +2118,7 @@ export default {
               tipoJuros: this.tipoJuros,
               tipoCorrecao: this.tipoCorrecao,
               atulizacao: this.atulizacao,
+              selic: this.selic,
             };
             let taxas = await axios
               .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
@@ -2250,7 +2251,7 @@ export default {
             100
         ) / 100;
     },
-    verificarDib() {
+    /*verificarDib() {
       if (!this.dibAnterior) {
         return this.info_calculo.dib;
       }
@@ -2272,7 +2273,7 @@ export default {
       } else {
         return this.dibAnterior;
       }
-    },
+    },*/
     verificadoInformacoes() {
       if (
         this.dtInicial == "" ||
@@ -2293,7 +2294,7 @@ export default {
       }
     },
     calculo() {
-      console.log("dib: " + this.verificarDib());
+      
       if (this.verificadoInformacoes()) {
         this.porcentagemRMI =
           this.porcentagemRMI != 0 &&
@@ -2314,9 +2315,9 @@ export default {
           limiteMinimoMaximo: this.limiteMinimoMaximo,
           salario13: this.salario13,
           dib:
-            this.info_calculo.dib == null || this.info_calculo.dib == ""
+            this.info_calculo.dibInicial == null || this.info_calculo.dibInicial == ""
               ? this.dtInicial
-              : this.info_calculo.dib,
+              : this.info_calculo.dibInicial,
           porcentagemRMI: this.porcentagemRMI,
           salario13Obrigatorio: this.salario13Obrigatorio,
           dibAnterior:
@@ -2325,6 +2326,7 @@ export default {
               : this.dibAnterior,
           selic: this.selic,
         };
+        console.log("Body calc_total" + body.dib)
         let timer = 0;
 
         axios
@@ -3498,6 +3500,7 @@ export default {
               { value: "salarioTotal", text: "Total R$" },
             ];
           }
+          
           const body = {
             inicioCalculo: info.dib,
             dip: info.dif,
@@ -3505,11 +3508,11 @@ export default {
             salario13: info.salario13,
             limiteMinimoMaximo: info.limiteMinimoMaximo,
             salarioMinimo: info.salarioMinimo,
-            porcentagemRmi: info.porcentagemRmi,
+            porcentagemRMI: parseFloat(info.porcentagemRmi),
             salario13Obrigatorio: info.salario13Obrigatorio,
             selic: this.selic,
           };
-
+          
           axios
             .post(`${baseApiUrl}/calculo/beneficioAcumulado`, body)
             .then((response) => {
