@@ -1507,8 +1507,13 @@
               : ""
           }}.
         </p>
-      </div>
 
+      <b v-if="selic">Observação:</b>
+      <br v-if="selic"/>
+      <p v-if="selic" class="describes">
+        CACULO UTILIZA SELIC PREV. EC/113 Até 2025.
+      </p>
+    </div>
       <table id="tabelaResumo">
         <thead>
           <tr>
