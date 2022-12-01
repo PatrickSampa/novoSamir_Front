@@ -1585,6 +1585,7 @@
         </tbody>
       </table>
 
+
       <br />
       <br />
       <br />
@@ -3801,6 +3802,7 @@ export default {
         } else {
           this.dtFinal =
             datafinal[0] - 1 + "/" + datafinal[1] + "/" + datafinal[2];
+
         }
       }
       //this.dtFinal = this.info_calculo.dip;
