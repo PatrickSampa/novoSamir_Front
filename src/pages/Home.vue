@@ -513,7 +513,7 @@
             depressed
             color="primary"
             style="margin-left: 145px"
-            @click="adicionarLote()"
+            @click="verificarAdicaoNoLote()"
             target="_blank"
             >Adicionar ao Lote</v-btn
           >
@@ -532,15 +532,21 @@
           <v-btn
             depressed
             color="primary"
-            @click="mode = 'table'"
+            @click="(mode = 'table'), AnexarMinutas()"
             target="_blank"
             >Calcular Lote</v-btn
           >
         </v-col>
       </v-row>
     </v-card>
-    <h3 class="mt-5">Beneficios para calculo em lote</h3>
-    <template>
+    <h3
+      class="mt-5"
+      style="cursor: pointer"
+      @click="exibirCalculoEmLote = !exibirCalculoEmLote"
+    >
+      Beneficios para calculo em lote
+    </h3>
+    <template v-if="exibirCalculoEmLote">
       <v-data-table
         :headers="headersCalculoLote"
         :items="calculoLote"
@@ -551,7 +557,7 @@
             <td
               class="py-3"
               style="color: rgb(107, 107, 218); cursor: pointer"
-              @click="tranferir(item.id)"
+              @click="atulizarInfosLote(item)"
             >
               {{ item.numeroDoProcesso }}
             </td>
@@ -1508,12 +1514,12 @@
           }}.
         </p>
 
-      <b v-if="selic">Observação:</b>
-      <br v-if="selic"/>
-      <p v-if="selic" class="describes">
-        CACULO UTILIZA SELIC PREV. EC/113 Até 2025.
-      </p>
-    </div>
+        <b v-if="selic">Observação:</b>
+        <br v-if="selic" />
+        <p v-if="selic" class="describes">
+          CACULO UTILIZA SELIC PREV. EC/113 Até 2025.
+        </p>
+      </div>
       <table id="tabelaResumo">
         <thead>
           <tr>
@@ -1904,9 +1910,10 @@
 </template>
 
 <script>
+import Axios from "../config/configAxios";
 // import TabelaDib from "../features/TabelaDib.vue";
 //import { pararJurosTeste } from "../features/pararJuros";
-import { baseApiUrl } from "../global";
+import { baseApiUrl,  apiSapiens} from "../global";
 import jsPDF from "jspdf";
 import axios from "axios";
 import AdicionarTaxa from "./AdicionarTaxa.vue";
@@ -2037,6 +2044,11 @@ export default {
       afterDateAjuizamento: 0,
       selic: false,
       salarioMinimoAnoAtual: 0,
+      exibirCalculoEmLote: true,
+      memoriaCalculoHTM: "",
+      senhaSapaiens: "",
+      username: "",
+      cpfSapiens: "",
     };
   },
   computed: {
@@ -2055,12 +2067,13 @@ export default {
       return this.valorHonorarios;
     },
     rpvOuPrecatorio() {
-      let valorAnalissar = Math.floor(
-                  (parseFloat(this.valor_corrigido) +
-                    parseFloat(this.valor_juros) -
-                    parseFloat(this.pacelasVencidas)) *
-                    this.formatarPorcentagemAcordo()
-                ) / 100
+      let valorAnalissar =
+        Math.floor(
+          (parseFloat(this.valor_corrigido) +
+            parseFloat(this.valor_juros) -
+            parseFloat(this.pacelasVencidas)) *
+            this.formatarPorcentagemAcordo()
+        ) / 100;
       if (valorAnalissar < this.salarioMinimoAnoAtual) {
         return "RPV";
       } else {
@@ -2300,7 +2313,6 @@ export default {
       }
     },
     calculo() {
-      
       if (this.verificadoInformacoes()) {
         this.porcentagemRMI =
           this.porcentagemRMI != 0 &&
@@ -2321,18 +2333,19 @@ export default {
           limiteMinimoMaximo: this.limiteMinimoMaximo,
           salario13: this.salario13,
           dib:
-            this.info_calculo.dibInicial == null || this.info_calculo.dibInicial == ""
+            this.info_calculo.dibInicial == null ||
+            this.info_calculo.dibInicial == ""
               ? this.dtInicial
               : this.info_calculo.dibInicial,
           porcentagemRMI: this.porcentagemRMI,
           salario13Obrigatorio: this.salario13Obrigatorio,
           dibAnterior:
             this.dibAnterior == null || this.dibAnterior == ""
-              ? this.dtInicial
+              ? ""
               : this.dibAnterior,
           selic: this.selic,
         };
-        console.log("Body calc_total" + body.dib)
+        console.log("Body calc_total" + body.dib);
         let timer = 0;
 
         axios
@@ -2468,7 +2481,11 @@ export default {
         ? this.procntagem_acordo
         : 100;
     },
+    verificarAdicaoNoLote() {
+      this.adicionarLote();
+    },
     adicionarLote() {
+      this.conteudoHTML();
       if (this.verificadoInformacoes() && this.verificarCalculo()) {
         let nomeBeneficioBeneficioAcumulado = [];
         let dataDeInicioBeneficioAcumulado = [];
@@ -2592,18 +2609,21 @@ export default {
           tipo: this.info_calculo.tipo,
           dib: this.info_calculo.dib,
           salario13Obrigatorio: this.salario13Obrigatorio,
+          conteudoHTML: this.memoriaCalculoHTM,
         };
-        axios
-          .post(`${baseApiUrl}/calculoEmLote/salvar`, body)
+        console.log(body);
+        Axios.AxiosApiControleUsuario.post(`/calculoLote`, body)
           .then((response) => {
             console.log(response.data);
-            axios
-              .get(
-                `${baseApiUrl}calculoEmLote/procurarPorUsuario/${this.usuario_id}`
-              )
+            Axios.AxiosApiControleUsuario.get(`/calculoLote`)
               .then((response) => {
                 this.calculoLote = response.data;
                 console.log(this.calculoLote);
+                this.$alert(
+                  "Calculo adicionado ao Lote.",
+                  "Success",
+                  "success"
+                ).then(() => console.log("Closed"));
               })
               .catch((error) => {
                 console.log(error);
@@ -2653,18 +2673,14 @@ export default {
     },
     removerItemLote(dado) {
       console.log(dado);
-      this.$prompt("digitr o nome de usuario").then((text) => {
-        if (text == "samir") {
+      this.$prompt("Digite seu nome de usuario").then((text) => {
+        if (text == this.username) {
           let body = dado;
           //this.calculoLote = this.calculoLote.filter((item) => item !== dado);
-          axios
-            .delete(`${baseApiUrl}calculoEmLote/deletar/${body.id}`)
+          Axios.AxiosApiControleUsuario.delete(`/calculoLote/${body.id}`)
             .then(async (res) => {
               console.log(res.data);
-              axios
-                .get(
-                  `${baseApiUrl}calculoEmLote/procurarPorUsuario/${this.usuario_id}`
-                )
+              Axios.AxiosApiControleUsuario.get(`/calculoLote`)
                 .then((response) => {
                   this.calculoLote = response.data;
                   console.log(this.calculoLote);
@@ -2685,19 +2701,12 @@ export default {
     },
     deletarLote() {
       console.log();
-      this.$prompt("digitr o nome de usuario").then((text) => {
-        if (text == "armageddon1234") {
-          axios
-            .delete(
-              `${baseApiUrl}/calculoEmLote/deletarAllUsuario/${this.usuario_id}`,
-              this.calculoLote
-            )
+      this.$prompt("Digite seu CPF").then((text) => {
+        if (text == this.cpfSapiens) {
+          Axios.AxiosApiControleUsuario.delete(`/calculoLote`, this.calculoLote)
             .then((dados) => {
               console.log(dados);
-              axios
-                .get(
-                  `${baseApiUrl}/calculoEmLote/procurarPorUsuario/${this.usuario_id}`
-                )
+              Axios.AxiosApiControleUsuario.get(`/calculoLote`)
                 .then((response) => {
                   this.calculoLote = response.data;
                   console.log(this.calculoLote);
@@ -2712,7 +2721,7 @@ export default {
               console.log("error deletar");
             });
         } else {
-          this.$alert("Nome errado");
+          this.$alert("CPF errado");
         }
       });
     },
@@ -2867,6 +2876,8 @@ export default {
         limiteMinimoMaximo: this.limiteMinimoMaximo,
         salario13: this.salario13,
         dibAnterior: this.dibAnterior == "" ? null : this.dibAnterior,
+        credencialCPF: "",
+        credencialSenha: "",
       };
       let timer = 0;
       axios
@@ -3506,7 +3517,7 @@ export default {
               { value: "salarioTotal", text: "Total R$" },
             ];
           }
-          
+
           const body = {
             inicioCalculo: info.dib,
             dip: info.dif,
@@ -3518,7 +3529,7 @@ export default {
             salario13Obrigatorio: info.salario13Obrigatorio,
             selic: this.selic,
           };
-          
+
           axios
             .post(`${baseApiUrl}/calculo/beneficioAcumulado`, body)
             .then((response) => {
@@ -4315,6 +4326,486 @@ export default {
       newWin.close();
     },
 
+    conteudoHTML() {
+      var divToPrint = document.getElementById("areaToPrint");
+
+      var style = "<style>";
+      style =
+        style +
+        ` 
+        
+        * {box-sizing: border-box; margin: 0; padding: 0}
+        div {margin-bottom: 3px;} label {font-weight: bold;}
+        .titulo, h1, h2 {text-align: center;}
+        
+        
+
+        body {height: auto; width: 100vw;padding: 15px; font-size: 1.3rem;}
+        .content{ padding: 15px;}
+        .center {
+          margin: auto;
+          width: 60%;
+          padding: 10px;
+          text-align: center
+
+          background-image: url(../assets/logo.png);
+          background-position: top left;
+          background-repeat: no-repeat;
+          /* background-size: cover; */
+          position: relative;
+        }
+
+        table th{
+          border: 20px solid #FFFFFF;
+          text-align: center;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+        table tr > td {
+          border: 4px solid #FFFFFF;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+
+        table tr < td {
+          border-up: 5px solid #FFFFFF;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+       
+        table td{
+          text-align: center;
+        }
+
+        .agu {text-align: center; font-size: 1.3rem; font-weight: bold;}
+        h1, h2, h3 {font-size: 1.2rem; font-weight: bold;}
+
+         .titulo {
+          text-align: center;
+        }
+
+        .camposInput {
+          text-align: left;
+          margin-left: -1%;
+          font-size: 1.0em;
+          font-weight: normal;
+        }
+
+        .center {
+          text-align: center;
+        }
+
+        .centerAGU {
+          text-align: center;
+          padding-top: 10px;
+        }
+
+        .column {
+          float: left;
+          width: 48%;
+        }
+
+        .columnRight {
+          float: left;
+          text-align: right;
+          width: 52%;
+        }
+
+        .rowInputs:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .resumoProcesso:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .columnResumoProcesso {
+          float: left;
+          width: 14%;
+          margin-left: 1%;
+        }
+
+        .columnResumoProcessoParte {
+          float: left;
+          width: 39%;
+          margin-left: 1%;
+        }
+
+        .centerMargin {
+          text-align: center;
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+
+        .inputToPrint {
+          margin-left: 10px;
+        }
+
+        .inputToPrintResumo {
+          margin-left: 0px;
+        }
+
+        .inputToPrintResumoParte {
+          float: left;
+          width: 500px;
+        }
+
+        .inputCalculo {
+          text-align: left;
+          margin-left: 1%;
+        }
+
+        .rowCalculo:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .page {
+          padding-top: 3px;
+        }
+
+        
+        .columnResumoPagamentosAdministrativos {
+          float: left;
+          width: 11%;
+          margin-left: 1%;
+        }
+
+        .columnRightAlcada {
+          float: left;
+          margin-left: 0%;
+          text-align: left;
+          width: 50%;
+        }
+
+        .columnAlcadaPrint {
+          float: center;
+          text-align: left;
+          width: 60%;
+          margin-left: 20%;
+          margin-right: 20%;
+        }
+
+        .inputPagamentosAdministrativos {
+          max-width: 100%;
+        }
+
+        .inputTetoAlcada {
+          max-width: 15%;
+          font-size: 12px;
+        }
+
+        .camposInputAlcada {
+          text-align: left;
+          margin-left: 3%;
+          font-size: 16px;
+          width: 30%;
+        }
+        
+
+        .inputToPrintAlcada {
+          text-align: left;
+          margin-left: 3%;
+          font-size: 16px;
+          width: 30%;
+        }
+
+        table,
+        th,
+        td {
+          text-align: left;
+          margin-left: 0px;
+          padding-left: 5px;
+          width: 120%;
+        }
+
+        #impostoRendaTitulo {
+          font-size: 18px;
+          width: 120%;
+        }
+
+        #testeTotal {
+          width: 100%;
+          text-align: center;
+        }
+
+        #textosResumo {
+          width: 42%;
+          text-align: right;
+          border: 1px solid white;
+        }
+        
+        #thead-limpo {
+          border: 1px solid white;
+          width: 29%;
+          font-size: 14px;
+        }
+
+        #thead-limpo-menor {
+          border: 1px solid white;
+          width: 42%;
+        }
+
+        #thead-centro {
+          border: 1px solid white;
+          width: 100%;
+          text-align: center;
+        }
+
+        #thead-invisivel {
+          border: 1px solid white;
+          width: 1%;
+        }
+
+
+        #valoresResumo {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumo2 {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumoExecucao {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valor-percentual-execucao {
+          width: 25%;
+          text-align: center;
+          border: 1px solid white;
+        }
+
+        #tabelaResumo {
+          width: 100%;
+          text-align: center;
+        }
+
+        #colunaVazia {
+          width: 15%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaVaziaDireita {
+          width: 45%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #colunaResumoEsquerda {
+          width: 25%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaResumoDireita {
+          width: 15%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-horizontal {
+          width: 57%;
+          border: 1px solid #000;
+          margin-left: 20%;
+          margin-top: 0%;
+        }
+
+        #colunaAnaliseTexto {
+          width: 35%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseEsquerda {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseDireita {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-soma {
+          width: 13%;
+          border: 1px solid #000;
+          margin-left: 69%;
+          margin-top: -4px;
+        }
+
+        #linha-horizontal-separacao {
+          width: 60%;
+          border: 1px solid black;
+          margin-left: 21%;
+          margin-top: -1px;
+          margin-bottom: -10px;
+        }
+
+        #observacoes-div {
+          width: 50%;
+          margin-left: 25%;
+          font-size: small;
+        }
+        
+        .describes{
+          text-overflow: clip ellipsis;
+          margin-right: 10px;
+        }
+
+        #observacoes-div-texto {
+          width:100%;
+          margin-left: 10%;
+          font-size: small;
+          height: auto;
+          text-overflow: clip ellipsis;
+        }
+        
+        #info-inicial {
+          width: 50%;
+          margin-left: 5%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+        #info-inicial-coluna {
+          width: 15%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+
+        #info-inicial-linha {
+          width: 100%;
+          text-align: left;
+          border: 2px solid green;
+        }
+
+
+        `;
+      style = style + "</style>";
+
+      // var id = new Date().getTime();
+      // var newWin = window.open(
+      //   window.location.href + "?printerFriendly=true",
+      //   id,
+      //   "toolbar=1,scrollbars=1,location=0,statusbar=0,menubar=1,resizable=1,width=800,height=600,left = 240,top = 212"
+      // );
+
+      let memoriaDeCalculo = `<html><head> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`;
+      memoriaDeCalculo += style;
+      memoriaDeCalculo += "</head>";
+      memoriaDeCalculo += "<body>";
+      memoriaDeCalculo += '<div class="center"></div>';
+      memoriaDeCalculo += "<body>";
+      memoriaDeCalculo += divToPrint.outerHTML;
+      memoriaDeCalculo += "</body></html>";
+
+      this.memoriaCalculoHTM = memoriaDeCalculo;
+      //console.log(memoriaDeCalculo);
+
+      // const body = {
+      //   login: {
+      //     cpf: "02127337298",
+      //     senha: "Senhasenh4",
+      //   },
+      //   etiqueta: "LIDO BOOT",
+      //   minutas: [
+      //     {
+      //       numeroprocesso: "10033030920204013502",
+      //       conteudo: memoriaDeCalculo,
+      //     }
+      //   ]
+      // };
+
+      // axios
+      // .post(`http://localhost:3000/teste`, body)
+      // .then((response) => {
+      //   console.log(response);
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // });
+
+      // newWin.document.write("<html><head>");
+      // newWin.document.write(
+      //   `<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`
+      // ); // <title> CABEÇALHO DO PDF.
+      // newWin.document.write(style); // INCLUI UM ESTILO NA TAB HEAD
+      // newWin.document.write("</head>");
+      // newWin.document.write("<body>");
+      // // newWin.document.write(`<img class="logo" src="${this.logo}">`);
+      // newWin.document.write(`
+      // <div class="center">
+      // </div>`);
+
+      // newWin.document.write(divToPrint.outerHTML);
+      // newWin.document.write("</body></html>");
+
+      // newWin.print();
+
+      // newWin.close();
+    },
+    AnexarMinutas() {
+      this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
+        (etiqueta) => {
+          if (etiqueta) {
+            let minutas = [];
+            this.calculoLote.forEach((minuta) => {
+              minutas.push({
+                numeroprocesso: minuta.nome,
+                conteudo: minuta.conteudoHTML,
+              });
+            });
+            const body = {
+              login: {
+                cpf: this.cpfSapiens,
+                senha: this.senhaSapaiens,
+              },
+              etiqueta,
+              minutas,
+            };
+            console.log(body);
+            axios
+              .post(`${apiSapiens}teste`, body)
+              .then((response) => {
+                console.log(response);
+                this.$alert(
+                  response.data.length,
+                  "Minutas anexadas: ",
+                  "success"
+                );
+              })
+              .catch((error) => {
+                this.$confirm("Falha ao anexar as minutas", "Error", "error")
+                  .then((r) => {
+                    console.log(r);
+                  })
+                  .catch(() => {
+                    console.log("OK not selected.");
+                  });
+                console.log(error.message);
+                console.log("error.message");
+              });
+          }
+        }
+      );
+    },
+
     taxasPorAno(response = []) {
       const taxas = {};
 
@@ -4337,8 +4828,10 @@ export default {
   },
 
   mounted() {
-    axios
-      .get(`${baseApiUrl}/calculoEmLote/procurarPorUsuario/${this.usuario_id}`)
+    this.cpfSapiens = localStorage.getItem("sapiensCPF");
+    this.username = localStorage.getItem("Username");
+    this.senhaSapaiens = localStorage.getItem("sapiensSenha");
+    Axios.AxiosApiControleUsuario.get(`/calculoLote`)
       .then((response) => {
         this.calculoLote = response.data;
       })

@@ -6,7 +6,7 @@
       color="teal"
     ></v-progress-linear>
     <v-row>
-      <button @click="dadosActive()">
+      <button @click="dadosActive()" style="cursor: pointer">
         Prencher dados Manualmente <v-icon>mdi-menu-up</v-icon>
       </button>
     </v-row>
@@ -226,7 +226,7 @@
       >
     </v-row>
     <v-card-title class="mt-5">
-      <button @click="exibirActive(), redirectToCalculo()">
+      <button @click="exibirActive(), redirectToCalculo()" style="cursor: pointer">
         Tabela de Processos <v-icon>mdi-menu-up</v-icon>
       </button></v-card-title
     >
