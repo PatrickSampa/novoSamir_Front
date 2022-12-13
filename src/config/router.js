@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '@/pages/Home'
 import Login from '@/pages/Login'
+import Cadastrar from '@/pages/Cadastrar'
 import Processos from '@/pages/Processos'
+import Home from '@/pages/Home'
 
 // import { userKey } from '@/global'
 
@@ -14,6 +15,11 @@ const routes = [
     name: 'login',
     path: '/',
     component: Login
+  },
+  {
+    name: 'cadastrar',
+    path: '/cadastrar',
+    component: Cadastrar
   },
   {
     name: 'home',
