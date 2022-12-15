@@ -4,7 +4,7 @@
       <v-container fluid class="pa-0" >
         {{verificaoLogin()}}
         <transition-group>
-          <div key="page-template" v-if="this.$route.name != 'login' && this.$route.name != 'cadastrar'">
+          <div key="page-template" v-if=" this.$route.name != 'cadastrar'">
             <toolbar />
           </div>
           <div key="page">
