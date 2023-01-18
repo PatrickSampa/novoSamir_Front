@@ -4,7 +4,7 @@
       <v-container fluid class="pa-0" >
         {{verificaoLogin()}}
         <transition-group>
-          <div key="page-template" v-if="this.$route.name != 'login' && this.$route.name != 'cadastrar'">
+          <div key="page-template" v-if=" this.$route.name != 'cadastrar'">
             <toolbar />
           </div>
           <div key="page">
@@ -37,7 +37,7 @@ export default {
      verificaoLogin() {
       console.log(this.$route.name);
       console.log((localStorage.getItem("authToken") == "" || localStorage.getItem("authToken") == null));
-      if((localStorage.getItem("authToken") == "" || localStorage.getItem("authToken") == null) && this.$route.name != "login" ){
+      if((localStorage.getItem("authToken") == "" || localStorage.getItem("authToken") == null) && (this.$route.name != "login" && this.$route.name != "cadastrar") ){
         this.$router.push({ name: "login" })
 
       }
