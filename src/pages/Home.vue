@@ -379,7 +379,7 @@
             <label for="beneficio_final" class="labels">Fim do Benefício</label>
             <b-form-input
               v-mask="'##/##/####'"
-              v-model="obj_beneficioAcumulado.dif"
+              v-model="obj_beneficioAcumulado.dcb"
               id="beneficio_final"
               type="text"
               size="sm"
@@ -869,7 +869,7 @@
         <p>DIB: {{ beneficio.dib }}</p>
       </v-col>
       <v-col cols="12" sm="6" md="2">
-        <p>DCB: {{ beneficio.dif }}</p>
+        <p>DCB: {{ beneficio.dcb }}</p>
       </v-col>
       <v-col cols="12" sm="6" md="2">
         <p>RMI: R${{ beneficio.rmi }}</p>
@@ -1463,7 +1463,7 @@
           <p>DIB: {{ beneficio.dib }}</p>
         </v-col>
         <v-col cols="12" sm="6" md="3">
-          <p>DCB: {{ beneficio.dif }}</p>
+          <p>DCB: {{ beneficio.dcb }}</p>
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <p>RMI: {{ beneficio.rmi }}</p>
@@ -2499,7 +2499,7 @@ export default {
         this.beneficioInacumulavel.forEach((value) => {
           nomeBeneficioBeneficioAcumulado.push(value.beneficio);
           dataDeInicioBeneficioAcumulado.push(value.dib);
-          dataFinalBeneficioAcumulado.push(value.dif);
+          dataFinalBeneficioAcumulado.push(value.dcb);
           rmilBeneficioAcumulado.push(value.rmi);
           porcentagemRmiBeneficioAcumulado.push(value.porcentagemRMI);
           salario13BeneficioAcumulado.push(value.salario13);
@@ -2746,7 +2746,7 @@ export default {
           beneficioAcumuladoLote.push({
             beneficio: this.refatoreNameBeneficio(value),
             dib: dado.dataDeInicioBeneficioAcumulado[index],
-            dif: dado.dataFinalBeneficioAcumulado[index],
+            dcb: dado.dataFinalBeneficioAcumulado[index],
             rmi: dado.rmilBeneficioAcumulado[index],
             limiteMinimoMaximo:
               dado.limiteMinimoMaximoBeneficioAcumulado[index],
@@ -3275,7 +3275,7 @@ export default {
         index,
         size,
         dib,
-        dif,
+        dcb,
         salrio13
       ) {
         console.log("Index: " + index);
@@ -3331,17 +3331,17 @@ export default {
         ) {
           if (index == size) {
             let dias =
-              dif.split("/")[0] >= dtFinal.split("/")[0]
+              dcb.split("/")[0] >= dtFinal.split("/")[0]
                 ? dtFinal.split("/")[0] >= 30 ||
                   (dtFinal.split("/")[0] >= 28 && dtFinal.split("/")[2] == 2)
                   ? 30
                   : dtFinal.split("/")[0]
                   ? 30
                   : dtFinal.split("/")[0]
-                : dif.split("/")[0] >= 30 ||
-                  (dif.split("/")[0] >= 28 && dif.split("/")[2] == 2)
+                : dcb.split("/")[0] >= 30 ||
+                  (dcb.split("/")[0] >= 28 && dcb.split("/")[2] == 2)
                 ? 30
-                : dif.split("/")[0];
+                : dcb.split("/")[0];
             recebido = (recebido / 30) * dias;
           } else {
             let dias =
@@ -3353,10 +3353,10 @@ export default {
           }
         } else if (index == size) {
           let dias =
-            dif.split("/")[0] >= 30 ||
-            (dif.split("/")[0] >= 28 && dif.split("/")[2] == 2)
+            dcb.split("/")[0] >= 30 ||
+            (dcb.split("/")[0] >= 28 && dcb.split("/")[2] == 2)
               ? 30
-              : dif.split("/")[0];
+              : dcb.split("/")[0];
           recebido = (recebido / 30) * dias;
         } else if (index == 0) {
           let dias =
@@ -3489,14 +3489,14 @@ export default {
 
       this.beneficioInacumulavel.forEach((info, index) => {
         let dataDib = info.dib.split("/");
-        let dataDif = info.dif.split("/");
+        let datadcb = info.dcb.split("/");
         let dataincial = this.dtInicial.split("/");
         let dataFinal = this.dtFinal.split("/");
         //fazerb um confirmado de periodo;
         if (
           this.beneficiosInacumulveilVerificadorPeriodo(
             dataDib,
-            dataDif,
+            datadcb,
             dataincial,
             dataFinal
           )
@@ -3520,7 +3520,7 @@ export default {
 
           const body = {
             inicioCalculo: info.dib,
-            dip: info.dif,
+            dip: info.dcb,
             rmi: info.rmi,
             salario13: info.salario13,
             limiteMinimoMaximo: info.limiteMinimoMaximo,
@@ -3578,7 +3578,7 @@ export default {
                           index,
                           size,
                           info.dib,
-                          info.dif,
+                          info.dcb,
                           info.salario13
                         )
                       );
@@ -3592,7 +3592,7 @@ export default {
                           index,
                           size,
                           info.dib,
-                          info.dif,
+                          info.dcb,
                           info.salario13
                         )
                       );
@@ -3643,19 +3643,19 @@ export default {
     },
     beneficiosInacumulveilVerificadorPeriodo(
       dataDib,
-      dataDif,
+      datadcb,
       dataincial,
       dataFinal
     ) {
-      if (dataDib[2] <= dataFinal[2] && dataDif[2] >= dataincial[2]) {
-        if (dataDif[2] == dataincial[2]) {
-          if (dataDif[1] == dataincial[1]) {
-            if (dataDif[0] >= dataincial[0]) {
+      if (dataDib[2] <= dataFinal[2] && datadcb[2] >= dataincial[2]) {
+        if (datadcb[2] == dataincial[2]) {
+          if (datadcb[1] == dataincial[1]) {
+            if (datadcb[0] >= dataincial[0]) {
               return true;
             } else {
               return false;
             }
-          } else if (dataDif[1] > dataincial[1]) {
+          } else if (datadcb[1] > dataincial[1]) {
             return true;
           } else {
             return false;
@@ -3856,8 +3856,8 @@ export default {
           console.log("Beneficio provisorio: " + value.name);
           beneficioProvisorio = value;
           this.salario13 = beneficioProvisorio.salario13;
-          if (beneficioProvisorio.dif) {
-            this.pensaoPorMorte = "Beneficio com DIF";
+          if (beneficioProvisorio.dcb) {
+            this.pensaoPorMorte = "Beneficio com dcb";
           }
         }
       });
@@ -3871,7 +3871,7 @@ export default {
               let push_beneficioAcumulado = {
                 beneficio: this.refatoreNameBeneficio(value.beneficio),
                 dib: value.dib,
-                dif: value.dif,
+                dcb: value.dcb,
                 rmi: value.rmi,
                 limiteMinimoMaximo: true,
                 salarioMinimo: false,
@@ -3916,7 +3916,7 @@ export default {
       let obj_beneficioAcumulado = {
         beneficio: null,
         dib: null,
-        dif: null,
+        dcb: null,
         rmi: null,
         salario13: true,
         limiteMinimoMaximo: true,
@@ -4781,7 +4781,7 @@ export default {
             };
             console.log(body);
             axios
-              .post(`${apiSapiens}teste`, body)
+              .post(`${apiSapiens}samir/insertMinutas`, body)
               .then((response) => {
                 console.log(response);
                 this.$alert(

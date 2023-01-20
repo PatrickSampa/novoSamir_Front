@@ -77,11 +77,11 @@ export default {
             await localStorage.setItem("authToken", res.data.token);
             await localStorage.setItem("authRefreshToken", res.data.refreshToken);
             this.valid = true;
-            
-            await this.$refs.form.validate();
+            this.$router.push({ path: "/processos" });
+            //await this.$refs.form.validate();
           })
           .catch(async (error) => {
-            let message = await error.response.data;
+            let message = await error;
             console.log(message);
             this.valid = false;
             this.$alert(message, "Error", "error", {
