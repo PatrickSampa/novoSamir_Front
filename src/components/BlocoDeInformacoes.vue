@@ -221,7 +221,11 @@
           >
         </v-col>
       </v-row>
-      <v-btn color="primary" @click="pushInfos(infos)" id="adicionarButton"
+      <v-btn
+        :loading="loading"
+        color="primary"
+        @click="pushInfos(infos)"
+        id="adicionarButton"
         >Adicionar</v-btn
       >
     </v-row>
@@ -278,6 +282,7 @@
 <script>
 import { baseApiUrl, apiSapiens } from "../global";
 import axios from "axios";
+import Axios from "../config/configAxios";
 export default {
   name: "Processos",
   props: ["exibir"],
@@ -343,20 +348,27 @@ export default {
           console.log(body);
           axios
             .post(`${apiSapiens}samir/getInformationFromSapienForSamir`, body)
-            .then((response) => {
+            .then(async (response) => {
               console.log(response.data);
-              response.data.forEach(value => {
-                value.numeroDoProcesso = `${value.numeroDoProcesso}`
-                this.infos.push(value);
-              })
-              this.saveInfos();
+              await Axios.AxiosApiControleUsuario.post(
+                `/informationsForCalcule/list`,
+                response.data
+              ).then((res) => {
+                this.infos.push(res.data);
+                console.log(res.data);
+                this.saveInfos();
+                this.$alert(1, "Processo adicionado: ", "success");
+                this.$emit("processos", true);
+                this.loading = false;
+              });
+              this.getInfos();
               this.$alert(
                 response.data.length,
                 "Processos colhidos: ",
                 "success"
               );
               this.$emit("processos", true);
-              this.redirectToCalculo()
+              this.redirectToCalculo();
               this.loading = false;
             })
             .catch((error) => {
@@ -389,8 +401,8 @@ export default {
       if (!this.numeroDoProcesso) {
         return;
       }
-      this.infos.push({
-        id: this.infos.length,
+      const body = {
+        // id: this.infos.length,
         numeroDoProcesso: this.numeroDoProcesso,
         nome: this.nome,
         dataAjuizamento: this.dataAjuizamento,
@@ -408,13 +420,55 @@ export default {
         dibAnterior: this.dibAnterior,
         beneficioAcumuladoBoolean: this.beneficioAcumuladoBoolean,
         tipo: this.tipo,
-      });
-      this.cleanFields();
+      };
+      //this.infos.push(body);
+      // body.id =null;
+      Axios.AxiosApiControleUsuario.post(`/informationsForCalcule/`, body)
+        .then((response) => {
+          console.log(response.data);
+          this.$alert(1, "Processo adicionado: ", "success");
+          this.$emit("processos", true);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          this.$confirm("Falha ao salvar o processo", "Error", "error")
+            .then((r) => {
+              console.log(r);
+            })
+            .catch(() => {
+              console.log("OK not selected.");
+            });
+          console.log(error.message);
+          console.log("error.message");
+        });
+      //this.cleanFields();
+      this.getInfos();
       this.saveInfos();
     },
     removeCat(x) {
       this.infos.splice(x, 1);
       this.saveInfos();
+    },
+    getInfos() {
+      Axios.AxiosApiControleUsuario.get(`/informationsForCalcule/`)
+        .then((response) => {
+          this.infos = response.data;
+          console.log(response.data);
+          this.saveInfos();
+          this.$emit("processos", true);
+        })
+        .catch((error) => {
+          this.$confirm("Falha ao receber os processo", "Error", "error")
+            .then((r) => {
+              console.log(r);
+            })
+            .catch(() => {
+              console.log("OK not selected.");
+            });
+          console.log(error.message);
+          console.log("error.message");
+        });
     },
     saveInfos() {
       const parsed = JSON.stringify(this.infos);
@@ -443,7 +497,7 @@ export default {
       return valor;
     },
     preencherFields(y) {
-      const processo = this.infos.find(info => info.id == y);
+      const processo = this.infos.find((info) => info.id == y);
       this.numeroDoProcesso = `${processo.numeroDoProcesso}`;
       this.nome = processo.nome;
       this.dataAjuizamento = processo.dataAjuizamento;
@@ -543,7 +597,7 @@ export default {
     tranferir(y) {
       this.redirectToCalculo();
       this.preencherFields(y);
-      this.calculo = this.infos.find( info => info.id == y);
+      this.calculo = this.infos.find((info) => info.id == y);
       this.$emit("calculo", this.calculo);
     },
   },
@@ -551,6 +605,7 @@ export default {
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
     this.username = localStorage.getItem("Username");
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");
+    this.getInfos();
     if (localStorage.getItem("infos")) {
       try {
         this.infos = JSON.parse(localStorage.getItem("infos"));
