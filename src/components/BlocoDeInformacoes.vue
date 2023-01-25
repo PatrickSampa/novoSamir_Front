@@ -243,6 +243,15 @@
         @click="traigemAutomatico"
         >Triar Automatico</v-btn
       >
+      <v-btn
+      :loading="loading"
+        depressed
+        color="red"
+        style="margin-left: 145px"
+        target="_blank"
+        @click="deletarTodosOsInfos()"
+        >Deletar Todas as Informações
+      </v-btn>
     </v-card-title>
     <v-data-table
       v-if="exibir.processos"
@@ -271,6 +280,9 @@
           <td>
             <v-btn icon @click="tranferir(item.id)">
               <v-icon color="success">mdi-file-eye-outline</v-icon>
+            </v-btn>
+            <v-btn :loading="loading" icon @click="deletarInforPorID(item)">
+              <v-icon color="red">mdi-delete</v-icon>
             </v-btn>
           </td>
         </tr>
@@ -321,18 +333,70 @@ export default {
       loading: false,
       senhaSapaiens: "",
       cpfSapiens: "",
+      username: "",
       //exibir: {tudo: true, processos: false },
     };
   },
   methods: {
     //teste
+    deletarInforPorID(dado) {
+      console.log(dado);
+      this.$prompt("Digite seu nome de usuario").then((text) => {
+        if (text == this.username) {
+          this.loading = true;
+          let body = dado;
+          //this.calculoLote = this.calculoLote.filter((item) => item !== dado);
+          Axios.AxiosApiControleUsuario.delete(
+            `/informationsForCalcule/${body.id}`
+          )
+            .then(async (res) => {
+              console.log(res.data);
+              this.getInfos();
+              this.loading = false;
+            })
+            .catch((error) => {
+              this.loading = false;
+              console.log(error.message);
+              console.log("error 1");
+            });
+        } else {
+          this.loading = false;
+          this.$alert("Nome errado");
+        }
+        this.loading = false;
+      });
+    },
+    deletarTodosOsInfos() {
+      this.$prompt("Digite seu CPF").then((text) => {
+        if (text == this.cpfSapiens) {
+          this.loading = true;
+          Axios.AxiosApiControleUsuario.delete(
+            `/informationsForCalcule`,
+            this.calculoLote
+          )
+            .then((dados) => {
+              console.log(dados);
+              this.getInfos();
+              this.loading = false;
+            })
+            .catch((error) => {
+              console.log(error);
+              console.log("error deletar");
+              this.loading = false;
+            });
+        } else {
+          this.$alert("CPF errado");
+          this.loading = false;
+        }
+        this.loading = false;
+      });
+    },
     traigemAutomatico() {
       if (this.cpfSapiens == null || this.cpfSapiens == "") {
         this.cpfSapiens = localStorage.getItem("sapiensCPF");
         this.username = localStorage.getItem("Username");
         this.senhaSapaiens = localStorage.getItem("sapiensSenha");
       }
-      this.loading = true;
       this.$prompt(
         "Qual é o nome das etiquetas?",
         "INVERTIDA SIMPLIFICADA"
@@ -345,6 +409,7 @@ export default {
             },
             etiqueta,
           };
+          this.loading = true;
           console.log(body);
           axios
             .post(`${apiSapiens}samir/getInformationFromSapienForSamir`, body)
@@ -376,9 +441,11 @@ export default {
               this.$confirm("Falha ao triar os processos", "Error", "error")
                 .then((r) => {
                   console.log(r);
+                  this.loading = false;
                 })
                 .catch(() => {
                   console.log("OK not selected.");
+                  this.loading = false;
                 });
               console.log(error.message);
               console.log("error.message");
@@ -435,12 +502,15 @@ export default {
           this.$confirm("Falha ao salvar o processo", "Error", "error")
             .then((r) => {
               console.log(r);
+              this.loading = false;
             })
             .catch(() => {
               console.log("OK not selected.");
+              this.loading = false;
             });
           console.log(error.message);
           console.log("error.message");
+          this.loading = false;
         });
       //this.cleanFields();
       this.getInfos();
