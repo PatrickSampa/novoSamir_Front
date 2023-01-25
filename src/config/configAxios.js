@@ -11,7 +11,7 @@ const AxiosApiControleUsuario = axios.create({
 AxiosApiControleUsuario.interceptors.response.use(response => {
     return response
 }, err => {
-    return new Promise(async function(resolve, reject){
+    return (async(resolve, reject) =>{
         const originalReq = await err
         let refreshToken = localStorage.getItem("authRefreshToken");
         if (originalReq.response.status === 401 && err.config && !err.config._retry && refreshToken != null) {

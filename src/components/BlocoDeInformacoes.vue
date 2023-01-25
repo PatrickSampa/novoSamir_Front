@@ -196,10 +196,10 @@
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <label for="beneficioAcumulado.dif" class="labels pb-3">DCB</label>
+          <label for="beneficioAcumulado.dcb" class="labels pb-3">DCB</label>
           <v-text-field
-            v-model="beneficioAcumulado.dif"
-            id="beneficioAcumulado_dif"
+            v-model="beneficioAcumulado.dcb"
+            id="beneficioAcumulado_dcb"
             dense
             placeholder=""
             outlined
@@ -221,15 +221,38 @@
           >
         </v-col>
       </v-row>
-      <v-btn color="primary" @click="pushInfos(infos)" id="adicionarButton"
+      <v-btn
+        :loading="loading"
+        color="primary"
+        @click="pushInfos(infos)"
+        id="adicionarButton"
         >Adicionar</v-btn
       >
     </v-row>
     <v-card-title class="mt-5">
-      <button @click="exibirActive(), redirectToCalculo()" style="cursor: pointer">
+      <button
+        @click="exibirActive(), redirectToCalculo()"
+        style="cursor: pointer"
+      >
         Tabela de Processos <v-icon>mdi-menu-up</v-icon>
-      </button></v-card-title
-    >
+      </button>
+      <v-btn
+        depressed
+        :loading="loading"
+        color="primary"
+        @click="traigemAutomatico"
+        >Triar Automatico</v-btn
+      >
+      <v-btn
+      :loading="loading"
+        depressed
+        color="red"
+        style="margin-left: 145px"
+        target="_blank"
+        @click="deletarTodosOsInfos()"
+        >Deletar Todas as Informações
+      </v-btn>
+    </v-card-title>
     <v-data-table
       v-if="exibir.processos"
       :headers="headers"
@@ -258,6 +281,9 @@
             <v-btn icon @click="tranferir(item.id)">
               <v-icon color="success">mdi-file-eye-outline</v-icon>
             </v-btn>
+            <v-btn :loading="loading" icon @click="deletarInforPorID(item)">
+              <v-icon color="red">mdi-delete</v-icon>
+            </v-btn>
           </td>
         </tr>
       </template>
@@ -266,8 +292,9 @@
 </template>
 
 <script>
-import { baseApiUrl } from "../global";
+import { baseApiUrl, apiSapiens } from "../global";
 import axios from "axios";
+import Axios from "../config/configAxios";
 export default {
   name: "Processos",
   props: ["exibir"],
@@ -300,14 +327,132 @@ export default {
       ],
       infos: [],
       calculo: {},
-      beneficioAcumulado: { beneficio: null, dib: null, dif: null, rmi: null },
+      beneficioAcumulado: { beneficio: null, dib: null, dcb: null, rmi: null },
       array_beneficioAcumulado: [],
       beneficioAcumuladoBoolean: false,
+      loading: false,
+      senhaSapaiens: "",
+      cpfSapiens: "",
+      username: "",
       //exibir: {tudo: true, processos: false },
     };
   },
   methods: {
     //teste
+    deletarInforPorID(dado) {
+      console.log(dado);
+      this.$prompt("Digite seu nome de usuario").then((text) => {
+        if (text == this.username) {
+          this.loading = true;
+          let body = dado;
+          //this.calculoLote = this.calculoLote.filter((item) => item !== dado);
+          Axios.AxiosApiControleUsuario.delete(
+            `/informationsForCalcule/${body.id}`
+          )
+            .then(async (res) => {
+              console.log(res.data);
+              this.getInfos();
+              this.loading = false;
+            })
+            .catch((error) => {
+              this.loading = false;
+              console.log(error.message);
+              console.log("error 1");
+            });
+        } else {
+          this.loading = false;
+          this.$alert("Nome errado");
+        }
+        this.loading = false;
+      });
+    },
+    deletarTodosOsInfos() {
+      this.$prompt("Digite seu CPF").then((text) => {
+        if (text == this.cpfSapiens) {
+          this.loading = true;
+          Axios.AxiosApiControleUsuario.delete(
+            `/informationsForCalcule`,
+            this.calculoLote
+          )
+            .then((dados) => {
+              console.log(dados);
+              this.getInfos();
+              this.loading = false;
+            })
+            .catch((error) => {
+              console.log(error);
+              console.log("error deletar");
+              this.loading = false;
+            });
+        } else {
+          this.$alert("CPF errado");
+          this.loading = false;
+        }
+        this.loading = false;
+      });
+    },
+    traigemAutomatico() {
+      if (this.cpfSapiens == null || this.cpfSapiens == "") {
+        this.cpfSapiens = localStorage.getItem("sapiensCPF");
+        this.username = localStorage.getItem("Username");
+        this.senhaSapaiens = localStorage.getItem("sapiensSenha");
+      }
+      this.$prompt(
+        "Qual é o nome das etiquetas?",
+        "INVERTIDA SIMPLIFICADA"
+      ).then((etiqueta) => {
+        if (etiqueta) {
+          const body = {
+            login: {
+              cpf: this.cpfSapiens,
+              senha: this.senhaSapaiens,
+            },
+            etiqueta,
+          };
+          this.loading = true;
+          console.log(body);
+          axios
+            .post(`${apiSapiens}samir/getInformationFromSapienForSamir`, body)
+            .then(async (response) => {
+              console.log(response.data);
+              await Axios.AxiosApiControleUsuario.post(
+                `/informationsForCalcule/list`,
+                response.data
+              ).then((res) => {
+                this.infos.push(res.data);
+                console.log(res.data);
+                this.saveInfos();
+                this.$alert(1, "Processo adicionado: ", "success");
+                this.$emit("processos", true);
+                this.loading = false;
+              });
+              this.getInfos();
+              this.$alert(
+                response.data.length,
+                "Processos colhidos: ",
+                "success"
+              );
+              this.$emit("processos", true);
+              this.redirectToCalculo();
+              this.loading = false;
+            })
+            .catch((error) => {
+              this.loading = false;
+              this.$confirm("Falha ao triar os processos", "Error", "error")
+                .then((r) => {
+                  console.log(r);
+                  this.loading = false;
+                })
+                .catch(() => {
+                  console.log("OK not selected.");
+                  this.loading = false;
+                });
+              console.log(error.message);
+              console.log("error.message");
+            });
+        }
+      });
+    },
     redirectToCalculo() {
       this.$router.push(`/home`).catch(() => {});
     },
@@ -323,8 +468,8 @@ export default {
       if (!this.numeroDoProcesso) {
         return;
       }
-      this.infos.push({
-        id: this.infos.length,
+      const body = {
+        // id: this.infos.length,
         numeroDoProcesso: this.numeroDoProcesso,
         nome: this.nome,
         dataAjuizamento: this.dataAjuizamento,
@@ -341,14 +486,59 @@ export default {
         urlProcesso: this.urlProcesso,
         dibAnterior: this.dibAnterior,
         beneficioAcumuladoBoolean: this.beneficioAcumuladoBoolean,
-        tipo: this.tipo
-      });
-      this.cleanFields();
+        tipo: this.tipo,
+      };
+      //this.infos.push(body);
+      // body.id =null;
+      Axios.AxiosApiControleUsuario.post(`/informationsForCalcule/`, body)
+        .then((response) => {
+          console.log(response.data);
+          this.$alert(1, "Processo adicionado: ", "success");
+          this.$emit("processos", true);
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.loading = false;
+          this.$confirm("Falha ao salvar o processo", "Error", "error")
+            .then((r) => {
+              console.log(r);
+              this.loading = false;
+            })
+            .catch(() => {
+              console.log("OK not selected.");
+              this.loading = false;
+            });
+          console.log(error.message);
+          console.log("error.message");
+          this.loading = false;
+        });
+      //this.cleanFields();
+      this.getInfos();
       this.saveInfos();
     },
     removeCat(x) {
       this.infos.splice(x, 1);
       this.saveInfos();
+    },
+    getInfos() {
+      Axios.AxiosApiControleUsuario.get(`/informationsForCalcule/`)
+        .then((response) => {
+          this.infos = response.data;
+          console.log(response.data);
+          this.saveInfos();
+          this.$emit("processos", true);
+        })
+        .catch((error) => {
+          this.$confirm("Falha ao receber os processo", "Error", "error")
+            .then((r) => {
+              console.log(r);
+            })
+            .catch(() => {
+              console.log("OK not selected.");
+            });
+          console.log(error.message);
+          console.log("error.message");
+        });
     },
     saveInfos() {
       const parsed = JSON.stringify(this.infos);
@@ -377,33 +567,34 @@ export default {
       return valor;
     },
     preencherFields(y) {
-      this.numeroDoProcesso = this.infos[y].numeroDoProcesso;
-      this.nome = this.infos[y].nome;
-      this.dataAjuizamento = this.infos[y].dataAjuizamento;
-      this.cpf = this.infos[y].cpf;
-      this.dibInicial = this.infos[y].dibInicial;
-      this.dibFinal = this.infos[y].dibFinal;
-      this.rmi = this.infos[y].rmi;
-      this.beneficio = this.infos[y].beneficio;
-      this.nb = this.infos[y].nb;
-      this.dip = this.infos[y].dip;
-      this.aps = this.infos[y].aps;
-      this.citacao = this.infos[y].citacao;
-      this.urlProcesso = this.infos[y].urlProcesso;
-      this.dibAnterior = this.infos[y].dibAnterior;
-      this.tipo = this.infos[y].tipo;
-      console.log(this.infos[y].beneficioAcumuladoBoolean);
-      console.log(this.infos[y].beneficiosAcumulados);
+      const processo = this.infos.find((info) => info.id == y);
+      this.numeroDoProcesso = `${processo.numeroDoProcesso}`;
+      this.nome = processo.nome;
+      this.dataAjuizamento = processo.dataAjuizamento;
+      this.cpf = processo.cpf;
+      this.dibInicial = processo.dibInicial;
+      this.dibFinal = processo.dibFinal;
+      this.rmi = processo.rmi;
+      this.beneficio = processo.beneficio;
+      this.nb = processo.nb;
+      this.dip = processo.dip;
+      this.aps = processo.aps;
+      this.citacao = processo.citacao;
+      this.urlProcesso = processo.urlProcesso;
+      this.dibAnterior = processo.dibAnterior;
+      this.tipo = processo.tipo;
+      console.log(processo.beneficioAcumuladoBoolean);
+      console.log(processo.beneficiosAcumulados);
     },
     pushBeneficio() {
       let dataDib = this.beneficioAcumulado.dib.split("/");
-      let dataDif = this.beneficioAcumulado.dif.split("/");
+      let dataDcb = this.beneficioAcumulado.dcb.split("/");
       let dataincial = this.dibInicial.split("/");
       let dataFinal = this.dip.split("/");
       if (
         this.beneficiosInacumulveilVerificadorPeriodo(
           dataDib,
-          dataDif,
+          dataDcb,
           dataincial,
           dataFinal
         ) &&
@@ -441,19 +632,19 @@ export default {
     },
     beneficiosInacumulveilVerificadorPeriodo(
       dataDib,
-      dataDif,
+      dataDcb,
       dataincial,
       dataFinal
     ) {
-      if (dataDib[2] <= dataFinal[2] && dataDif[2] >= dataincial[2]) {
-        if (dataDif[2] == dataincial[2]) {
-          if (dataDif[1] == dataincial[1]) {
-            if (dataDif[0] >= dataincial[0]) {
+      if (dataDib[2] <= dataFinal[2] && dataDcb[2] >= dataincial[2]) {
+        if (dataDcb[2] == dataincial[2]) {
+          if (dataDcb[1] == dataincial[1]) {
+            if (dataDcb[0] >= dataincial[0]) {
               return true;
             } else {
               return false;
             }
-          } else if (dataDif[1] > dataincial[1]) {
+          } else if (dataDcb[1] > dataincial[1]) {
             return true;
           } else {
             return false;
@@ -469,18 +660,22 @@ export default {
       this.beneficioAcumulado = {
         beneficio: null,
         dib: null,
-        dif: null,
+        dcb: null,
         rmi: null,
       };
     },
     tranferir(y) {
       this.redirectToCalculo();
       this.preencherFields(y);
-      this.calculo = this.infos[y];
+      this.calculo = this.infos.find((info) => info.id == y);
       this.$emit("calculo", this.calculo);
     },
   },
   mounted() {
+    this.cpfSapiens = localStorage.getItem("sapiensCPF");
+    this.username = localStorage.getItem("Username");
+    this.senhaSapaiens = localStorage.getItem("sapiensSenha");
+    this.getInfos();
     if (localStorage.getItem("infos")) {
       try {
         this.infos = JSON.parse(localStorage.getItem("infos"));
