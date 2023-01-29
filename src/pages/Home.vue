@@ -1932,7 +1932,6 @@ export default {
       add_taxa: false,
       beneficio: false,
       pesquisa: {},
-      loading: true,
       infos: [],
       dtInicial: "",
       dtFinal: "",
