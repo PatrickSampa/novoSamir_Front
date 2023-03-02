@@ -410,7 +410,6 @@ export default {
             etiqueta,
           };
           this.loading = true;
-          console.log(body);
           axios
             .post(`${apiSapiens}samir/getInformationFromSapienForSamir`, body)
             .then(async (response) => {

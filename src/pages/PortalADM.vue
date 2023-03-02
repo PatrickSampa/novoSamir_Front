@@ -1,84 +1,18 @@
 <template>
   <v-card class="pa-3 my-3">
-    <v-row>
-      <v-col cols="12" sm="6" md="3">
-        <label for="data-inicial" class="labels pb-3">Data da taxa</label>
-        <v-text-field
-          v-model="data_da_taxa"
-          id="data-inicial"
-          dense
-          type="date"
-          outlined
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="3">
-        <label for="valor-taxa" class="labels pb-3">Valor da Taxa</label>
-        <v-text-field
-          v-model="taxa_inserida"
-          id="valor-taxa"
-          dense
-          placeholder="Ex: 3.084"
-          outlined
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="3">
-        <label for="taxa-modelo" class="labels pb-3"
-          >Qual modelo de taxa a ser inserida</label
-        >
-        <select v-model="taxa_modelo" class="select-valer">
-          <option
-            v-for="option in options"
-            v-bind:value="option.value"
-            v-bind:key="option.value"
-            v-on:click="limpa(), id_elemento()"
-          >
-            {{ option.text }}
-          </option>
-        </select>
-      </v-col>
-      <v-col cols="12" sm="6" md="3">
-        <label for="taxa-tipo" class="labels pb-3"
-          >Qual Tipo de taxa a ser inserida</label
-        >
-        <select v-model="tipo" class="select-valer">
-          <option
-            v-for="tipos of tipo_taxa"
-            v-bind:value="tipos.value"
-            v-bind:key="tipos.value"
-            dense
-            @click="tipo_execuçao()"
-          >
-            {{ tipos.text }}
-          </option>
-        </select>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="6" md="3">
-        <v-btn @click="id_elemento()"> Adicionar </v-btn>
-      </v-col>
-      <v-col cols="12" sm="6" md="3">
-        <v-btn @click="seletarTipoTaxa()"> Excluir </v-btn>
-      </v-col>
-      <v-col cols="12" sm="6" md="3"> </v-col>
-    </v-row>
-    <v-row>
-      <v-data-table
-        :headers="headers"
-        :items="taxas_exibir"
-        item-key="codigo"
-        class="elevation-1"
-      >
-      </v-data-table>
-      {{ descriçao_juros }}
-    </v-row>
+   <AtualizadorDosPrev/>
   </v-card>
 </template>
 
 <script>
 import axios from "axios";
 import { baseApiUrl } from "../global";
+import AtualizadorDosPrev from "../components/AtualizadorDosPrev.vue";
 export default {
+  components: {
+    AtualizadorDosPrev: AtualizadorDosPrev
+  },
+
   //name: "AdicionarTaxa",
   data: function () {
     return {

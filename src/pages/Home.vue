@@ -17,10 +17,12 @@
       <v-tabs>
         <v-tabs-slider color="green"></v-tabs-slider>
         <v-tab @click="add_taxa = false">Cálculo</v-tab>
-        <v-tab @click="add_taxa = true">Adicionar Taxa</v-tab>
+        <v-tab  @click="acessoPortalADM()">Portal ADM</v-tab>
       </v-tabs>
     </v-card>
-    <v-card>
+    <PortalADM v-if="add_taxa"/>
+    <v-container fluid id="calculadora" v-if="!add_taxa">
+      <v-card>
       <bloco-informacoes
         v-if="!add_taxa"
         @calculo="atualizarTodosDados($event)"
@@ -586,7 +588,7 @@
       </v-data-table>
     </template>
 
-    <adicionar-taxa v-if="add_taxa == true" />
+    <portal-a-d-m v-if="add_taxa == true" />
 
     <!-- TABELA PRNCIPAL -->
     <br />
@@ -1908,6 +1910,8 @@
         ><i class="fa fa-file"></i
       ></b-button>
     </div>
+    </v-container>
+
   </v-container>
 </template>
 
@@ -1918,12 +1922,12 @@ import Axios from "../config/configAxios";
 import { baseApiUrl,  apiSapiens} from "../global";
 import jsPDF from "jspdf";
 import axios from "axios";
-import AdicionarTaxa from "./AdicionarTaxa.vue";
+import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
 export default {
   name: "Home",
   components: {
-    AdicionarTaxa,
+    PortalADM: PortalADM,
     "bloco-informacoes": BlocoDeInformacoes,
   },
   data: function () {
@@ -2084,6 +2088,16 @@ export default {
     },
   },
   methods: {
+    acessoPortalADM(){
+      this.$prompt("Digite a senha de acesso").then((text) => {
+        if(text == "Beremiz Samir"){
+          this.add_taxa = true;
+        }else{
+          this.add_taxa = false;
+          this.$alert("SENHA ERRADA");
+        }
+      })
+    },
     quebraLinhaDescribe(describe) {
       let arrayDescribe = describe;
 
