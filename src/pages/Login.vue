@@ -83,6 +83,7 @@ export default {
           .catch(async (error) => {
             let message = await error;
             console.log(message);
+            console.log("message");
             this.valid = false;
             this.$alert(message, "Error", "error", {
               confirmButtonText: "Got it!",

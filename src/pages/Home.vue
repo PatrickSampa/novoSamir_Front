@@ -2004,7 +2004,7 @@ export default {
       arrayBenficios: [],
       arrayTeste: [],
       beneficiosInacumulveisBanco: [],
-      beneficiosInacumulveisBancoName: ["Seguro Desemprego", "Auxilio Defesa"],
+      beneficiosInacumulveisBancoName: ["Seguro Desemprego", "Seguro Defesa"],
       beneficioInacumulavel: [],
       pacelasVencidas: 0,
       salarioMinimoOssada: 0,
@@ -2101,7 +2101,7 @@ export default {
       if (
         obj_beneficioAcumulado.beneficio != null &&
         (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") ||
-          obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))
+          obj_beneficioAcumulado.beneficio.includes("Seguro Defesa"))
       ) {
         obj_beneficioAcumulado.salario13 = true;
         obj_beneficioAcumulado.salario13Obrigatorio = true;
@@ -2114,7 +2114,7 @@ export default {
       if (
         obj_beneficioAcumulado.beneficio != null &&
         (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") ||
-          obj_beneficioAcumulado.beneficio.includes("Auxilio Defesa"))
+          obj_beneficioAcumulado.beneficio.includes("Seguro Defesa"))
       ) {
         return true;
       } else {
@@ -2381,7 +2381,7 @@ export default {
                     this.beneficioInacumulavel.push(value);
                   } else if (
                     (value.beneficio.includes("Seguro Desemprego") ||
-                      value.beneficio.includes("Auxilio Defesa")) &&
+                      value.beneficio.includes("Seguro Defesa")) &&
                     index == beneficioProvisorio.inacumulavel.length - 1
                   ) {
                     this.beneficioInacumulavel.push(value);
@@ -2860,7 +2860,7 @@ export default {
           parseInt(value.name.split("-")[0]) ==
             parseInt(beneficio.split("-")[0]) ||
           beneficio.includes("Seguro Desemprego") ||
-          beneficio.includes("Auxilio Defesa")
+          beneficio.includes("Seguro Defesa")
         ) {
           console.log("benefio e " + value.name);
           benficioVerdadeiro = value.name;
@@ -3573,7 +3573,7 @@ export default {
                     //console.log(decontar(value, dado));
                     if (
                       info.beneficio.includes("Seguro Desemprego") ||
-                      info.beneficio.includes("Auxilio Defesa")
+                      info.beneficio.includes("Seguro Defesa")
                     ) {
                       newArrayCalculo.push(
                         decontarExpecial(
@@ -3698,7 +3698,9 @@ export default {
       this.total_processos = Math.floor(this.total_processos * 100) / 100;
       this.valorHonorarios = Math.floor(this.valorHonorarios * 100) / 100;
       let index = 0;
+      console.log(this.calc_total)
       for (const value of this.calc_total) {
+        console.log(this.calc_total[index].salarioCorrigido)
         this.calc_total[index].salarioCorrigido =
           Math.floor(value.salarioCorrigido * 100) / 100;
         this.calc_total[index].salarioTotal =

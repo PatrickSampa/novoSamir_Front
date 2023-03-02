@@ -425,7 +425,20 @@ export default {
                 this.$alert(1, "Processo adicionado: ", "success");
                 this.$emit("processos", true);
                 this.loading = false;
-              });
+              }).catch((error) => {
+              this.loading = false;
+              this.$confirm("Falha ao salvar os processos", "Error", "error")
+                .then((r) => {
+                  console.log(r);
+                  this.loading = false;
+                })
+                .catch(() => {
+                  console.log("OK not selected.");
+                  this.loading = false;
+                });
+              console.log(error.message);
+              console.log("error.message");
+            });
               this.getInfos();
               this.$alert(
                 response.data.length,
