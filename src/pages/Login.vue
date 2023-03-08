@@ -15,14 +15,15 @@
         <v-text-field
           v-model="username"
           :rules="nameRules"
-          label="username"
+          label="Username"
           required
         ></v-text-field>
 
         <v-text-field
           v-model="password"
           :rules="passwordRules"
-          label="CPF"
+          label="senha"
+          type="password"
           required
         ></v-text-field>
         <v-btn depressed :loading="loading" color="primary" @click="validate"
@@ -43,6 +44,7 @@
 
 <script>
 import axios from "../config/configAxios";
+import { samirControle } from '../global';
 export default {
   name: "Login",
   data: () => {
@@ -59,25 +61,34 @@ export default {
     };
   },
   methods: {
-    async getUsuario() {
-      
-      
+    getUsuario() {
+      console.log(localStorage.getItem("authToken"))
+      let baseURL = `${samirControle}users`;
+      console.log(baseURL)
+      axios.AxiosApiControleUsuario.get("/users", {
+      }).then((response) => {
+        console.log(response)
+        this.$router.push({ name: "home" })
+      })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
     },
     async validate() {
       try {
         this.loading = true;
         let body = {
           userName: this.username,
-          cpf: this.password,
+          password: this.password,
         };
         console.log(body);
-        axios.AxiosApiControleUsuario.post("/users/loginProvissorio", body)
+        axios.AxiosApiControleUsuario.post("/users/login", body)
           .then(async (res) => {
             console.log(res.data);
             await localStorage.setItem("authToken", res.data.token);
             await localStorage.setItem("authRefreshToken", res.data.refreshToken);
             this.valid = true;
-            this.$router.push({ path: "/processos" });
+            this.$router.push({ name: "home" })
             //await this.$refs.form.validate();
           })
           .catch(async (error) => {
@@ -97,12 +108,15 @@ export default {
         });
       } finally {
         if (this.valid) {
-          this.$router.push({ path: "/processos" });
+          this.$router.push({ name: "home" })
         }
         this.loading = false;
       }
     },
   },
+  mounted(){
+    this.getUsuario()
+  }
 };
 </script>
 

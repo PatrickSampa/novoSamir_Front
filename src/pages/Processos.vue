@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     redirectToCalculo() {
-      this.$router.push(`/home`).catch(() => {});
+      this.$router.push({ name: "home" })
     },
   },
 };

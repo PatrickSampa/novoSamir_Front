@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     signin() {
-      this.$router.push({ path: "/processos" });
+      this.$router.push({ name: "home" })
     },
     async validate() {
       try {
@@ -123,7 +123,7 @@ export default {
       } finally {
         
         if(this.valid){
-            this.$router.push({ path: "/" });
+          this.$router.push({ name: "login" })
         }
         this.loading = false;
       }

@@ -466,7 +466,7 @@ export default {
       });
     },
     redirectToCalculo() {
-      this.$router.push(`/home`).catch(() => {});
+      this.$router.push({ name: "home" })
     },
     dadosActive() {
       let dados = !this.exibir.tudo;

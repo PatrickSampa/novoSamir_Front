@@ -4848,7 +4848,7 @@ export default {
       return taxas;
     },
     redirectToCalculo() {
-      this.$router.push("/processos").catch(() => {});
+      this.$router.push({ name: "processos" }).catch(() => {});
     },
   },
 
