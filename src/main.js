@@ -7,7 +7,7 @@ import 'font-awesome/css/font-awesome.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vuetify from './plugins/vuetify'
-import router from './config/router'
+import router from './config/routes/router'
 
 
 import VueTheMask from 'vue-the-mask'

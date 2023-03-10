@@ -18,7 +18,7 @@
 
 <script>
 // import Login from "./pages/Login";
-import Content from "./components/Content.vue";
+import Content from "./config/routes/Content.vue";
 import Toolbar from "./components/Toolbar.vue";
 
 export default {
