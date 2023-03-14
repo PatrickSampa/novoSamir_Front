@@ -76,13 +76,14 @@ export default {
       passwordSapiensRules: [
         (v) => !!v || "Digite a sua senha do Sapiens!",
         (v) => (v && v.length >= 6) || "Senha com menos de 6 caracteres!",
+        (v) =>(v && v != this.password) || "Senha Samir tem que ser igual a senha Sapiens!"
       ],
       loading: false,
     };
   },
   methods: {
     signin() {
-      this.$router.push({ path: "/processos" });
+      this.$router.push({ name: "home" })
     },
     async validate() {
       try {
@@ -123,7 +124,7 @@ export default {
       } finally {
         
         if(this.valid){
-            this.$router.push({ path: "/" });
+          this.$router.push({ name: "login" })
         }
         this.loading = false;
       }

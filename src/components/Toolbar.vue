@@ -3,11 +3,11 @@
     <img class="logo-bar" height="90" max-height="90" src="../assets/logo2.png" />
     <v-spacer />
     <div class="logged">
-      <span class="pr-3" style="color: black">{{ username }}</span>
+      <span class="pr-3" style="color: black">{{ valid }}</span>
       <v-avatar color="indigo" size="36">
         <span class="white--text text-h5">{{ username[0] + username[1] }}</span>
       </v-avatar>
-      <v-btn icon to="/" @click="logout()">
+      <v-btn icon @click="logout()">
         <v-icon color="black">mdi-export</v-icon>
       </v-btn>
     </div>
@@ -22,32 +22,53 @@ export default {
   data() {
     return {
       username: "",
+      tentativa: 0,
+    }
+  },
+  computed: {
+    valid() {
+      if (this.username == null || this.username == "") {
+        /* eslint-disable */
+        this.tentativa++
+        this.getUsuario()
+      }
+      if (this.tentativa > 3) {
+        this.logout()
+      }
+      return this.username
     }
   },
   methods: {
+    getUsuario() {
+      console.log(localStorage.getItem("authToken"))
+      let baseURL = `${samirControle}users`;
+      console.log(baseURL)
+      axios.get(baseURL, {
+        headers: {
+          'authorization': `bearer ${localStorage.getItem("authToken")}`
+        }
+      }).then((response) => {
+        localStorage.setItem("sapiensCPF", response.data.cpf);
+        localStorage.setItem("Username", response.data.userName);
+        localStorage.setItem("sapiensSenha", response.data.passwordSapiens);
+        this.username = response.data.userName;
+      })
+        .catch((error) => {
+          this.logout()
+          console.log(error.response.data);
+        });
+    },
     logout() {
-      localStorage.setItem("authToken", "null ");
-      localStorage.setItem("authRefreshToken", "nnull");
-      localStorage.setItem("sapiensCPF", "null");
-      localStorage.setItem("Username", "null ");
-      localStorage.setItem("sapiensSenha", " null");
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("authRefreshToken");
+      localStorage.removeItem("sapiensCPF");
+      localStorage.removeItem("Username");
+      localStorage.removeItem("sapiensSenha");
+      this.$router.push({ name: "login" })
     },
   },
   mounted() {
-    console.log(localStorage.getItem("authToken"))
-    let baseURL = `${samirControle}users`;
-    console.log(baseURL)
-    axios.get(baseURL ,{headers: {
-        'authorization': `bearer ${localStorage.getItem("authToken")}`
-      }} ).then((response) => {
-      localStorage.setItem("sapiensCPF", response.data.cpf);
-      localStorage.setItem("Username", response.data.userName);
-      localStorage.setItem("sapiensSenha", response.data.passwordSapiens);
-      this.username = response.data.userName;
-    })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
+    this.getUsuario()
   }
 };
 </script>

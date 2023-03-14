@@ -1,48 +1,24 @@
 <template>
-  <v-layout
-    class="login-layout my-5"
-    align-center
-    justify-center
-    row
-    fill-height
-  >
+  <v-layout class="login-layout my-5" align-center justify-center row fill-height>
     <v-card class="login pa-5" color="#F3F3F3">
       <v-toolbar dark color="primary">
         <span class="pa-3 title"> Samir </span>
       </v-toolbar>
 
       <v-form class="pa-3" v-model="valid" lazy-validation>
-        <v-text-field
-          v-model="username"
-          :rules="nameRules"
-          label="username"
-          required
-        ></v-text-field>
+        <v-text-field v-model="username" :rules="nameRules" label="Username" required></v-text-field>
 
-        <v-text-field
-          v-model="password"
-          :rules="passwordRules"
-          label="CPF"
-          required
-        ></v-text-field>
-        <v-btn depressed :loading="loading" color="primary" @click="validate"
-          >LOGIN</v-btn
-        >
-        <v-btn
-          id="cadastrar"
-          depressed
-          :loading="loading"
-          color="secondary"
-          to="/cadastrar"
-          >Cadastrar</v-btn
-        >
+        <v-text-field v-model="password" :rules="passwordRules" label="senha" type="password" required></v-text-field>
+        <v-btn depressed :loading="loading" color="primary" @click="loginUsuario">LOGIN</v-btn>
+        <v-btn id="cadastrar" depressed :loading="loading" color="secondary" to="/cadastrar">Cadastrar</v-btn>
       </v-form>
     </v-card>
   </v-layout>
 </template>
 
 <script>
-import axios from "../config/configAxios";
+import { login } from "../api/controle-usuario/login";
+import { validationToken } from "../api/controle-usuario/validationToken";
 export default {
   name: "Login",
   data: () => {
@@ -60,49 +36,35 @@ export default {
   },
   methods: {
     async getUsuario() {
-      
+        await validationToken().then(() => this.$router.push({ name: "home" }))
       
     },
-    async validate() {
+    async loginUsuario() {
+      let body = {
+        userName: this.username,
+        password: this.password,
+      };
       try {
         this.loading = true;
-        let body = {
-          userName: this.username,
-          cpf: this.password,
-        };
-        console.log(body);
-        axios.AxiosApiControleUsuario.post("/users/loginProvissorio", body)
-          .then(async (res) => {
-            console.log(res.data);
-            await localStorage.setItem("authToken", res.data.token);
-            await localStorage.setItem("authRefreshToken", res.data.refreshToken);
-            this.valid = true;
-            this.$router.push({ path: "/processos" });
-            //await this.$refs.form.validate();
-          })
-          .catch(async (error) => {
-            let message = await error;
-            console.log(message);
-            console.log("message");
-            this.valid = false;
-            this.$alert(message, "Error", "error", {
-              confirmButtonText: "Got it!",
-            });
-          });
+        await login(body);
+        this.loading = false;
+        this.valid = true;
+        this.$router.push({ name: "home" })
       } catch (error) {
         this.loading = false;
+        let message = await error.message;
+        console.log(message);
+        console.log("message");
         this.valid = false;
-        this.$alert(error.message, "Error", "error", {
+        this.$alert(message, "Error", "error", {
           confirmButtonText: "Got it!",
         });
-      } finally {
-        if (this.valid) {
-          this.$router.push({ path: "/processos" });
-        }
-        this.loading = false;
       }
     },
   },
+  mounted() {
+    this.getUsuario()
+  }
 };
 </script>
 
@@ -115,9 +77,11 @@ export default {
   /* display: flex;
   justify-content: center; */
 }
+
 #cadastrar {
   margin-left: 320px;
 }
+
 .login {
   margin-top: 100px;
   width: 600px;
