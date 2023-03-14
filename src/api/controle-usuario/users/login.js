@@ -1,9 +1,9 @@
 import {
     validateRequiredFields
-} from "../../util/validation/validationFields";
+} from "../../../util/validation/validationFields";
 import {
     axios_controleUsuario
-} from "./Api_axios";
+} from "../Api_axios";
 
 export async function login(body) {
     const requiredFields = ["userName", "password"];

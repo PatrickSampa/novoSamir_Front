@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-progress-linear
-      v-if="!beneficiosInacumulveisBanco[0]"
-      indeterminate
-      color="teal"
-    ></v-progress-linear>
+    <v-progress-linear v-if="!beneficiosInacumulveisBanco[0]" indeterminate color="teal"></v-progress-linear>
     <v-row>
       <button @click="dadosActive()" style="cursor: pointer">
         Prencher dados Manualmente <v-icon>mdi-menu-up</v-icon>
@@ -12,261 +8,114 @@
     </v-row>
     <v-row v-if="exibir.tudo && beneficiosInacumulveisBanco[0]" class="mx-3">
       <v-col cols="12" sm="6" md="3">
-        <label for="numeroProcesso" class="labels pb-3"
-          >Número do Processo</label
-        >
-        <v-text-field
-          v-model="numeroDoProcesso"
-          id="numeroProcesso"
-          dense
-          plyaaceholder="Número Processo"
-          outlined
-        ></v-text-field>
+        <label for="numeroProcesso" class="labels pb-3">Número do Processo</label>
+        <v-text-field v-model="numeroDoProcesso" id="numeroProcesso" dense plyaaceholder="Número Processo"
+          outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="6">
         <label for="nome" class="labels pb-3">Nome</label>
-        <v-text-field
-          v-model="nome"
-          id="nome"
-          dense
-          placeholder="Nome"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="nome" id="nome" dense placeholder="Nome" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="3">
-        <label for="dataAjuizamento" class="labels pb-3"
-          >Data Ajuizamento</label
-        >
-        <v-text-field
-          v-model="dataAjuizamento"
-          id="dataAjuizamento"
-          dense
-          type="text"
-          outlined
-        ></v-text-field>
+        <label for="dataAjuizamento" class="labels pb-3">Data Ajuizamento</label>
+        <v-text-field v-model="dataAjuizamento" id="dataAjuizamento" dense type="text" outlined></v-text-field>
       </v-col>
     </v-row>
     <v-row class="mx-3" v-if="exibir.tudo && beneficiosInacumulveisBanco[0]">
       <v-col cols="12" sm="6" md="3">
         <label for="cpf" class="labels pb-3">CPF</label>
-        <v-text-field
-          v-model="cpf"
-          id="cpf"
-          dense
-          placeholder="cpf"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="cpf" id="cpf" dense placeholder="cpf" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="3">
         <label for="dtDibInicial" class="labels pb-3">Termo Inicial</label>
-        <v-text-field
-          v-model="dibInicial"
-          id="dtDibInicial"
-          dense
-          type="text"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="dibInicial" id="dtDibInicial" dense type="text" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="3">
         <label for="dtDibFinal" class="labels pb-3">Termo Final</label>
-        <v-text-field
-          v-model="dibFinal"
-          id="dtDibFinal"
-          dense
-          type="text"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="dibFinal" id="dtDibFinal" dense type="text" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="3">
         <label for="rmi" class="labels pb-3">RMI</label>
-        <v-text-field
-          v-model="rmi"
-          id="rmi"
-          dense
-          placeholder="R$ - "
-          @input="rmi = formataçao(rmi)"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="rmi" id="rmi" dense placeholder="R$ - " @input="rmi = formataçao(rmi)"
+          outlined></v-text-field>
       </v-col>
     </v-row>
     <v-row class="mx-3" v-if="exibir.tudo && beneficiosInacumulveisBanco[0]">
       <v-col cols="12" sm="6" md="3">
         <label for="beneficio" class="labels pb-3">Benefício</label>
-        <v-text-field
-          v-model="beneficio"
-          id="beneficio"
-          dense
-          placeholder="Beneficio"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="beneficio" id="beneficio" dense placeholder="Beneficio" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="3">
         <label for="nb" class="labels pb-3">Número do benefíco</label>
-        <v-text-field
-          v-model="nb"
-          id="nb"
-          dense
-          placeholder="Número do benefício"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="nb" id="nb" dense placeholder="Número do benefício" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="3">
         <label for="dip" class="labels pb-3">Data Início de Pagamento</label>
-        <v-text-field
-          v-model="dip"
-          id="dip"
-          dense
-          type="text"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="dip" id="dip" dense type="text" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="6" md="3">
         <label for="dip" class="labels pb-3">Citação</label>
-        <v-text-field
-          v-model="citacao"
-          id="citacao"
-          dense
-          type="text"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="citacao" id="citacao" dense type="text" outlined></v-text-field>
       </v-col>
     </v-row>
     <v-row class="mx-3" v-if="exibir.tudo && beneficiosInacumulveisBanco[0]">
       <v-col cols="12" sm="3" md="3">
         <label for="aps" class="labels pb-3">APS</label>
-        <v-text-field
-          v-model="aps"
-          id="aps"
-          dense
-          placeholder="Aps"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="aps" id="aps" dense placeholder="Aps" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="3" md="3">
         <label for="urlProcesso" class="labels pb-3">URL do processo</label>
-        <v-text-field
-          v-model="urlProcesso"
-          id="urlProcesso"
-          dense
-          placeholder="Exp: https://sapiens.agu.gov.br"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="urlProcesso" id="urlProcesso" dense placeholder="Exp: https://sapiens.agu.gov.br"
+          outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="3" md="3">
         <label for="urlProcesso" class="labels pb-3">DIB-ANTERIOR</label>
-        <v-text-field
-          v-model="dibAnterior"
-          id="dibAnterior"
-          dense
-          placeholder="Exp: 17/06/2000"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="dibAnterior" id="dibAnterior" dense placeholder="Exp: 17/06/2000" outlined></v-text-field>
       </v-col>
       <v-col cols="12" sm="3" md="3">
         <label for="tipo" class="labels pb-3">TIPO</label>
-        <v-text-field
-          v-model="tipo"
-          id="tipo"
-          dense
-          placeholder="Ativo"
-          outlined
-        ></v-text-field>
+        <v-text-field v-model="tipo" id="tipo" dense placeholder="Ativo" outlined></v-text-field>
       </v-col>
       <v-row class="mx-3" v-if="exibir.tudo && beneficiosInacumulveisBanco[0]">
         <v-col cols="12" sm="6" md="2">
-          <label for="beneficioAcumulado.beneficio" class="labels pb-3"
-            >Beneficio Acumulado?</label
-          >
-          <v-text-field
-            v-model="beneficioAcumulado.beneficio"
-            id="beneficioAcumulado_beneficio"
-            dense
-            placeholder=""
-            outlined
-          ></v-text-field>
+          <label for="beneficioAcumulado.beneficio" class="labels pb-3">Beneficio Acumulado?</label>
+          <v-text-field v-model="beneficioAcumulado.beneficio" id="beneficioAcumulado_beneficio" dense placeholder=""
+            outlined></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <label for="beneficioAcumulado.dib" class="labels pb-3">DIB </label>
-          <v-text-field
-            v-model="beneficioAcumulado.dib"
-            id="beneficioAcumulado_dib"
-            dense
-            placeholder=""
-            outlined
-          ></v-text-field>
+          <v-text-field v-model="beneficioAcumulado.dib" id="beneficioAcumulado_dib" dense placeholder=""
+            outlined></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <label for="beneficioAcumulado.dcb" class="labels pb-3">DCB</label>
-          <v-text-field
-            v-model="beneficioAcumulado.dcb"
-            id="beneficioAcumulado_dcb"
-            dense
-            placeholder=""
-            outlined
-          ></v-text-field>
+          <v-text-field v-model="beneficioAcumulado.dcb" id="beneficioAcumulado_dcb" dense placeholder=""
+            outlined></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <label for="beneficioAcumulado.rmi" class="labels pb-3">RMI</label>
-          <v-text-field
-            v-model="beneficioAcumulado.rmi"
-            id="beneficioAcumulado_rmi"
-            dense
-            placeholder=""
-            outlined
-          ></v-text-field>
+          <v-text-field v-model="beneficioAcumulado.rmi" id="beneficioAcumulado_rmi" dense placeholder=""
+            outlined></v-text-field>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <v-btn color="primary" @click="pushBeneficio()" id="beneficioBtn"
-            >Adicinar Beneficio</v-btn
-          >
+          <v-btn color="primary" @click="pushBeneficio()" id="beneficioBtn">Adicinar Beneficio</v-btn>
         </v-col>
       </v-row>
-      <v-btn
-        :loading="loading"
-        color="primary"
-        @click="pushInfos(infos)"
-        id="adicionarButton"
-        >Adicionar</v-btn
-      >
+      <v-btn :loading="loading" color="primary" @click="pushInfos(infos)" id="adicionarButton">Adicionar</v-btn>
     </v-row>
     <v-card-title class="mt-5">
-      <button
-        @click="exibirActive(), redirectToCalculo()"
-        style="cursor: pointer"
-      >
+      <button @click="exibirActive(), redirectToCalculo()" style="cursor: pointer">
         Tabela de Processos <v-icon>mdi-menu-up</v-icon>
       </button>
-      <v-btn
-        depressed
-        :loading="loading"
-        color="primary"
-        @click="traigemAutomatico"
-        >Triar Automatico</v-btn
-      >
-      <v-btn
-      :loading="loading"
-        depressed
-        color="red"
-        style="margin-left: 145px"
-        target="_blank"
-        @click="deletarTodosOsInfos()"
-        >Deletar Todas as Informações
+      <v-btn depressed :loading="loading" color="primary" @click="traigemAutomatico">Triar Automatico</v-btn>
+      <v-btn :loading="loading" depressed color="red" style="margin-left: 145px" target="_blank"
+        @click="deletarTodosOsInfos()">Deletar Todas as Informações
       </v-btn>
     </v-card-title>
-    <v-data-table
-      v-if="exibir.processos"
-      :headers="headers"
-      :items="infos"
-      item-key="name"
-      class="elevation-1"
-    >
+    <v-data-table v-if="exibir.processos" :headers="headers" :items="infos" item-key="name" class="elevation-1">
       <template v-slot:item="{ item }">
         <tr @click="tranferir(item.id)">
-          <td
-            class="py-3"
-            style="color: rgb(107, 107, 218); cursor: pointer"
-            @click="tranferir(item.id)"
-          >
+          <td class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="tranferir(item.id)">
             {{ item.numeroDoProcesso }}
           </td>
           <td>{{ item.nome }}</td>
@@ -292,9 +141,14 @@
 </template>
 
 <script>
-import { baseApiUrl, apiSapiens } from "../global";
+import { baseApiUrl } from "../global";
+import { deleteInformationForCalculoToID } from "../api/controle-usuario/informationCalculo/deleteInformationForCalculoToID"
+import { deleternformationForCalculoInList } from "../api/controle-usuario/informationCalculo/deleternformationForCalculoInList"
+import { salvarInformationForCalculoList } from "../api/controle-usuario/informationCalculo/salvarInformationForCalculoList"
+import { salvarInformationForCalculo } from "../api/controle-usuario/informationCalculo/salvarInformationForCalculo"
+import { getInformationsForCalcule } from "../api/controle-usuario/informationCalculo/getInformationsForCalcule"
+import { getInformationFromSapienForSamir } from "../api/visao/getInformation/getInformationFromSapienForSamir"
 import axios from "axios";
-import Axios from "../config/configAxios";
 export default {
   name: "Processos",
   props: ["exibir"],
@@ -341,24 +195,16 @@ export default {
     //teste
     deletarInforPorID(dado) {
       console.log(dado);
-      this.$prompt("Digite seu nome de usuario").then((text) => {
+      this.$prompt("Digite seu nome de usuario").then(async (text) => {
         if (text == this.username) {
           this.loading = true;
-          let body = dado;
-          //this.calculoLote = this.calculoLote.filter((item) => item !== dado);
-          Axios.AxiosApiControleUsuario.delete(
-            `/informationsForCalcule/${body.id}`
-          )
-            .then(async (res) => {
-              console.log(res.data);
-              this.getInfos();
-              this.loading = false;
-            })
-            .catch((error) => {
-              this.loading = false;
-              console.log(error.message);
-              console.log("error 1");
-            });
+          try {
+            await deleteInformationForCalculoToID(dado.id)
+            this.getInfos();
+            this.loading = false;
+          } catch (error) {
+            this.$alert(error.message);
+          }
         } else {
           this.loading = false;
           this.$alert("Nome errado");
@@ -367,23 +213,17 @@ export default {
       });
     },
     deletarTodosOsInfos() {
-      this.$prompt("Digite seu CPF").then((text) => {
+      this.$prompt("Digite seu CPF").then(async (text) => {
         if (text == this.cpfSapiens) {
           this.loading = true;
-          Axios.AxiosApiControleUsuario.delete(
-            `/informationsForCalcule`,
-            this.calculoLote
-          )
-            .then((dados) => {
-              console.log(dados);
-              this.getInfos();
-              this.loading = false;
-            })
-            .catch((error) => {
-              console.log(error);
-              console.log("error deletar");
-              this.loading = false;
-            });
+          try {
+            await deleternformationForCalculoInList(this.calculoLote);
+            this.getInfos();
+            this.loading = false;
+          } catch (error) {
+            this.loading = false;
+            this.$alert(error.message);
+          }
         } else {
           this.$alert("CPF errado");
           this.loading = false;
@@ -400,7 +240,7 @@ export default {
       this.$prompt(
         "Qual é o nome das etiquetas?",
         "INVERTIDA SIMPLIFICADA"
-      ).then((etiqueta) => {
+      ).then(async (etiqueta) => {
         if (etiqueta) {
           const body = {
             login: {
@@ -410,58 +250,21 @@ export default {
             etiqueta,
           };
           this.loading = true;
-          axios
-            .post(`${apiSapiens}samir/getInformationFromSapienForSamir`, body)
-            .then(async (response) => {
-              console.log(response.data);
-              await Axios.AxiosApiControleUsuario.post(
-                `/informationsForCalcule/list`,
-                response.data
-              ).then((res) => {
-                this.infos.push(res.data);
-                console.log(res.data);
-                this.saveInfos();
-                this.$alert(1, "Processo adicionado: ", "success");
-                this.$emit("processos", true);
-                this.loading = false;
-              }).catch((error) => {
-              this.loading = false;
-              this.$confirm("Falha ao salvar os processos", "Error", "error")
-                .then((r) => {
-                  console.log(r);
-                  this.loading = false;
-                })
-                .catch(() => {
-                  console.log("OK not selected.");
-                  this.loading = false;
-                });
-              console.log(error.message);
-              console.log("error.message");
-            });
-              this.getInfos();
-              this.$alert(
-                response.data.length,
-                "Processos colhidos: ",
-                "success"
-              );
-              this.$emit("processos", true);
-              this.redirectToCalculo();
-              this.loading = false;
-            })
-            .catch((error) => {
-              this.loading = false;
-              this.$confirm("Falha ao triar os processos", "Error", "error")
-                .then((r) => {
-                  console.log(r);
-                  this.loading = false;
-                })
-                .catch(() => {
-                  console.log("OK not selected.");
-                  this.loading = false;
-                });
-              console.log(error.message);
-              console.log("error.message");
-            });
+          try {
+            let informationCalculo = await getInformationFromSapienForSamir(body);
+            await salvarInformationForCalculoList(informationCalculo);
+            this.infos.push(informationCalculo);
+            this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
+            this.saveInfos();
+            this.redirectToCalculo();
+            this.getInfos();
+            this.$emit("processos", true);
+            this.loading = false;
+          } catch (error) {
+            this.loading = false;
+            this.$alert(error.message);
+          }
+
         }
       });
     },
@@ -500,57 +303,40 @@ export default {
         beneficioAcumuladoBoolean: this.beneficioAcumuladoBoolean,
         tipo: this.tipo,
       };
-      //this.infos.push(body);
-      // body.id =null;
-      Axios.AxiosApiControleUsuario.post(`/informationsForCalcule/`, body)
-        .then((response) => {
-          console.log(response.data);
-          this.$alert(1, "Processo adicionado: ", "success");
-          this.$emit("processos", true);
-          this.loading = false;
-        })
-        .catch((error) => {
-          this.loading = false;
-          this.$confirm("Falha ao salvar o processo", "Error", "error")
-            .then((r) => {
-              console.log(r);
-              this.loading = false;
-            })
-            .catch(() => {
-              console.log("OK not selected.");
-              this.loading = false;
-            });
-          console.log(error.message);
-          console.log("error.message");
-          this.loading = false;
-        });
-      //this.cleanFields();
-      this.getInfos();
-      this.saveInfos();
+      this.loading = true;
+      salvarInformationForCalculo(body).then(() => {
+        this.$alert(1, "Processo adicionado: ", "success");
+        this.$emit("processos", true);
+        this.loading = false;
+        this.getInfos();
+        this.saveInfos();
+        this.cleanFields();
+      }).catch(error => {
+        this.$alert(error.message);
+        this.loading = false;
+      });
     },
     removeCat(x) {
       this.infos.splice(x, 1);
       this.saveInfos();
     },
     getInfos() {
-      Axios.AxiosApiControleUsuario.get(`/informationsForCalcule/`)
-        .then((response) => {
-          this.infos = response.data;
-          console.log(response.data);
-          this.saveInfos();
-          this.$emit("processos", true);
-        })
-        .catch((error) => {
-          this.$confirm("Falha ao receber os processo", "Error", "error")
-            .then((r) => {
-              console.log(r);
-            })
-            .catch(() => {
-              console.log("OK not selected.");
-            });
-          console.log(error.message);
-          console.log("error.message");
-        });
+      getInformationsForCalcule().then((response) => {
+        this.infos = response;
+        console.log(response);
+        this.saveInfos();
+        this.$emit("processos", true);
+      }).catch((error) => {
+        this.$confirm("Falha ao receber os processo", "Error", "error")
+          .then((r) => {
+            console.log(r);
+          })
+          .catch(() => {
+            console.log("OK not selected.");
+          });
+        console.log(error.message);
+        console.log("error.message");
+      });
     },
     saveInfos() {
       const parsed = JSON.stringify(this.infos);
@@ -702,5 +488,4 @@ export default {
 };
 </script>
 
-<style >
-</style>
+<style ></style>

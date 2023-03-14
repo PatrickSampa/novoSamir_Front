@@ -55,7 +55,7 @@
 </template>
   
   <script>
-import axios from "../config/configAxios";
+import { cadastraUsuario } from "../api/controle-usuario/users/cadastraUsuario";
 export default {
   name: "Cadastrar",
   data: () => {
@@ -76,7 +76,6 @@ export default {
       passwordSapiensRules: [
         (v) => !!v || "Digite a sua senha do Sapiens!",
         (v) => (v && v.length >= 6) || "Senha com menos de 6 caracteres!",
-        (v) =>(v && v != this.password) || "Senha Samir tem que ser igual a senha Sapiens!"
       ],
       loading: false,
     };
@@ -97,20 +96,18 @@ export default {
         };
         console.log(body);
         if(this.passwordSapiens === this.password){
-            await axios.AxiosApiControleUsuario.post("/users", body)
-          .then(async (res) => {
-            console.log(res.data);
+          try {
+            await cadastraUsuario(body)
             this.valid = true;
-            
-          })
-          .catch(async (error) => {
-            let message = await error.response.data.message;
+          } catch (error) {
+            let message = await error.message;
             this.valid = false;
             console.log(message);
             this.$alert(message, "Error", "error", {
               confirmButtonText: "Got it!",
             });
-          });
+          }
+          
         }else{
             throw new Error("Senhas diferentes");
         }
