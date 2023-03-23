@@ -30,7 +30,7 @@ export default {
     atualizarDosPrev() {
       this.$prompt(
         "Qual é o nome das etiquetas? as etiquetas não pode conter a palvra ATUALIZAÇAO e FALHA",
-        "DOSPREV FORA DO PRAZO DO PRAZO DE VALIDADE"
+        "LEGOLAS"
       ).then((etiqueta) => {
         if (etiqueta) {
           const body = {
