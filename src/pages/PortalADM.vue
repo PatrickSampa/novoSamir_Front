@@ -1,6 +1,7 @@
 <template>
   <v-card class="pa-3 my-3">
    <AtualizadorDosPrev/>
+   <ValidadorDossiePrevidenciario/>
   </v-card>
 </template>
 
@@ -8,9 +9,12 @@
 import axios from "axios";
 import { baseApiUrl } from "../global";
 import AtualizadorDosPrev from "../components/AtualizadorDosPrev.vue";
+import ValidadorDossiePrevidenciario from "../components/ValidadorDossiePrevidenciario.vue";
 export default {
   components: {
-    AtualizadorDosPrev: AtualizadorDosPrev
+    AtualizadorDosPrev: AtualizadorDosPrev,
+    ValidadorDossiePrevidenciario: ValidadorDossiePrevidenciario
+
   },
 
   //name: "AdicionarTaxa",
