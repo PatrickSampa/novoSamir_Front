@@ -2,7 +2,7 @@
     <body class="container">
         <div class="VerificadorDeProcessoDuplicado">
             <v-btn :loading="loading" @click="atualizarDosPrev()" class="button-VerificadorDeProcessoDuplicado" color="primary">
-                Validador de Dossiê Previdenciário
+               Verificador de processo duplicado
             </v-btn>
         </div>
     </body>
