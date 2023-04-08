@@ -141,14 +141,13 @@
 </template>
 
 <script>
-import { baseApiUrl } from "../global";
 import { deleteInformationForCalculoToID } from "../api/controle-usuario/informationCalculo/deleteInformationForCalculoToID"
 import { deleternformationForCalculoInList } from "../api/controle-usuario/informationCalculo/deleternformationForCalculoInList"
 import { salvarInformationForCalculoList } from "../api/controle-usuario/informationCalculo/salvarInformationForCalculoList"
 import { salvarInformationForCalculo } from "../api/controle-usuario/informationCalculo/salvarInformationForCalculo"
 import { getInformationsForCalcule } from "../api/controle-usuario/informationCalculo/getInformationsForCalcule"
 import { getInformationFromSapienForSamir } from "../api/visao/getInformation/getInformationFromSapienForSamir"
-import axios from "axios";
+import { getBeneficios } from "../api/calculadora/beneficios/getBeneficios"
 export default {
   name: "Processos",
   props: ["exibir"],
@@ -481,8 +480,8 @@ export default {
         localStorage.removeItem("infos");
       }
     }
-    axios.get(baseApiUrl + "/beneficio/listar").then((res) => {
-      this.beneficiosInacumulveisBanco = res.data;
+    getBeneficios().then((res) => {
+      this.beneficiosInacumulveisBanco = res;
     });
   },
 };
