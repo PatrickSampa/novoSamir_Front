@@ -245,7 +245,7 @@
               @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
           </v-col>
           <v-col cols="1">
-            <v-btn depressed color="secondary" @click="(mode = ''), calculo()">cancelar</v-btn>
+            <v-btn depressed color="secondary" @click="(mode = '')/*, calculo()*/">cancelar</v-btn>
           </v-col>
           <v-col cols="1">
             <v-btn depressed color="primary" style="margin-left: 25px" :href="info_calculo.urlProcesso" target="_blank">
@@ -669,20 +669,23 @@
               <input type="number" v-model="item.reajusteAcumulado" />
             </td>
             <td v-if="beneficioInacumulavel[0]">
-              <input type="number" v-model="item.devido" @input="item = totaisSalarioTablePrincipal(item)"
+              <input type="number" v-model="item.devido"
+                @input="item = totaisSalarioTablePrincipal(item), totaisSalario()"
                 :disabled="disableLinhaTable(item.data)" />
             </td>
             <td v-if="beneficioInacumulavel[0]">
-              <input type="number" v-model="item.reajusteRecebido" @input="item = totaisSalarioTablePrincipal(item)"
+              <input type="number" v-model="item.reajusteRecebido"
+                @input="item = totaisSalarioTablePrincipal(item), totaisSalario()"
                 :disabled="disableLinhaTable(item.data)" />
             </td>
             <td v-if="beneficioInacumulavel[0]">
-              <input type="number" v-model="item.recebido" @input="item = totaisSalarioTablePrincipal(item)"
+              <input type="number" v-model="item.recebido"
+                @input="item = totaisSalarioTablePrincipal(item), totaisSalario()"
                 :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
-              <input type="number" @input="item = totaisSalarioTablePrincipal(item)" v-model="item.salario"
-                :disabled="disableLinhaTable(item.data)" />
+              <input type="number" @input="item = totaisSalarioTablePrincipal(item), totaisSalario()"
+                v-model="item.salario" :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
               <input v-model="item.correcao" :disabled="disableLinhaTable(item.data)" />
@@ -700,7 +703,7 @@
               <input type="number" v-model="item.salarioTotal" disabled />
             </td>
             <td>
-              <v-icon @click="removerItemTablePrincipal(item)" color="red">mdi-delete</v-icon>
+              <v-icon @click="removerItemTablePrincipal(item), totaisSalario()" color="red">mdi-delete</v-icon>
             </td>
           </tr>
         </template>
@@ -1587,14 +1590,6 @@ export default {
       }
     },
   },
-  watch: {
-    calc_total: {
-      handler(newVal, oldeValer) {
-        console.log('Users changed:', newVal);
-        console.log("old Valor", oldeValer)
-      }
-    }
-  },
   methods: {
     acessoPortalADM() {
       this.$prompt("Digite a senha de acesso").then((text) => {
@@ -1635,9 +1630,10 @@ export default {
           selic: this.selic,
           beneficio: this.info_calculo.beneficio
         };
-        this.arrayBeneficioAcumuladosContaveis = this.beneficio === true? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
+        this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
         let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
         this.calc_total = tabelaDeCalculo;
+        this.totaisSalario()
       } catch (error) {
         let message = await error.message;
         console.log(message);
@@ -3328,6 +3324,18 @@ export default {
       this.formatacao();
     },
     totaisSalario() {
+      if (!this.porcentagemHonorarios && !this.DataHonorarios) {
+        this.textoHonorarios = null;
+      } else {
+        this.honorarios(
+          this.DataHonorarios.split("/")[1],
+          this.DataHonorarios.split("/")[2]
+        );
+        this.textoHonorarios =
+          this.porcentagemHonorarios +
+          "% com parcelas até " +
+          this.DataHonorarios;
+      }
       this.zeraDadosDocalculo();
       this.formatacao();
       this.total_processos = 0;
@@ -3371,6 +3379,9 @@ export default {
           100
         ) / 100;
       this.formatacao();
+      if (this.alcadaBoolean) {
+        this.calculoDeOssada();
+      }
     },
     honorarios(mesHonorarios, anoHonorarios) {
       let i = 0;
