@@ -214,11 +214,18 @@
                 v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
                 class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
             </b-col>
+            
             <b-col sm="3" v-if="beneficio === true">
               <label for="beneficio" class="labels">13 Salario Obrigatorio</label>
 
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
                 v-model="obj_beneficioAcumulado.salario13Obrigatorio" :value="obj_beneficioAcumulado.salario13Obrigatorio"
+                class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
+            </b-col>
+            <b-col sm="3" v-if="beneficio === true">
+              <label for="beneficio" class="labels">Desconto obrigatório</label>
+              <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
+                v-model="obj_beneficioAcumulado.obrigatorio" :value="obj_beneficioAcumulado.obrigatorio"
                 class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
             </b-col>
             <b-col sm="2" v-if="beneficio === true">
@@ -234,8 +241,8 @@
 
         <v-row>
           <v-col>
-            <label for="valor-devido" class="labels pensaoPOrMorte">
-              {{ pensaoPorMorte }}
+            <label for="valor-devido" class="labels alertCalculoComObservacoes" v-if="(alertCalculoComObservacoes() != '') ">
+              {{ alertCalculoComObservacoes() }}
             </label>
           </v-col>
         </v-row>
@@ -1557,20 +1564,7 @@ export default {
     };
   },
   computed: {
-    // totaisValorCalculo() {
-    //   if (this.calculoProvissorio != this.calc_total) {
-    //     this.calculoProvissorio = this.calc_total
-    //     this.totalCalculo();
-    //   }
-    //   return {
-    //       valorCorrecao: this.valor_corrigido,
-    //       valorJuros: this.valor_juros,
-    //       valorTotal: this.total_processos,
-    //       impostoAtual: this.iPvalorAnoAtual,
-    //       impostoAnterior: this.iPvalorAnoAnterior,
-    //     };
-
-    // },
+    
     honorariosCalculo() {
       this.honorarios();
       return this.valorHonorarios;
@@ -1591,6 +1585,13 @@ export default {
     },
   },
   methods: {
+    alertCalculoComObservacoes() {
+      if(this.info_calculo.beneficio && this.info_calculo.beneficio.split(" - ")[0] === "21"){
+        return "21 - PENSÃO POR MORTE, Revisar os termos"
+      }
+      return ""
+
+    },
     acessoPortalADM() {
       this.$prompt("Digite a senha de acesso").then((text) => {
         if (text == "Beremiz Samir") {
@@ -3550,6 +3551,7 @@ export default {
         dib: null,
         dcb: null,
         rmi: null,
+        obrigatorio: false,
         salario13: true,
         limiteMinimoMaximo: true,
         salarioMinimo: false,
@@ -4552,10 +4554,12 @@ v-card {
   position: absolute;
 }
 
-.pensaoPOrMorte {
+.alertCalculoComObservacoes {
   background: firebrick;
   color: white;
   font-size: 25px;
+  padding: 5px 5px;
+  border-radius: 5px;
 }
 
 .logo {
