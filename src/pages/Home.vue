@@ -1612,7 +1612,6 @@ export default {
             if (diffInMonths > 0 || (diffInMonths === 0 && diffInDays >= 0)) {
               this.$confirm("Calcular 5 anos atrás do ajuizamento, Revisar Termos", "Prescrição quinquenal", "error")
             }
-
           }
         }
       }
