@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { login } from "../api/controle-usuario/login";
-import { validationToken } from "../api/controle-usuario/validationToken";
+import { login } from "../api/controle-usuario/users/login";
+import { validationToken } from "../api/controle-usuario/users/validationToken";
 export default {
   name: "Login",
   data: () => {
