@@ -2,7 +2,7 @@ export async function triagemBeneficiosValidos({ beneficio, inicioCalculo, dip }
     const beneficioPrincipal = listBeneficiosInacumulaveis.find(beneficioDetalhado => parseInt(beneficioDetalhado.name.split("-")[0]) === parseInt(beneficio.split("-")[0]));
     const arrayBeneficioAcumuladosContaveis = [];
     for (const beneficioInacumulaves of arrayBeneficiosAcumaladosRecebido) {
-      if (beneficioInacumulaves.obrigatorio || beneficioInacumulaves.beneficio == "Seguro Desemprego" || beneficioInacumulaves.beneficio == "Seguro Defesa" || beneficioPrincipal.inacumulavel.find(beneficio => parseInt(`${beneficioInacumulaves.beneficio.split("-")[0]}`) === parseInt(`${beneficio.split("-")[0]}`))) {
+      if (beneficioInacumulaves.obrigatorio || beneficioInacumulaves.beneficio == "Seguro Desemprego" || beneficioInacumulaves.beneficio == "Seguro Defesa" || beneficioInacumulaves.beneficio == "Auxílio Emergencial" || beneficioPrincipal.inacumulavel.find(beneficio => parseInt(`${beneficioInacumulaves.beneficio.split("-")[0]}`) === parseInt(`${beneficio.split("-")[0]}`))) {
         if (compararDatas({ inicioCalculo, dip }, beneficioInacumulaves))
           arrayBeneficioAcumuladosContaveis.push(beneficioInacumulaves);
       }

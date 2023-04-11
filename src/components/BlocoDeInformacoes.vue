@@ -120,16 +120,13 @@
           </td>
           <td>{{ item.nome }}</td>
           <td>{{ item.tipo }}</td>
+          <td>{{ item.cpf }}</td>
           <td>
             <v-icon v-if="item.beneficiosAcumulados[0]" color="red">
               mdi-check-outline
             </v-icon>
           </td>
-          <td>{{ item.id + 1 }}</td>
           <td>
-            <v-btn icon @click="tranferir(item.id)">
-              <v-icon color="success">mdi-file-eye-outline</v-icon>
-            </v-btn>
             <v-btn :loading="loading" icon @click="deletarInforPorID(item)">
               <v-icon color="red">mdi-delete</v-icon>
             </v-btn>
@@ -174,9 +171,9 @@ export default {
         { value: "numeroDoProcesso", text: "Número do Processo" },
         { value: "nome", text: "Nome" },
         { value: "tipo", text: "Tipo" },
+        { value: "cpf", text: "CPF" },
         { value: "beneficioAcumuladoBoolean", text: "Recebeu Benefício" },
-        { value: "id", text: "ID" },
-        { value: "actions", text: "" },
+        { value: "actions", text: "Delete" },
       ],
       infos: [],
       calculo: {},

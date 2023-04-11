@@ -214,7 +214,7 @@
                 v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
                 class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
             </b-col>
-            
+
             <b-col sm="3" v-if="beneficio === true">
               <label for="beneficio" class="labels">13 Salario Obrigatorio</label>
 
@@ -241,7 +241,8 @@
 
         <v-row>
           <v-col>
-            <label for="valor-devido" class="labels alertCalculoComObservacoes" v-if="(alertCalculoComObservacoes() != '') ">
+            <label for="valor-devido" class="labels alertCalculoComObservacoes"
+              v-if="(alertCalculoComObservacoes() != '')">
               {{ alertCalculoComObservacoes() }}
             </label>
           </v-col>
@@ -1510,7 +1511,7 @@ export default {
       arrayBenficios: [],
       arrayTeste: [],
       beneficiosInacumulveisBanco: [],
-      beneficiosInacumulveisBancoName: ["Seguro Desemprego", "Seguro Defesa"],
+      beneficiosInacumulveisBancoName: ["Seguro Desemprego", "Seguro Defesa", "Auxílio Emergencial"],
       beneficioInacumulavel: [],
       pacelasVencidas: 0,
       salarioMinimoOssada: 0,
@@ -1564,7 +1565,7 @@ export default {
     };
   },
   computed: {
-    
+
     honorariosCalculo() {
       this.honorarios();
       return this.valorHonorarios;
@@ -1580,16 +1581,41 @@ export default {
       if (valorAnalissar < this.salarioMinimoAnoAtual) {
         return "RPV";
       } else {
+        if (this.procntagem_acordo != 0 && this.procntagem_acordo != null) {
+          this.$confirm("Acordo ultrapassa os 60 salarios minimos", "Ultrapassagem de limite de ACORDO", "error")
+        }
         return "Precatório";
       }
     },
   },
   methods: {
     alertCalculoComObservacoes() {
-      if(this.info_calculo.beneficio && this.info_calculo.beneficio.split(" - ")[0] === "21"){
+      this.isPrescricaoQuinquenal()
+      if (this.info_calculo.beneficio && this.info_calculo.beneficio.split(" - ")[0] === "21") {
         return "21 - PENSÃO POR MORTE, Revisar os termos"
       }
       return ""
+
+    },
+    isPrescricaoQuinquenal() {
+      if ((this.dtInicial.length != 0 || this.dtInicial.split('/').length == 3) && (this.info_calculo.dataAjuizamento != 0 || this.info_calculo.dataAjuizamento.split('/').length == 3)) {
+        const [dayAjuizamento, monthAjuizamento, yearAjuizamento] = this.info_calculo.dataAjuizamento.split('/');
+        const [dayDtInicial, monthDtInicial, yearDtInicial] = this.dtInicial.split('/');
+        const diffInYears = yearAjuizamento - yearDtInicial;
+        const diffInMonths = monthAjuizamento - monthDtInicial;
+        const diffInDays = dayAjuizamento - dayDtInicial;
+        if (yearAjuizamento > 1990 && yearDtInicial > 1990) {
+          if (diffInYears > 5) {
+            console.log("this.dtInicial", (this.dtInicial.length == 0), this.dtInicial)
+            this.$confirm("Calcular 5 anos atrás do ajuizamento, Revisar Termos", "Prescrição quinquenal", "error")
+          } else if (diffInYears === 5) {
+            if (diffInMonths > 0 || (diffInMonths === 0 && diffInDays >= 0)) {
+              this.$confirm("Calcular 5 anos atrás do ajuizamento, Revisar Termos", "Prescrição quinquenal", "error")
+            }
+
+          }
+        }
+      }
 
     },
     acessoPortalADM() {
@@ -1689,7 +1715,8 @@ export default {
       if (
         obj_beneficioAcumulado.beneficio != null &&
         (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") ||
-          obj_beneficioAcumulado.beneficio.includes("Seguro Defesa"))
+          obj_beneficioAcumulado.beneficio.includes("Seguro Defesa") ||
+          obj_beneficioAcumulado.beneficio.includes("Auxílio Emergencial"))
       ) {
         obj_beneficioAcumulado.salario13 = true;
         obj_beneficioAcumulado.salario13Obrigatorio = true;
@@ -1702,7 +1729,8 @@ export default {
       if (
         obj_beneficioAcumulado.beneficio != null &&
         (obj_beneficioAcumulado.beneficio.includes("Seguro Desemprego") ||
-          obj_beneficioAcumulado.beneficio.includes("Seguro Defesa"))
+          obj_beneficioAcumulado.beneficio.includes("Seguro Defesa") ||
+          obj_beneficioAcumulado.beneficio.includes("Auxílio Emergencial"))
       ) {
         return true;
       } else {
@@ -2425,6 +2453,7 @@ export default {
           parseInt(value.name.split("-")[0]) ==
           parseInt(beneficio.split("-")[0]) ||
           beneficio.includes("Seguro Desemprego") ||
+          beneficio.includes("Auxílio Emergencial") ||
           beneficio.includes("Seguro Defesa")
         ) {
           console.log("benefio e " + value.name);
@@ -3139,6 +3168,7 @@ export default {
                     //console.log(decontar(value, dado));
                     if (
                       info.beneficio.includes("Seguro Desemprego") ||
+                      info.beneficio.includes("Auxílio Emergencial") ||
                       info.beneficio.includes("Seguro Defesa")
                     ) {
                       newArrayCalculo.push(

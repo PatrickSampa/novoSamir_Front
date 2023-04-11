@@ -57,6 +57,7 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
       let linhaBeneficioInacumulavel = await tabelaBeneficioInacumulavel.find(linha => linha.data == (diaLinhaTabelaPrincipal + "/" + mesLinhaTabelaPrincipal + "/" + anoLinhaTabelaPrincipal))
       if (linhaBeneficioInacumulavel !== undefined) {
         if (beneficioInacumulavel.beneficio.includes("Seguro Desemprego") ||
+       beneficioInacumulavel.beneficio.includes("Auxílio Emergencial") ||
           beneficioInacumulavel.beneficio.includes("Seguro Defesa")) {
           return await descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicioCalculo, dip, dib, dcb, beneficioInacumulavel.salario13);
         } else {
