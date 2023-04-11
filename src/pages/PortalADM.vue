@@ -1,6 +1,8 @@
 <template>
   <v-card class="pa-3 my-3">
+    <ValidadorDossiePrevidenciario/>
    <AtualizadorDosPrev/>
+   <VerificadorDeProcessoDuplicado/>
   </v-card>
 </template>
 
@@ -8,9 +10,13 @@
 import axios from "axios";
 import { baseApiUrl } from "../global";
 import AtualizadorDosPrev from "../components/AtualizadorDosPrev.vue";
+import ValidadorDossiePrevidenciario from "../components/ValidadorDossiePrevidenciario.vue";
+import VerificadorDeProcessoDuplicado from "../components/VerificadorDeProcessoDuplicado.vue";
 export default {
   components: {
-    AtualizadorDosPrev: AtualizadorDosPrev
+    AtualizadorDosPrev: AtualizadorDosPrev,
+    ValidadorDossiePrevidenciario: ValidadorDossiePrevidenciario,
+    VerificadorDeProcessoDuplicado: VerificadorDeProcessoDuplicado
   },
 
   //name: "AdicionarTaxa",
