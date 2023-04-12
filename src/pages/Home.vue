@@ -1304,7 +1304,7 @@
         </div>
         <br />
 
-        <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headers" :items="calc_total"
+        <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()" :items="calc_total"
           :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
         </v-data-table>
         <br />
@@ -1612,7 +1612,6 @@ export default {
             if (diffInMonths > 0 || (diffInMonths === 0 && diffInDays >= 0)) {
               this.$confirm("Calcular 5 anos atrás do ajuizamento, Revisar Termos", "Prescrição quinquenal", "error")
             }
-
           }
         }
       }
@@ -1629,46 +1628,48 @@ export default {
       })
     },
     async novoCalculo() {
-
-      try {
-        const body = {
-          inicioCalculo: this.dtInicial,
-          dip: this.dtFinal,
-          atulizacao: this.atulizacao,
-          incioJuros: this.inicio_juros,
-          rmi: this.salarioInicial,
-          juros: this.boolJuros,
-          tipoJuros: this.tipoJuros,
-          tipoCorrecao: this.tipoCorrecao,
-          salarioMinimo: this.salarioMinimo,
-          limiteMinimoMaximo: this.limiteMinimoMaximo,
-          salario13: this.salario13,
-          dib:
-            this.info_calculo.dibInicial == null ||
-              this.info_calculo.dibInicial == ""
-              ? this.dtInicial
-              : this.info_calculo.dibInicial,
-          porcentagemRMI: this.porcentagemRMI,
-          salario13Obrigatorio: this.salario13Obrigatorio,
-          dibAnterior:
-            this.dibAnterior == null || this.dibAnterior == ""
-              ? ""
-              : this.dibAnterior,
-          selic: this.selic,
-          beneficio: this.info_calculo.beneficio
-        };
-        this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
-        let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
-        this.calc_total = tabelaDeCalculo;
-        this.totaisSalario()
-      } catch (error) {
-        let message = await error.message;
-        console.log(message);
-        console.log("message");
-        this.$alert(message, "Error", "error", {
-          confirmButtonText: "Got it!",
-        });
+      if (this.verificadoInformacoes()) {
+        try {
+          const body = {
+            inicioCalculo: this.dtInicial,
+            dip: this.dtFinal,
+            atulizacao: this.atulizacao,
+            incioJuros: this.inicio_juros,
+            rmi: this.salarioInicial,
+            juros: this.boolJuros,
+            tipoJuros: this.tipoJuros,
+            tipoCorrecao: this.tipoCorrecao,
+            salarioMinimo: this.salarioMinimo,
+            limiteMinimoMaximo: this.limiteMinimoMaximo,
+            salario13: this.salario13,
+            dib:
+              this.info_calculo.dibInicial == null ||
+                this.info_calculo.dibInicial == ""
+                ? this.dtInicial
+                : this.info_calculo.dibInicial,
+            porcentagemRMI: this.porcentagemRMI,
+            salario13Obrigatorio: this.salario13Obrigatorio,
+            dibAnterior:
+              this.dibAnterior == null || this.dibAnterior == ""
+                ? ""
+                : this.dibAnterior,
+            selic: this.selic,
+            beneficio: this.info_calculo.beneficio
+          };
+          this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
+          let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
+          this.calc_total = tabelaDeCalculo;
+          this.totaisSalario()
+        } catch (error) {
+          let message = await error.message;
+          console.log(message);
+          console.log("message");
+          this.$alert(message, "Error", "error", {
+            confirmButtonText: "Got it!",
+          });
+        }
       }
+
     },
     headersTabelaPrincipal() {
       if (this.calc_total.find(linha => linha.recebido >= 0) === undefined) {

@@ -76,12 +76,12 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
 async function conatdorDe13SalarioBeneficioPrincipal(linhaTabelaPrincipal, inicioCalculo, dip) {
   if (linhaTabelaPrincipal.data == inicioCalculo || linhaTabelaPrincipal.data == dip) {
     if ((linhaTabelaPrincipal.data == inicioCalculo && (quantosDiasFaltaParaAcabarOMes(inicioCalculo) >= 15) ||
-      (linhaTabelaPrincipal.data == dip && (parseInt(dip.split("/")[0]) >= 15))
+    (linhaTabelaPrincipal.data == dip && (parseInt(dip.split("/")[0]) >= 15))
     )) {
+      console.log("é janeiro", (parseInt(linhaTabelaPrincipal.data.split("/")[1]) === 1), "contadorMesDe13SalarioSalarioBeneficioPrincipa", contadorMesDe13SalarioSalarioBeneficioPrincipal)
       contadorMesDe13SalarioSalarioBeneficioPrincipal++;
     }
   } else {
-    console.log("é janeiro", (parseInt(linhaTabelaPrincipal.data.split("/")[1]) === 1), "contadorMesDe13SalarioSalarioBeneficioPrincipa", contadorMesDe13SalarioSalarioBeneficioPrincipal)
     if (parseInt(linhaTabelaPrincipal.data.split("/")[1]) === 1) {
       contadorMesDe13SalarioSalarioBeneficioPrincipal = 1;
     }else if(linhaTabelaPrincipal.data.split("/")[0] != "13Salario"){
