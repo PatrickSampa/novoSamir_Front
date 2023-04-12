@@ -1304,7 +1304,7 @@
         </div>
         <br />
 
-        <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headers" :items="calc_total"
+        <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()" :items="calc_total"
           :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
         </v-data-table>
         <br />
