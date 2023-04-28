@@ -1,16 +1,16 @@
 <template>
     <body class="container">
         <div class="VerificadorDeProcessoDuplicado">
-            <v-btn :loading="loading" @click="atualizarDosPrev()" class="button-VerificadorDeProcessoDuplicado" color="primary">
-               Verificador de processo duplicado
+            <v-btn :loading="loading" @click="verificadorDeProcessoDuplicado()"
+                class="button-VerificadorDeProcessoDuplicado" color="primary">
+                Verificador de processo duplicado
             </v-btn>
         </div>
     </body>
 </template>
     
 <script>
-import { apiSapiens } from "../global";
-import axios from "axios";
+import { VerificadorDeProcessoDuplicado } from "../api/visao/triagem/VerificadorDeProcessoDuplicado"
 export default {
     name: "VerificadorDeProcessoDuplicado",
     data() {
@@ -27,7 +27,7 @@ export default {
         this.senhaSapaiens = localStorage.getItem("sapiensSenha");
     },
     methods: {
-        atualizarDosPrev() {
+        verificadorDeProcessoDuplicado() {
             this.$prompt(
                 "Qual é o nome das etiquetas? as etiquetas não pode conter a palvra ATUALIZAÇAO e FALHA",
                 "LEGOLAS"
@@ -42,12 +42,10 @@ export default {
                     };
                     this.loading = true;
 
-                    axios
-                        .post(`${apiSapiens}samir/verificadorDeDupliciade`, body)
+                    VerificadorDeProcessoDuplicado(body)
                         .then(async (response) => {
-                            console.log(response.data);
                             this.$alert(
-                                response.data.length,
+                                response.length,
                                 "Processos duplicados: ",
                                 "success"
                             );

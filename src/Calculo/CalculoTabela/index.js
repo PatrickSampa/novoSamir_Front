@@ -4,7 +4,9 @@ import { calculoBeneficioPrincipal } from "./BeneficioPrincpal/calculoBeneficioP
 export async function calculoTabelaPrincipal(informationBeneficioPrincpal, beneficiosAcumulados){
   var tabelaPrincipal = await calculoBeneficioPrincipal(informationBeneficioPrincpal);
   if(beneficiosAcumulados.length > 0){
-    return await calculoBeneficioInacumulavel(informationBeneficioPrincpal, beneficiosAcumulados, tabelaPrincipal);
+    const tabelaBeneficioInacumulavel = await calculoBeneficioInacumulavel(informationBeneficioPrincpal, beneficiosAcumulados, tabelaPrincipal);
+    
+    return await tabelaBeneficioInacumulavel;
   }else{
     return await tabelaPrincipal
   }

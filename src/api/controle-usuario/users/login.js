@@ -11,7 +11,7 @@ export async function login(body) {
     try {
         await validateRequiredFields(body, requiredFields);
 
-        const res = await axios_controleUsuario.post("/users/login", body);
+        const res = await axios_controleUsuario.post("users/login", body);
         if (!res.data) {
             return Promise.reject(new Error("Login invalido"));
         } else {

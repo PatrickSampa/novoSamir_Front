@@ -1,7 +1,7 @@
 <template>
     <body class="container">
         <div class="ValidadorDossiePrevidenciario">
-            <v-btn :loading="loading" @click="atualizarDosPrev()" class="button-ValidadorDossiePrevidenciario" color="primary">
+            <v-btn :loading="loading" @click="validadorDossiePrevidenciario()" class="button-ValidadorDossiePrevidenciario" color="primary">
                 Validador de Dossiê Previdenciário
             </v-btn>
         </div>
@@ -9,8 +9,7 @@
 </template>
     
 <script>
-import { apiSapiens } from "../global";
-import axios from "axios";
+import{ValidadorDeDossiePrividenciaria} from "../api/visao/triagem/ValidadorDeDossiePrividenciaria"
 export default {
     name: "ValidadorDossiePrevidenciario",
     data() {
@@ -27,7 +26,7 @@ export default {
         this.senhaSapaiens = localStorage.getItem("sapiensSenha");
     },
     methods: {
-        atualizarDosPrev() {
+        validadorDossiePrevidenciario() {
             this.$prompt(
                 "Qual é o nome das etiquetas? as etiquetas não pode conter a palvra ATUALIZAÇAO e FALHA",
                 "LEGOLAS"
@@ -42,12 +41,10 @@ export default {
                     };
                     this.loading = true;
 
-                    axios
-                        .post(`${apiSapiens}samir/verificadorValidadeDossiePrevidenciario`, body)
+                    ValidadorDeDossiePrividenciaria(body)
                         .then(async (response) => {
-                            console.log(response.data);
                             this.$alert(
-                                response.data.length,
+                                response.length,
                                 "Processos verificados: ",
                                 "success"
                             );

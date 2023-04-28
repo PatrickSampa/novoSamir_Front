@@ -8,7 +8,11 @@ export async function triagemBeneficiosValidos({ beneficio, inicioCalculo, dip }
     }
   }
 
-  return arrayBeneficioAcumuladosContaveis;
+  return arrayBeneficioAcumuladosContaveis.sort((evento1, evento2) => {
+    const data1 = new Date(evento1.dcb.split('/').reverse().join('-'));
+    const data2 = new Date(evento2.dcb.split('/').reverse().join('-'));
+    return data1 - data2;
+  });
 }
 
 function compararDatas({ inicioCalculo, dip }, { dib, dcb }) {

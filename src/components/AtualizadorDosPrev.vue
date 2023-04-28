@@ -9,8 +9,7 @@
 </template>
   
   <script>
-import { apiSapiens } from "../global";
-import axios from "axios";
+import {AtualizacaoDossiePrevidenciario} from "../api/visao/triagem/AtualizacaoDossiePrevidenciario"
 export default {
   name: "AtualizadorDosPrev",
   data() {
@@ -42,12 +41,9 @@ export default {
           };
           this.loading = true;
 
-          axios
-            .post(`${apiSapiens}samir/atualizaoDossiePrevidenciario`, body)
-            .then(async (response) => {
-              console.log(response.data);
+          AtualizacaoDossiePrevidenciario(body).then(async (response) => {
               this.$alert(
-                response.data.length,
+                response.length,
                 "Dossiês Previdenciários atualizados: ",
                 "success"
               );

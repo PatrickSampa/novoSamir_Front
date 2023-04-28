@@ -249,7 +249,7 @@
         </v-row>
         <v-row class="my-3">
           <v-col cols="1" class="mr-6">
-            <v-btn depressed color="primary"
+            <v-btn depressed color="primary" :loading="loading"
               @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
           </v-col>
           <v-col cols="1">
@@ -1630,6 +1630,7 @@ export default {
     async novoCalculo() {
       if (this.verificadoInformacoes()) {
         try {
+          this.loading = true;
           const body = {
             inicioCalculo: this.dtInicial,
             dip: this.dtFinal,
@@ -1668,6 +1669,7 @@ export default {
             confirmButtonText: "Got it!",
           });
         }
+        this.loading = false;
       }
 
     },
@@ -1757,6 +1759,7 @@ export default {
               tipoCorrecao: this.tipoCorrecao,
               atulizacao: this.atulizacao,
               selic: this.selic,
+              juros: this.boolJuros,
             };
             let taxas = await axios
               .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
@@ -2201,17 +2204,17 @@ export default {
           iPvalorAnoAtual: this.iPvalorAnoAtual,
           competenciaAnoAnterior: this.competenciaAnoAnterior,
           competenciaAnoAtual: this.competenciaAnoAtual,
-          porcentagemRMI: this.porcentagemRMI,
+          porcentagemRMI: this.porcentagemRMI == null? 100 : this.porcentagemRMI,
           tipo: this.info_calculo.tipo,
           dib: this.info_calculo.dib,
           salario13Obrigatorio: this.salario13Obrigatorio,
           conteudoHTML: this.memoriaCalculoHTM,
         };
         console.log(body);
-        Axios.AxiosApiControleUsuario.post(`/calculoLote`, body)
+        Axios.AxiosApiControleUsuario.post(`calculoLote`, body)
           .then((response) => {
             console.log(response.data);
-            Axios.AxiosApiControleUsuario.get(`/calculoLote`)
+            Axios.AxiosApiControleUsuario.get(`calculoLote`)
               .then((response) => {
                 this.calculoLote = response.data;
                 console.log(this.calculoLote);
@@ -2274,10 +2277,10 @@ export default {
           this.loading = true;
           let body = dado;
           //this.calculoLote = this.calculoLote.filter((item) => item !== dado);
-          Axios.AxiosApiControleUsuario.delete(`/calculoLote/${body.id}`)
+          Axios.AxiosApiControleUsuario.delete(`calculoLote/${body.id}`)
             .then(async (res) => {
               console.log(res.data);
-              Axios.AxiosApiControleUsuario.get(`/calculoLote`)
+              Axios.AxiosApiControleUsuario.get(`calculoLote`)
                 .then((response) => {
                   this.loading = false;
                   this.calculoLote = response.data;
@@ -2303,10 +2306,10 @@ export default {
       console.log();
       this.$prompt("Digite seu CPF").then((text) => {
         if (text == this.cpfSapiens) {
-          Axios.AxiosApiControleUsuario.delete(`/calculoLote`, this.calculoLote)
+          Axios.AxiosApiControleUsuario.delete(`calculoLote`, this.calculoLote)
             .then((dados) => {
               console.log(dados);
-              Axios.AxiosApiControleUsuario.get(`/calculoLote`)
+              Axios.AxiosApiControleUsuario.get(`calculoLote`)
                 .then((response) => {
                   this.calculoLote = response.data;
                   console.log(this.calculoLote);
@@ -3295,9 +3298,7 @@ export default {
       this.total_processos = Math.floor(this.total_processos * 100) / 100;
       this.valorHonorarios = Math.floor(this.valorHonorarios * 100) / 100;
       let index = 0;
-      console.log(this.calc_total)
       for (const value of this.calc_total) {
-        console.log(this.calc_total[index].salarioCorrigido)
         this.calc_total[index].salarioCorrigido =
           Math.floor(value.salarioCorrigido * 100) / 100;
         this.calc_total[index].salarioTotal =
@@ -4447,7 +4448,7 @@ export default {
             };
             console.log(body);
             axios
-              .post(`${apiSapiens}samir/insertMinutas`, body)
+              .post(`${apiSapiens}/insertMinutas`, body)
               .then((response) => {
                 this.loading = false;
                 console.log(response);

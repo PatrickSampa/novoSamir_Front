@@ -8,9 +8,8 @@ export const samirControle = 'http://10.191.8.242:3010/'
 export const apiSapiens = 'http://10.191.8.131:80/samir'
 // export const apiSapiens = 'http://172.17.24.236:3002'
 
-export const baseApiUrl = 'http://10.191.8.242:4001/'
-//export const baseApiUrl = 'https://samir-calculadora.herokuapp.com/'
-// export const baseApiUrl = 'http://172.17.24.236:8888/'
+// export const baseApiUrl = 'http://10.191.8.242:4001/'
+export const baseApiUrl = 'http://localhost:8888/'
 
 
 export default { baseApiUrl, userKey }
