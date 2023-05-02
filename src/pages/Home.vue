@@ -24,9 +24,9 @@
     <v-container fluid id="calculadora" v-if="!add_taxa">
       <v-card>
         <bloco-informacoes v-if="!add_taxa" @calculo="atualizarTodosDados($event)" :exibir="{
-          tudo: BlocoDeInformacoes_tudo,
-          processos: BlocoDeInformacoes_processos,
-        }" @dados="BlocoDeInformacoes_tudo = $event" @processos="BlocoDeInformacoes_processos = $event">
+            tudo: BlocoDeInformacoes_tudo,
+            processos: BlocoDeInformacoes_processos,
+          }" @dados="BlocoDeInformacoes_tudo = $event" @processos="BlocoDeInformacoes_processos = $event">
         </bloco-informacoes>
       </v-card>
       <v-card class="pa-3 my-3" v-if="add_taxa == false">
@@ -667,11 +667,10 @@
         <template v-slot:item="{ item }">
           <tr>
             <td>
-              <the-mask @input="
-                (item.data = formatarDataTable(item.data)),
-                acrescentarTaxaTablePrincipal(item),
-                (item.correcao = 0)
-              " :mask="['XXAaaaaaa/##/####', '##/##/####']" v-model="item.data" />
+              <the-mask @input="(item.data = formatarDataTable(item.data)),
+                  acrescentarTaxaTablePrincipal(item),
+                  (item.correcao = 0)
+                  " :mask="['XXAaaaaaa/##/####', '##/##/####']" v-model="item.data" />
             </td>
             <td>
               <input type="number" v-model="item.reajusteAcumulado" />
@@ -1304,8 +1303,8 @@
         </div>
         <br />
 
-        <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()" :items="calc_total"
-          :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
+        <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()"
+          :items="calc_total" :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
         </v-data-table>
         <br />
         <br />
@@ -1561,7 +1560,9 @@ export default {
       calculoProvissorio: [],
 
       // item gerados ao calcular:
-      arrayBeneficioAcumuladosContaveis: []
+      arrayBeneficioAcumuladosContaveis: [],
+      indentificadorDePersistenciaQuinquenal: "",
+      indentificadorDePersistenciaUtrapassagemDeAcordo: "",
     };
   },
   computed: {
@@ -1571,6 +1572,7 @@ export default {
       return this.valorHonorarios;
     },
     rpvOuPrecatorio() {
+      console.log( "this.salarioMinimoAnoAtual " +  this.salarioMinimoAnoAtual);
       let valorAnalissar =
         Math.floor(
           (parseFloat(this.valor_corrigido) +
@@ -1581,7 +1583,9 @@ export default {
       if (valorAnalissar < this.salarioMinimoAnoAtual) {
         return "RPV";
       } else {
-        if (this.procntagem_acordo != 0 && this.procntagem_acordo != null) {
+        if (this.indentificadorDePersistenciaUtrapassagemDeAcordo != this.info_calculo.nb && (this.procntagem_acordo != 0 && this.procntagem_acordo != null)) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.indentificadorDePersistenciaUtrapassagemDeAcordo = this.info_calculo.nb;
           this.$confirm("Acordo ultrapassa os 60 salarios minimos", "Ultrapassagem de limite de ACORDO", "error")
         }
         return "Precatório";
@@ -1598,22 +1602,24 @@ export default {
 
     },
     isPrescricaoQuinquenal() {
-      if ((this.dtInicial.length != 0 || this.dtInicial.split('/').length == 3) && (this.info_calculo.dataAjuizamento != 0 || this.info_calculo.dataAjuizamento.split('/').length == 3)) {
+      if (this.indentificadorDePersistenciaQuinquenal != this.info_calculo.nb && ((this.dtInicial.length != 0 || this.dtInicial.split('/').length == 3) && (this.info_calculo.dataAjuizamento != 0 || this.info_calculo.dataAjuizamento.split('/').length == 3))) {
         const [dayAjuizamento, monthAjuizamento, yearAjuizamento] = this.info_calculo.dataAjuizamento.split('/');
         const [dayDtInicial, monthDtInicial, yearDtInicial] = this.dtInicial.split('/');
         const diffInYears = yearAjuizamento - yearDtInicial;
         const diffInMonths = monthAjuizamento - monthDtInicial;
         const diffInDays = dayAjuizamento - dayDtInicial;
-        if (yearAjuizamento > 1990 && yearDtInicial > 1990) {
+        if (yearAjuizamento > 1000 && yearDtInicial > 1000) {
           if (diffInYears > 5) {
-            console.log("this.dtInicial", (this.dtInicial.length == 0), this.dtInicial)
-            this.$confirm("Calcular 5 anos atrás do ajuizamento, Revisar Termos", "Prescrição quinquenal", "error")
+            this.indentificadorDePersistenciaQuinquenal = this.info_calculo.nb;
+            this.$confirm("Conferir o termo inicial do calculo", "Prescrição quinquenal não observada", "error")
           } else if (diffInYears === 5) {
             if (diffInMonths > 0 || (diffInMonths === 0 && diffInDays >= 0)) {
-              this.$confirm("Calcular 5 anos atrás do ajuizamento, Revisar Termos", "Prescrição quinquenal", "error")
+              this.indentificadorDePersistenciaQuinquenal = this.info_calculo.nb;
+              this.$confirm("Conferir o termo inicial do calculo", "Prescrição quinquenal não observada", "error")
             }
           }
         }
+
       }
 
     },
@@ -2204,7 +2210,7 @@ export default {
           iPvalorAnoAtual: this.iPvalorAnoAtual,
           competenciaAnoAnterior: this.competenciaAnoAnterior,
           competenciaAnoAtual: this.competenciaAnoAtual,
-          porcentagemRMI: this.porcentagemRMI == null? 100 : this.porcentagemRMI,
+          porcentagemRMI: this.porcentagemRMI == null ? 100 : this.porcentagemRMI,
           tipo: this.info_calculo.tipo,
           dib: this.info_calculo.dib,
           salario13Obrigatorio: this.salario13Obrigatorio,
@@ -4537,9 +4543,9 @@ export default {
     });
     let anoAtual = new Date().getFullYear();
     axios
-      .get(baseApiUrl + "salarioMinimo/procuraPorAno/" + anoAtual)
+      .get(baseApiUrl + "/salarioMinimo/procuraPorAno/" + anoAtual)
       .then((res) => {
-        console.log(res.data[res.data.length - 1]);
+        console.log("Salrio minimo ano atual",res.data[res.data.length - 1]);
         this.salarioMinimoAnoAtual = res.data[res.data.length - 1].valor * 60;
       });
   },
