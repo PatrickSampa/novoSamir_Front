@@ -49,7 +49,7 @@ export default {
         await login(body);
         this.loading = false;
         this.valid = true;
-        this.$router.push({ name: "home" })
+        this.$router.push({ name: "loginSapiens" })
       } catch (error) {
         this.loading = false;
         let message = await error.message;

@@ -5,6 +5,7 @@ import Login from '@/pages/Login'
 import Cadastrar from '@/pages/Cadastrar'
 import Processos from '@/pages/Processos'
 import Home from '@/pages/Home'
+import LoginSapiens from '@/pages/LoginSapiens'
 
 // import { userKey } from '@/global'
 
@@ -15,6 +16,11 @@ const routes = [
     name: 'login',
     path: '/login',
     component: Login
+  },
+  {
+    name: 'loginSapiens',
+    path: '/loginSapiens',
+    component: LoginSapiens
   },
   {
     name: 'cadastrar',

@@ -14,7 +14,7 @@ export function validateRequiredFields(obj, requiredFields) {
                     reject(new Error(`field ${field} cannot be empty or null`));
                 }
             }
-        }
+        }  
         resolve(null);
     })
 }

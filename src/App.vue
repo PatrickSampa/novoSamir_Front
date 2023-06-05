@@ -9,6 +9,9 @@
           </div>
           <div key="page">
             <Content />
+            <!-- <br>
+            <br>
+            <LoginSapiens/> -->
           </div>
         </transition-group>
       </v-container>
@@ -20,6 +23,7 @@
 // import Login from "./pages/Login";
 import Content from "./config/routes/Content.vue";
 import Toolbar from "./components/Toolbar.vue";
+/* import LoginSapiens from "./pages/loginSapiens.vue" */
 
 export default {
   name: "App",
@@ -28,6 +32,7 @@ export default {
     // Login,
     Toolbar,
     Content,
+    /* LoginSapiens, */
   },
 
   data: () => ({
