@@ -4,6 +4,7 @@ export async function cadastraUsuario(body) {
     try {
         
         const res =  await axios_controleUsuario.post("users", body);
+        console.log("res" + res)
         if (!res.data) {
             return Promise.reject(new Error("Usuario invalido apara cadastro"));
         } else {

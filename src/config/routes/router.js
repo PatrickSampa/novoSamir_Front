@@ -5,7 +5,8 @@ import Login from '@/pages/Login'
 import Cadastrar from '@/pages/Cadastrar'
 import Processos from '@/pages/Processos'
 import Home from '@/pages/Home'
-import LoginSapiens from '@/pages/LoginSapiens'
+import SapiensLogin from '@/pages/SapiensLogin'
+import Teste from '@/pages/Teste'
 
 // import { userKey } from '@/global'
 
@@ -18,24 +19,29 @@ const routes = [
     component: Login
   },
   {
-    name: 'loginSapiens',
-    path: '/loginSapiens',
-    component: LoginSapiens
-  },
-  {
     name: 'cadastrar',
     path: '/cadastrar',
     component: Cadastrar
   },
   {
     name: 'home',
-    path: '/',
+    path: '/home',
     component: Home
   },
   {
     name: 'processos',
     path: '/processos',
     component: Processos
+  },
+  {
+    name: 'sapienslogin',
+    path: '/sapienslogin',
+    component: SapiensLogin
+  },
+  {
+    name: 'teste',
+    path: '/teste',
+    component: Teste
   }
 ]
 

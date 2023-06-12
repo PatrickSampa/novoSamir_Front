@@ -9,9 +9,10 @@
           </div>
           <div key="page">
             <Content />
-            <!-- <br>
             <br>
-            <LoginSapiens/> -->
+            <br>
+            <!-- <SapiensLogin/> -->
+            
           </div>
         </transition-group>
       </v-container>
@@ -20,19 +21,19 @@
 </template>
 
 <script>
-// import Login from "./pages/Login";
+/* import SapiensLogin from "../src/pages/Sapiens.vue" */
 import Content from "./config/routes/Content.vue";
 import Toolbar from "./components/Toolbar.vue";
+/* import Cadastrar from "../src/pages/Cadastrar.vue" */
 /* import LoginSapiens from "./pages/loginSapiens.vue" */
 
 export default {
   name: "App",
 
   components: {
-    // Login,
     Toolbar,
     Content,
-    /* LoginSapiens, */
+    /* SapiensLogin, */
   },
 
   data: () => ({

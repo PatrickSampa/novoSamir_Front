@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     async getUsuario() {
-        await validationToken().then(() => this.$router.push({ name: "home" }))
+        await validationToken().then(() => this.$router.push({ name: "loginSapiens" }))
       
     },
     async loginUsuario() {
@@ -49,7 +49,9 @@ export default {
         await login(body);
         this.loading = false;
         this.valid = true;
-        this.$router.push({ name: "loginSapiens" })
+        /* const t = await this.$router.push({ name: "cadastrar" });
+        console.log("aqui: " + t) */
+        this.$router.push({ name: "sapienslogin" });
       } catch (error) {
         this.loading = false;
         let message = await error.message;

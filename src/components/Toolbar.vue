@@ -48,11 +48,11 @@ export default {
           'authorization': `bearer ${localStorage.getItem("authToken")}`
         }
       }).then((response) => {
-        localStorage.setItem("sapiensCPF", response.data.cpf);
+        /* localStorage.setItem("sapiensCPF", response.data.cpf); */
         localStorage.setItem("Username", response.data.userName);
-        localStorage.setItem("sapiensSenha", response.data.passwordSapiens);
+      /*   localStorage.setItem("sapiensSenha", response.data.passwordSapiens); */
         this.username = response.data.userName;
-        this.$router.push({ name: "home" })
+        /* this.$router.push({ name: "" }) */
       })
         .catch((error) => {
           this.logout()

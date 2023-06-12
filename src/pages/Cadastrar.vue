@@ -39,13 +39,13 @@
           type="password"
           required
         ></v-text-field>
-        <v-text-field
+        <!-- <v-text-field
           v-model="passwordSapiens"
           :rules="passwordSapiensRules"
           label="Senha Sapiens"
           type="password"
           required
-        ></v-text-field>
+        ></v-text-field> -->
         <v-btn depressed :loading="loading" color="primary" @click="validate"
           >Cadastrar</v-btn
         >
@@ -73,10 +73,10 @@ export default {
         (v) => !!v || "Digite a Senha!",
         (v) => (v && v.length >= 6) || "Senha com menos de 6 caracteres!",
       ],
-      passwordSapiensRules: [
+      /* passwordSapiensRules: [
         (v) => !!v || "Digite a sua senha do Sapiens!",
         (v) => (v && v.length >= 6) || "Senha com menos de 6 caracteres!",
-      ],
+      ], */
       loading: false,
     };
   },
@@ -89,13 +89,13 @@ export default {
         this.loading = true;
         let body = {
           name: this.nome,
-          passwordSapiens: this.passwordSapiens,
+          /* passwordSapiens: this.passwordSapiens, */
           password: this.password,
           userName: this.username,
           cpf: this.cpf,
         };
         console.log(body);
-        if(this.passwordSapiens === this.password){
+        
           try {
             await cadastraUsuario(body)
             this.valid = true;
@@ -107,10 +107,7 @@ export default {
               confirmButtonText: "Got it!",
             });
           }
-          
-        }else{
-            throw new Error("Senhas diferentes");
-        }
+        
         
       } catch (error) {
         this.loading = false;
