@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     async getUsuario() {
-        await validationToken().then(() => this.$router.push({ name: "loginSapiens" }))
+        await validationToken().then(() => this.$router.push({ name: "sapienslogin" }))
       
     },
     async loginUsuario() {

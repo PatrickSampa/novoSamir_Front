@@ -52,7 +52,8 @@ export default {
         localStorage.setItem("Username", response.data.userName);
       /*   localStorage.setItem("sapiensSenha", response.data.passwordSapiens); */
         this.username = response.data.userName;
-        /* this.$router.push({ name: "" }) */
+       /*  this.$router.push({ name: "login" }) */
+        this.$router.push({ name: "sapienslogin" })
       })
         .catch((error) => {
           this.logout()

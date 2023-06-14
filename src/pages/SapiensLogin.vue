@@ -17,6 +17,7 @@
 
 <script>
 import { VerificarUserSapiens } from '../api/verificar_login_sapiens_visao/users';
+/* import { validationToken } from "../api/controle-usuario/users/validationToken"; */
 export default {
   name: "SapiensLogin",
   data: () => {
@@ -33,6 +34,10 @@ export default {
     };
   },
   methods: {
+    /* async getUsuario() {
+        await validationToken().then(() => this.$router.push({ name: "sapienslogin" }))
+      
+    }, */
     async loginUsuarioSapiens() {
       let body = {
         cpf: this.cpf,
@@ -40,6 +45,7 @@ export default {
       };
       try {
         this.loading = true;
+        console.log("ENTROU AQUI")
         await VerificarUserSapiens(body);
         localStorage.setItem("sapiensCPF", body.cpf);
         localStorage.setItem("sapiensSenha", body.senha);
@@ -52,13 +58,16 @@ export default {
         console.log(message);
         console.log("message");
         this.valid = false;
-        this.$alert(message, "Error", "error", {
+        this.$alert(message, "Usuário Sapiens Incorreto", "error", {
           confirmButtonText: "Got it!",
         });
         /* this.$router.push({ name: "sapienslogin" }) */
       }
     },
   },
+  /* mounted() {
+    this.getUsuario()
+  } */
 };
 </script>
 
