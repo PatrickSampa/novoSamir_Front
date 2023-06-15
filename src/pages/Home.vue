@@ -4537,8 +4537,8 @@ export default {
       });
       // console.log(this.beneficiosInacumulveisBancoName);
       this.beneficiosInacumulveisBanco = res.data;
-      console.log(this.res.data);
-      localStorage.setItem("listBeneficiosInacumulaveis", this.res.data);
+      /* console.log(this.res.data); */
+      //localStorage.setItem("listBeneficiosInacumulaveis", this.res.data);
     });
     let anoAtual = new Date().getFullYear();
     axios
