@@ -43,11 +43,12 @@ export default {
       console.log(localStorage.getItem("authToken"))
       let baseURL = `${samirControle}users`;
       console.log(baseURL)
-      axios.get(baseURL, {
+       axios.get(baseURL, {
         headers: {
           'authorization': `bearer ${localStorage.getItem("authToken")}`
         }
       }).then((response) => {
+        console.log("GetUser1: " + localStorage.getItem("authToken"), response)
         /* localStorage.setItem("sapiensCPF", response.data.cpf); */
         localStorage.setItem("Username", response.data.userName);
       /*   localStorage.setItem("sapiensSenha", response.data.passwordSapiens); */
@@ -56,6 +57,7 @@ export default {
         this.$router.push({ name: "sapienslogin" })
       })
         .catch((error) => {
+          console.log("GetUser2: " + localStorage.getItem("authToken"))
           this.logout()
           console.log(error.response.data);
         });

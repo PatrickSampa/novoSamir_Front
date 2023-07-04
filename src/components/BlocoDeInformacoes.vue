@@ -248,6 +248,7 @@ export default {
           this.loading = true;
           try {
             let informationCalculo = await getInformationFromSapienForSamir(body);
+            console.log("Calculo: " + informationCalculo);
             await salvarInformationForCalculoList(informationCalculo);
             this.infos.push(informationCalculo);
             this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
@@ -316,8 +317,8 @@ export default {
       this.infos.splice(x, 1);
       this.saveInfos();
     },
-    getInfos() {
-      getInformationsForCalcule().then((response) => {
+     getInfos() {
+       getInformationsForCalcule().then((response) => {
         this.infos = response;
         console.log(response);
         this.saveInfos();
@@ -466,6 +467,8 @@ export default {
     },
   },
   mounted() {
+    console.log("CPF: " + localStorage.getItem("sapiensCPF"))
+    console.log("Senha: " + localStorage.getItem("Username"));
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
     this.username = localStorage.getItem("Username");
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");

@@ -7,7 +7,7 @@ export async function VerificarUserSapiens(data){
     console.log(data)
     try{
         console.log("LOGIN")
-        const retorno = await axios_visao.post("http://localhost:3000/samir/login", data);
+        const retorno = await axios_visao.post("http://10.191.9.2:8080/samir/login", data);
        
        const resp = retorno.data == "Acesso negado, verifique se o CPF e a senha est�o corretos!"
        

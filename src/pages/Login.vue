@@ -46,17 +46,16 @@ export default {
       };
       try {
         this.loading = true;
+        console.log("TESTANDO123")
         await login(body);
         this.loading = false;
         this.valid = true;
-        /* const t = await this.$router.push({ name: "cadastrar" });
-        console.log("aqui: " + t) */
         this.$router.push({ name: "sapienslogin" });
+        window.location.reload();
       } catch (error) {
+        console.log("TESTANDO321")
         this.loading = false;
         let message = await error.message;
-        console.log(message);
-        console.log("message");
         this.valid = false;
         this.$alert(message, "Error", "error", {
           confirmButtonText: "Got it!",

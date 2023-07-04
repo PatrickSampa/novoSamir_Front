@@ -4505,12 +4505,14 @@ export default {
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
     this.username = localStorage.getItem("Username");
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");
+    console.log("AxiocControlerUser: " + JSON.stringify(Axios.AxiosApiControleUsuario.get(`/calculoLote`)))
     Axios.AxiosApiControleUsuario.get(`/calculoLote`)
       .then((response) => {
+        console.log("thenHomeMounted(): " + response.data)
         this.calculoLote = response.data;
       })
       .catch((error) => {
-        console.log(error);
+        console.log("CatchHomeMounted(): " + error);
       });
     axios.get(baseApiUrl + "/describeJuros").then((response) => {
       response.data.forEach((value) => {
