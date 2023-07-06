@@ -1,6 +1,8 @@
 import { axios_visao } from "../Api_axios_visao";
 
 export async function getInformationFromSapienForSamir(body){
+    console.log(body)
+    console.log()
     try {
         const res = await axios_visao.post("/getInformationFromSapienForSamir", body);
         if (!res.data) {

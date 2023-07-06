@@ -235,7 +235,7 @@ export default {
       }
       this.$prompt(
         "Qual é o nome das etiquetas?",
-        "INVERTIDA SIMPLIFICADA"
+        ""
       ).then(async (etiqueta) => {
         if (etiqueta) {
           const body = {
