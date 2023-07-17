@@ -1663,7 +1663,14 @@ export default {
             selic: this.selic,
             beneficio: this.info_calculo.beneficio
           };
+          console.log("Passou por aqui porr: " + body, this.arrayBenficios, this.beneficiosInacumulveisBanco)
+          console.log(this.arrayBenficios)
+          console.log(this.beneficio)
+          console.log(this.beneficiosInacumulveisBanco)
+          console.log(body)
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
+          console.log("ANOTHIG")
+          console.log(this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : [])
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
           this.totaisSalario()
@@ -1904,6 +1911,7 @@ export default {
         this.dtFinal == "" ||
         this.atulizacao == "" ||
         this.inicio_juros == "" ||
+        this.inicio_juros == null ||
         this.salarioInicial == "" ||
         this.tipoJuros == "" ||
         this.tipoCorrecao == ""

@@ -248,9 +248,14 @@ export default {
           this.loading = true;
           try {
             let informationCalculo = await getInformationFromSapienForSamir(body);
-            console.log("Calculo: " + informationCalculo);
+            console.log("Calculo: " + JSON.stringify(informationCalculo));
             await salvarInformationForCalculoList(informationCalculo);
+            console.log("Antes")
+            console.log(informationCalculo)
             this.infos.push(informationCalculo);
+            console.log("Depois")
+            console.log(informationCalculo)
+            console.log(this.infos)
             this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
             this.saveInfos();
             this.redirectToCalculo();
@@ -270,6 +275,8 @@ export default {
     },
     dadosActive() {
       let dados = !this.exibir.tudo;
+      console.log("Dados")
+      console.log(dados)
       this.$emit("dados", dados);
     },
     exibirActive() {
@@ -300,12 +307,14 @@ export default {
         beneficioAcumuladoBoolean: this.beneficioAcumuladoBoolean,
         tipo: this.tipo,
       };
+      console.log(body.beneficiosAcumulados)
       this.loading = true;
       salvarInformationForCalculo(body).then(() => {
         this.$alert(1, "Processo adicionado: ", "success");
         this.$emit("processos", true);
         this.loading = false;
         this.getInfos();
+        console.log("Chamou a saveInfos Novamente")
         this.saveInfos();
         this.cleanFields();
       }).catch(error => {
@@ -315,12 +324,14 @@ export default {
     },
     removeCat(x) {
       this.infos.splice(x, 1);
+      console.log("RemoteCat")
       this.saveInfos();
     },
      getInfos() {
        getInformationsForCalcule().then((response) => {
         this.infos = response;
         console.log(response);
+        console.log("Chamou a saveInfos Novamente")
         this.saveInfos();
         this.$emit("processos", true);
       }).catch((error) => {
@@ -336,7 +347,10 @@ export default {
       });
     },
     saveInfos() {
+      console.log(this.infos)
       const parsed = JSON.stringify(this.infos);
+      console.log("Pra salvar")
+      console.log(parsed)
       localStorage.setItem("infos", parsed);
     },
     cleanFields() {
@@ -362,7 +376,9 @@ export default {
       return valor;
     },
     preencherFields(y) {
+      console.log("Processos PORR")
       const processo = this.infos.find((info) => info.id == y);
+      console.log(processo)
       this.numeroDoProcesso = `${processo.numeroDoProcesso}`;
       this.nome = processo.nome;
       this.dataAjuizamento = processo.dataAjuizamento;
@@ -379,13 +395,16 @@ export default {
       this.dibAnterior = processo.dibAnterior;
       this.tipo = processo.tipo;
       console.log(processo.beneficioAcumuladoBoolean);
+      console.log("BeneficiosAcumulados AQUIP")
       console.log(processo.beneficiosAcumulados);
     },
     pushBeneficio() {
+      console.log("PushBeneficio")
       let dataDib = this.beneficioAcumulado.dib.split("/");
       let dataDcb = this.beneficioAcumulado.dcb.split("/");
       let dataincial = this.dibInicial.split("/");
       let dataFinal = this.dip.split("/");
+      console.log("PASSOU PELO pushBeneficio")
       if (
         this.beneficiosInacumulveilVerificadorPeriodo(
           dataDib,
@@ -403,6 +422,7 @@ export default {
       }
     },
     verificarBeneficio() {
+      console.log("Chamou verificarBeneficio")
       let beneficiovalido;
       this.beneficiosInacumulveisBanco.forEach((value) => {
         if (
@@ -423,6 +443,9 @@ export default {
         }
       });
       console.log("benefio e " + beneficiovalido);
+      console.log(this.beneficioAcumulado)
+      console.log(this.beneficioAcumulado)
+      console.log(this.beneficioAcumulado.beneficio)
       return beneficiovalido;
     },
     beneficiosInacumulveilVerificadorPeriodo(
@@ -431,23 +454,31 @@ export default {
       dataincial,
       dataFinal
     ) {
+      console.log("BeneficioNoPeriodo")
       if (dataDib[2] <= dataFinal[2] && dataDcb[2] >= dataincial[2]) {
         if (dataDcb[2] == dataincial[2]) {
           if (dataDcb[1] == dataincial[1]) {
             if (dataDcb[0] >= dataincial[0]) {
+              console.log("Retornou true")
               return true;
             } else {
+              console.log("Retornou false")
               return false;
+              
             }
           } else if (dataDcb[1] > dataincial[1]) {
+            console.log("Retornou true2")
             return true;
           } else {
+            console.log("Retornou false2")
             return false;
           }
         } else {
+          console.log("Retornou true3")
           return true;
         }
       } else {
+        console.log("Retornou false4")
         return false;
       }
     },
