@@ -2,8 +2,6 @@ import { axios_controleUsuario } from "../Api_axios";
 
 export async function salvarInformationForCalculo(body){
     try {
-        console.log("Salvar")
-        console.log(body)
         const res = await axios_controleUsuario.post("informationsForCalcule", body);
         
         if (!res.data) {

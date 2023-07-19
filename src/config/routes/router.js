@@ -7,6 +7,7 @@ import Processos from '@/pages/Processos'
 import Home from '@/pages/Home'
 import SapiensLogin from '@/pages/SapiensLogin'
 import Teste from '@/pages/Teste'
+import ProcessosHome from '@/pages/ProcessosHome'
 
 // import { userKey } from '@/global'
 
@@ -42,6 +43,11 @@ const routes = [
     name: 'teste',
     path: '/teste',
     component: Teste
+  },
+  {
+    name: 'processoshome',
+    path: '/processoshome',
+    component: ProcessosHome
   }
 ]
 

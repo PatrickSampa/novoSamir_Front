@@ -114,15 +114,15 @@
     </v-card-title>
     <v-data-table v-if="exibir.processos" :headers="headers" :items="infos" item-key="name" class="elevation-1">
       <template v-slot:item="{ item }">
-        <tr @click="tranferir(item.id)">
-          <td class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="tranferir(item.id)">
+        <tr @click="tranferir(item.id); itemClicked = item.id">
+          <td  class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="tranferir(item.id); itemClicked = item.id">
             {{ item.numeroDoProcesso }}
           </td>
-          <td>{{ item.nome }}</td>
-          <td>{{ item.tipo }}</td>
-          <td>{{ item.cpf }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.nome }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.tipo }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.cpf }}</td>
           <td>
-            <v-icon v-if="item.beneficiosAcumulados[0]" color="red">
+            <v-icon v-if="item.beneficiosAcumulados[0]" color="green">
               mdi-check-outline
             </v-icon>
           </td>
@@ -166,13 +166,14 @@ export default {
       urlProcesso: "",
       tipo: "",
       dibAnterior: "",
+      itemClicked: null,
       beneficiosInacumulveisBanco: [],
       headers: [
         { value: "numeroDoProcesso", text: "Número do Processo" },
         { value: "nome", text: "Nome" },
-        { value: "tipo", text: "Tipo" },
+        { value: "tipo", text: "Benefício" },
         { value: "cpf", text: "CPF" },
-        { value: "beneficioAcumuladoBoolean", text: "Recebeu Benefício" },
+        { value: "beneficioAcumuladoBoolean", text: "Benefício Acumulado" },
         { value: "actions", text: "Delete" },
       ],
       infos: [],
@@ -190,7 +191,6 @@ export default {
   methods: {
     //teste
     deletarInforPorID(dado) {
-      console.log(dado);
       this.$prompt("Digite seu nome de usuario").then(async (text) => {
         if (text == this.username) {
           this.loading = true;
@@ -248,14 +248,8 @@ export default {
           this.loading = true;
           try {
             let informationCalculo = await getInformationFromSapienForSamir(body);
-            console.log("Calculo: " + JSON.stringify(informationCalculo));
             await salvarInformationForCalculoList(informationCalculo);
-            console.log("Antes")
-            console.log(informationCalculo)
             this.infos.push(informationCalculo);
-            console.log("Depois")
-            console.log(informationCalculo)
-            console.log(this.infos)
             this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
             this.saveInfos();
             this.redirectToCalculo();
@@ -275,8 +269,7 @@ export default {
     },
     dadosActive() {
       let dados = !this.exibir.tudo;
-      console.log("Dados")
-      console.log(dados)
+     console.log("DADOSSSSSSSSSSSSSSSSSSSSSSSSS: ".dados)
       this.$emit("dados", dados);
     },
     exibirActive() {
@@ -307,7 +300,7 @@ export default {
         beneficioAcumuladoBoolean: this.beneficioAcumuladoBoolean,
         tipo: this.tipo,
       };
-      console.log(body.beneficiosAcumulados)
+
       this.loading = true;
       salvarInformationForCalculo(body).then(() => {
         this.$alert(1, "Processo adicionado: ", "success");
@@ -324,14 +317,11 @@ export default {
     },
     removeCat(x) {
       this.infos.splice(x, 1);
-      console.log("RemoteCat")
       this.saveInfos();
     },
      getInfos() {
        getInformationsForCalcule().then((response) => {
         this.infos = response;
-        console.log(response);
-        console.log("Chamou a saveInfos Novamente")
         this.saveInfos();
         this.$emit("processos", true);
       }).catch((error) => {
@@ -347,10 +337,7 @@ export default {
       });
     },
     saveInfos() {
-      console.log(this.infos)
       const parsed = JSON.stringify(this.infos);
-      console.log("Pra salvar")
-      console.log(parsed)
       localStorage.setItem("infos", parsed);
     },
     cleanFields() {
@@ -376,9 +363,8 @@ export default {
       return valor;
     },
     preencherFields(y) {
-      console.log("Processos PORR")
+      console.log("PREENCHERFILED")
       const processo = this.infos.find((info) => info.id == y);
-      console.log(processo)
       this.numeroDoProcesso = `${processo.numeroDoProcesso}`;
       this.nome = processo.nome;
       this.dataAjuizamento = processo.dataAjuizamento;
@@ -394,9 +380,6 @@ export default {
       this.urlProcesso = processo.urlProcesso;
       this.dibAnterior = processo.dibAnterior;
       this.tipo = processo.tipo;
-      console.log(processo.beneficioAcumuladoBoolean);
-      console.log("BeneficiosAcumulados AQUIP")
-      console.log(processo.beneficiosAcumulados);
     },
     pushBeneficio() {
       console.log("PushBeneficio")
@@ -430,7 +413,6 @@ export default {
           parseInt(this.beneficio.split("-")[0])
         ) {
           value.inacumulavel.forEach((dado, index) => {
-            console.log(parseInt(dado.split("-")[0]));
             if (
               parseInt(dado.split("-")[0]) ==
               parseInt(this.beneficioAcumulado.beneficio.split("-")[0])
@@ -442,10 +424,6 @@ export default {
           });
         }
       });
-      console.log("benefio e " + beneficiovalido);
-      console.log(this.beneficioAcumulado)
-      console.log(this.beneficioAcumulado)
-      console.log(this.beneficioAcumulado.beneficio)
       return beneficiovalido;
     },
     beneficiosInacumulveilVerificadorPeriodo(
@@ -491,6 +469,9 @@ export default {
       };
     },
     tranferir(y) {
+      console.log('clike')
+      console.log(this.itemClicked)
+      this.isNomeActive = true;
       this.redirectToCalculo();
       this.preencherFields(y);
       this.calculo = this.infos.find((info) => info.id == y);
@@ -498,8 +479,6 @@ export default {
     },
   },
   mounted() {
-    console.log("CPF: " + localStorage.getItem("sapiensCPF"))
-    console.log("Senha: " + localStorage.getItem("Username"));
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
     this.username = localStorage.getItem("Username");
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");
@@ -518,4 +497,15 @@ export default {
 };
 </script>
 
-<style ></style>
+<style >
+
+.active-item {
+  color: red; /* Adicione a sombra desejada */
+}
+
+.shadowed-text {
+  color: red; /* Adicione a sombra no texto quando estiver ativo */
+}
+
+
+</style>

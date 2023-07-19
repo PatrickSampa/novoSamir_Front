@@ -1,12 +1,12 @@
 import { getcalculoBeneficioinacumulavel } from "../../../api/calculadora/calculo/getBeneficioInacumulavel";
 import { quantosDiasFaltaParaAcabarOMes } from "../../Helps/quantosDiasFaltaParaAcabarOMes";
 import { validarValorDoDiaSerConsideradoNaTabelaDeCalculo } from "../../Helps/validarValorDoDiaSerConsideradoNaTabelaDeCalculo";
-console.log("ENTROU NA PARTE DE CALCULO DO SAMIR")
+
 var contadorMesDe13SalarioBeneficioInacumulavel = 0;
 var contadorMesDe13SalarioSalarioBeneficioPrincipal = 0;
 var arrayDeQUnatidadeDeMessesDeCadaAno = []
 export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal, beneficiosAcumulados, tabelaPrincipal) {
-  console.log("CalculoBeneficioAcumulavel")
+
   const { inicioCalculo, dip } = informationBeneficioPrincpal;
   tabelaPrincipal = tabelaPrincipal.map((linhaTabelaPrincipal) => {
     conatdorDe13SalarioBeneficioPrincipal(linhaTabelaPrincipal, inicioCalculo, dip)
@@ -31,8 +31,8 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
     }
   });
   const tabelasFeitas = await beneficiosAcumulados.map(async (beneficioInacumulavel) => {
-    console.log("Acumulados")
-    console.log(beneficiosAcumulados)
+
+
     const { dib, dcb } = beneficioInacumulavel;
     contadorMesDe13SalarioBeneficioInacumulavel = 0;
     contadorMesDe13SalarioSalarioBeneficioPrincipal = 0;
@@ -48,12 +48,11 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
       selic: informationBeneficioPrincpal.selic,
     };
     const tabelaBeneficioInacumulavel = await getcalculoBeneficioinacumulavel(body)
-    console.log("TabelaBeneficio: " + tabelaBeneficioInacumulavel)
-    console.log(tabelaBeneficioInacumulavel)
+
     tabelaPrincipal = await Promise.all(tabelaPrincipal.map(async (linhaTabelaPrincipal) => {
       let [, mesDCBBeneficioInacumulavel, anoDCBBeneficioInacumulavel] = beneficioInacumulavel.dcb.split("/")
       var [diaLinhaTabelaPrincipal, mesLinhaTabelaPrincipal, anoLinhaTabelaPrincipal] = linhaTabelaPrincipal.data.split("/")
-      //console.log("mesDCBBeneficioInacumulavel ", mesDCBBeneficioInacumulavel, "anoDCBBeneficioInacumulavel ", anoDCBBeneficioInacumulavel)
+      
       if(anoLinhaTabelaPrincipal > anoDCBBeneficioInacumulavel || (anoLinhaTabelaPrincipal == anoDCBBeneficioInacumulavel && mesLinhaTabelaPrincipal > mesDCBBeneficioInacumulavel) ){
         return linhaTabelaPrincipal;
       }
@@ -83,7 +82,7 @@ async function conatdorDe13SalarioBeneficioPrincipal(linhaTabelaPrincipal, inici
     if ((linhaTabelaPrincipal.data == inicioCalculo && (quantosDiasFaltaParaAcabarOMes(inicioCalculo) >= 15) ||
       (linhaTabelaPrincipal.data == dip && (parseInt(dip.split("/")[0]) >= 15))
     )) {
-      // console.log("é janeiro", (parseInt(linhaTabelaPrincipal.data.split("/")[1]) === 1), "contadorMesDe13SalarioSalarioBeneficioPrincipa", contadorMesDe13SalarioSalarioBeneficioPrincipal)
+      
       contadorMesDe13SalarioSalarioBeneficioPrincipal++;
     }
   } else {

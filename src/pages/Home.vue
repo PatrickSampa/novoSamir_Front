@@ -32,6 +32,13 @@
       <v-card class="pa-3 my-3" v-if="add_taxa == false">
         <v-row>
           <v-col cols="12" sm="6" md="3">
+            <label for="data-inicial" class="labels pb-3">Nome</label>
+            <v-text-field  v-model="nmprocesso" id="nome-processo" dense outlined required>  
+            </v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" sm="6" md="3">
             <label for="data-inicial" class="labels pb-3">Data Inicial <b class="item-obrigatorio">*</b></label>
 
             <v-text-field v-mask="'##/##/####'" v-model="dtInicial" id="data-inicial" dense outlined required>
@@ -42,7 +49,7 @@
             <v-text-field v-mask="'##/##/####'" v-model="dtFinal" id="data-final" dense outlined required></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="valor-devido R$" class="labels pb-3">Valor Devido <b class="item-obrigatorio">*</b></label>
+            <label for="valor-devido R$" class="labels pb-3">RMI <b class="item-obrigatorio">*</b></label>
             <v-text-field type="number" v-model="salarioInicial" id="valor-devido" dense placeholder="nada"
               @input="salarioInicial = formataçao(salarioInicial)" outlined required></v-text-field>
           </v-col>
@@ -58,7 +65,7 @@
             <v-text-field v-mask="'##/##/####'" v-model="DataHonorarios" id="data-final" dense outlined></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="honorarios_Advocativos" class="labels pb-3">Honorários Advocatício Porcentagem %</label>
+            <label for="honorarios_Advocativos" class="labels pb-3">Honorários advocatícios até</label>
             <v-text-field type="number" v-model="porcentagemHonorarios" id="data-final" dense outlined></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
@@ -80,13 +87,13 @@
             <v-select outlined placeholder="Escolha uma opção" :items="optionsCorrecao" v-model="tipoCorrecao"></v-select>
           </v-col>
           <v-col cols="12" sm="6" md="2">
-            <label for="atualizacao" class="labels pb-2">Atualização <b class="item-obrigatorio">*</b></label>
+            <label for="atualizacao" class="labels pb-2">Atualizar Até <b class="item-obrigatorio">*</b></label>
             <v-text-field v-mask="'##/####'" v-model="atulizacao" id="atualizacao" placeholder="Ex: 06/2022" dense
               outlined required>
             </v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="2">
-            <label for="dibAnterior" class="labels pb-2">DIB-Anterior</label>
+            <label for="dibAnterior" class="labels pb-2">DIB Anterior</label>
             <v-text-field v-mask="'##/##/####'" v-model="dibAnterior" id="dibAnterior" placeholder="Ex: 17/06/2022" dense
               outlined>
             </v-text-field>
@@ -175,13 +182,13 @@
               </v-autocomplete>
             </b-col>
             <b-col sm="3" v-if="beneficio === true">
-              <label for="beneficio_inicial" class="labels">Início do Benefício</label>
+              <label for="beneficio_inicial" class="labels">Inicio de Desconto</label>
               <b-form-input v-mask="'##/##/####'" id="beneficio_inicial" v-model="obj_beneficioAcumulado.dib" type="text"
                 size="sm">
               </b-form-input>
             </b-col>
             <b-col sm="3" v-if="beneficio === true">
-              <label for="beneficio_final" class="labels">Fim do Benefício</label>
+              <label for="beneficio_final" class="labels">Fim do Desconto</label>
               <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.dcb" id="beneficio_final" type="text"
                 size="sm">
               </b-form-input>
@@ -1441,6 +1448,8 @@ export default {
       infos: [],
       dtInicial: "",
       dtFinal: "",
+      nome: "",
+      nmprocesso: "",
       salarioInicial: "",
       objetoDoCalculo: "CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO",
       varaPrevidenciaria: "Previdenciária",
@@ -1566,13 +1575,11 @@ export default {
     };
   },
   computed: {
-
     honorariosCalculo() {
       this.honorarios();
       return this.valorHonorarios;
     },
     rpvOuPrecatorio() {
-      console.log( "this.salarioMinimoAnoAtual " +  this.salarioMinimoAnoAtual);
       let valorAnalissar =
         Math.floor(
           (parseFloat(this.valor_corrigido) +
@@ -1663,21 +1670,12 @@ export default {
             selic: this.selic,
             beneficio: this.info_calculo.beneficio
           };
-          console.log("Passou por aqui porr: " + body, this.arrayBenficios, this.beneficiosInacumulveisBanco)
-          console.log(this.arrayBenficios)
-          console.log(this.beneficio)
-          console.log(this.beneficiosInacumulveisBanco)
-          console.log(body)
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
-          console.log("ANOTHIG")
-          console.log(this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : [])
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
           this.totaisSalario()
         } catch (error) {
           let message = await error.message;
-          console.log(message);
-          console.log("message");
           this.$alert(message, "Error", "error", {
             confirmButtonText: "Got it!",
           });
@@ -2001,7 +1999,6 @@ export default {
                   console.log(timer);
                 });
               });
-              console.log("size: " + this.beneficioInacumulavel.length);
               this.headers = [
                 { value: "data", text: "Data" },
                 { value: "reajusteAcumulado", text: "Reajuste" },
@@ -2408,6 +2405,7 @@ export default {
         });
       });
       console.log(dado.url);
+      console.log("Nome: ", dado.nome)
       this.info_calculo.urlProcesso = dado.url;
       this.info_calculo.dip = dado.dataDePagamento;
       this.calc_total = calcul;
@@ -2420,6 +2418,8 @@ export default {
       this.dtInicial = dado.termoInicial;
       this.dtFinal = dado.termoFinal;
       this.salarioInicial = dado.rmi;
+      console.log("salarioInicial")
+      console.log(dado.rmi)
       this.inicio_juros = dado.inicioJuros;
       this.DataHonorarios = dado.honorarioAdvocativosData;
       this.porcentagemHonorarios = dado.honorariosAdvocativos;
@@ -3468,8 +3468,10 @@ export default {
       ];
       this.salarioInicial = this.info_calculo.rmi.replace(".", "");
       this.salarioInicial = this.salarioInicial.replace(",", ".");
+      console.log("atualizarTodosDados")
       this.salarioInicial = parseFloat(this.salarioInicial);
       this.dtInicial = this.info_calculo.dibInicial;
+      this.nmprocesso = this.info_calculo.nome;
       let datafinal = this.info_calculo.dip.split("/");
       if (datafinal[0] == 1) {
         if (datafinal[1] == 1) {

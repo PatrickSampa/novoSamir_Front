@@ -17,7 +17,7 @@
 
 <script>
 import { VerificarUserSapiens } from '../api/verificar_login_sapiens_visao/users';
-/* import { validationToken } from "../api/controle-usuario/users/validationToken"; */
+import { ValidationTokenSapiens } from '../api/verificar_login_sapiens_visao/validationTokenSapiens'
 export default {
   name: "SapiensLogin",
   data: () => {
@@ -34,10 +34,10 @@ export default {
     };
   },
   methods: {
-    /* async getUsuario() {
-        await validationToken().then(() => this.$router.push({ name: "sapienslogin" }))
+    async getUsuarioSapiens() {
+        await ValidationTokenSapiens().then(() => this.$router.push({ name: "home" }))
       
-    }, */
+    },
     async loginUsuarioSapiens() {
       let body = {
         cpf: this.cpf,
@@ -52,6 +52,7 @@ export default {
         this.loading = false;
         this.valid = true;
         this.$router.push({ name: "home" })
+ /*        window.open("http://10.191.8.198:8080/home"); */
       } catch (error) {
         this.loading = false;
         let message = await error.message;
@@ -65,9 +66,9 @@ export default {
       }
     },
   },
-  /* mounted() {
-    this.getUsuario()
-  } */
+  mounted() {
+    this.getUsuarioSapiens()
+  }
 };
 </script>
 

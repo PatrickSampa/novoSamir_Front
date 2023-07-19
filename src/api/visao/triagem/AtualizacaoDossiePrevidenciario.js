@@ -3,7 +3,7 @@ import { axios_visao } from "../Api_axios_visao";
 export async function AtualizacaoDossiePrevidenciario(body){
     try {
         const res = await axios_visao.post("/atualizaoDossiePrevidenciario", body);
-        console.log(res.data);
+
         if (!res.data) {
             return Promise.reject(new Error("erro ao triar as informações para calculo"));
         } else {
