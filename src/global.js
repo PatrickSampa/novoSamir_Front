@@ -8,8 +8,9 @@ export const samirControle = 'http://10.191.8.254:3001/'
 //http://10.191.8.198:3001
 
 /* export const apiSapiens = 'http://10.191.8.131:80/samir' */
-export const apiSapiens = 'http://10.191.9.2:8080/samir'
+export const apiSapiens = 'http://localhost:3000/samir'
 // export const apiSapiens = 'http://172.17.24.236:3002'
+// em producao http://10.191.9.2:8080/samir
 
 /* export const baseApiUrl = 'http://localhost:3000/' */
  export const baseApiUrl = 'http://10.191.8.254:3004'

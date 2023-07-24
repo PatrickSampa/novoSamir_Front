@@ -145,6 +145,8 @@ import { salvarInformationForCalculo } from "../api/controle-usuario/information
 import { getInformationsForCalcule } from "../api/controle-usuario/informationCalculo/getInformationsForCalcule"
 import { getInformationFromSapienForSamir } from "../api/visao/getInformation/getInformationFromSapienForSamir"
 import { getBeneficios } from "../api/calculadora/beneficios/getBeneficios"
+import Vue from 'vue';
+
 export default {
   name: "Processos",
   props: ["exibir"],
@@ -191,6 +193,7 @@ export default {
   methods: {
     //teste
     deletarInforPorID(dado) {
+
       this.$prompt("Digite seu nome de usuario").then(async (text) => {
         if (text == this.username) {
           this.loading = true;
@@ -363,7 +366,6 @@ export default {
       return valor;
     },
     preencherFields(y) {
-      console.log("PREENCHERFILED")
       const processo = this.infos.find((info) => info.id == y);
       this.numeroDoProcesso = `${processo.numeroDoProcesso}`;
       this.nome = processo.nome;
@@ -382,12 +384,10 @@ export default {
       this.tipo = processo.tipo;
     },
     pushBeneficio() {
-      console.log("PushBeneficio")
       let dataDib = this.beneficioAcumulado.dib.split("/");
       let dataDcb = this.beneficioAcumulado.dcb.split("/");
       let dataincial = this.dibInicial.split("/");
       let dataFinal = this.dip.split("/");
-      console.log("PASSOU PELO pushBeneficio")
       if (
         this.beneficiosInacumulveilVerificadorPeriodo(
           dataDib,
@@ -469,8 +469,6 @@ export default {
       };
     },
     tranferir(y) {
-      console.log('clike')
-      console.log(this.itemClicked)
       this.isNomeActive = true;
       this.redirectToCalculo();
       this.preencherFields(y);

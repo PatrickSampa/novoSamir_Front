@@ -54,7 +54,7 @@
               @input="salarioInicial = formataçao(salarioInicial)" outlined required></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="inicio_Juros" class="labels pb-3">Início do juros <b class="item-obrigatorio">*</b></label>
+            <label for="inicio_Juros" class="labels pb-3">Início dos juros <b class="item-obrigatorio">*</b></label>
             <v-text-field v-mask="'##/##/####'" v-model="inicio_juros" id="data-final" dense outlined required>
             </v-text-field>
           </v-col>
@@ -175,7 +175,7 @@
 
         <b-card v-for="obj_beneficioAcumulado of arrayBenficios" :key="obj_beneficioAcumulado">
           <b-row class="row-one my-3 align-items-center">
-            <b-col sm="3" v-if="beneficio === true">
+            <b-col sm="3" v-if="beneficio === true">do
               <v-autocomplete id="beneficio" :items="beneficiosInacumulveisBancoName"
                 v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?"
                 @input="beneficiosEspecialInfo(obj_beneficioAcumulado)">
@@ -239,6 +239,11 @@
               <label for="beneficio" class="labels">RMI%</label>
               <b-form-input type="number" v-model="obj_beneficioAcumulado.porcentagemRmi" id="beneficio" size="sm"
                 placeholder="Ex:1000">
+              </b-form-input>
+            </b-col>
+            <b-col sm="2" v-if="beneficio === true">
+              <label for="beneficio" class="labels">N.B</label>
+              <b-form-input type="text" v-model="obj_beneficioAcumulado.nb" id="beneficio" size="sm">
               </b-form-input>
             </b-col>
           </b-row>
@@ -1449,6 +1454,7 @@ export default {
       dtInicial: "",
       dtFinal: "",
       nome: "",
+      nb: "",
       nmprocesso: "",
       salarioInicial: "",
       objetoDoCalculo: "CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO",
@@ -1671,6 +1677,8 @@ export default {
             beneficio: this.info_calculo.beneficio
           };
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
+          console.log("CONTAVEIS")
+          console.log(this.arrayBeneficioAcumuladosContaveis)
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
           this.totaisSalario()
@@ -2362,6 +2370,7 @@ export default {
             dib: dado.dataDeInicioBeneficioAcumulado[index],
             dcb: dado.dataFinalBeneficioAcumulado[index],
             rmi: dado.rmilBeneficioAcumulado[index],
+/*             nb: dado.rmilBeneficioAcumulado[index], */
             limiteMinimoMaximo:
               dado.limiteMinimoMaximoBeneficioAcumulado[index],
             salario13: dado.salario13BeneficioAcumulado[index],
@@ -3553,6 +3562,7 @@ export default {
                 dib: value.dib,
                 dcb: value.dcb,
                 rmi: value.rmi,
+                nb: value.nb,
                 limiteMinimoMaximo: true,
                 salarioMinimo: false,
                 salario13: true,
@@ -3598,6 +3608,7 @@ export default {
         dib: null,
         dcb: null,
         rmi: null,
+        nb: null,
         obrigatorio: false,
         salario13: true,
         limiteMinimoMaximo: true,
@@ -4515,11 +4526,11 @@ export default {
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
     this.username = localStorage.getItem("Username");
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");
-    console.log("AxiocControlerUser: " + JSON.stringify(Axios.AxiosApiControleUsuario.get(`/calculoLote`)))
     Axios.AxiosApiControleUsuario.get(`/calculoLote`)
       .then((response) => {
         console.log("thenHomeMounted(): " + response.data)
         this.calculoLote = response.data;
+        console.log(response.data)
       })
       .catch((error) => {
         console.log("CatchHomeMounted(): " + error);
