@@ -145,7 +145,7 @@ import { salvarInformationForCalculo } from "../api/controle-usuario/information
 import { getInformationsForCalcule } from "../api/controle-usuario/informationCalculo/getInformationsForCalcule"
 import { getInformationFromSapienForSamir } from "../api/visao/getInformation/getInformationFromSapienForSamir"
 import { getBeneficios } from "../api/calculadora/beneficios/getBeneficios"
-import Vue from 'vue';
+
 
 export default {
   name: "Processos",
