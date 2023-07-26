@@ -175,7 +175,7 @@
 
         <b-card v-for="obj_beneficioAcumulado of arrayBenficios" :key="obj_beneficioAcumulado">
           <b-row class="row-one my-3 align-items-center">
-            <b-col sm="3" v-if="beneficio === true">do
+            <b-col sm="3" v-if="beneficio === true">
               <v-autocomplete id="beneficio" :items="beneficiosInacumulveisBancoName"
                 v-model="obj_beneficioAcumulado.beneficio" type="text" size="sm" placeholder="Qual Benefício?"
                 @input="beneficiosEspecialInfo(obj_beneficioAcumulado)">
@@ -1438,6 +1438,10 @@ import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
 import { calculoTabelaPrincipal } from "../Calculo/CalculoTabela";
 import { triagemBeneficiosValidos } from "../Calculo/CalculoTabela/BeneficioAcumulado/triagemBeneficiosValidos";
+//import { deleteInformationForCalculoToID } from "../api/controle-usuario/informationCalculo/deleteInformationForCalculoToID";
+import { EventBus } from "../eventBus/eventBus"
+
+
 export default {
   name: "Home",
   components: {
@@ -2094,16 +2098,20 @@ export default {
         return false;
       }
     },
-    formatarPorcentagemAcordo() {
+     formatarPorcentagemAcordo() {
       return this.procntagem_acordo != 0 && this.procntagem_acordo != null
         ? this.procntagem_acordo
         : 100;
     },
-    verificarAdicaoNoLote() {
+    async verificarAdicaoNoLote() {
+      EventBus.$emit('deletarPeloHome', this.info_calculo.id);
+      //this.loading = true;
+      //await deleteInformationForCalculoToID(JSON.stringify(this.info_calculo.id))
       this.adicionarLote();
     },
     adicionarLote() {
       this.conteudoHTML();
+      //this.loading = false;
       if (this.verificadoInformacoes() && this.verificarCalculo()) {
         let nomeBeneficioBeneficioAcumulado = [];
         let dataDeInicioBeneficioAcumulado = [];
@@ -2229,6 +2237,7 @@ export default {
           salario13Obrigatorio: this.salario13Obrigatorio,
           conteudoHTML: this.memoriaCalculoHTM,
         };
+        console.log("Body")
         console.log(body);
         Axios.AxiosApiControleUsuario.post(`calculoLote`, body)
           .then((response) => {
@@ -2236,6 +2245,7 @@ export default {
             Axios.AxiosApiControleUsuario.get(`calculoLote`)
               .then((response) => {
                 this.calculoLote = response.data;
+                console.log("Calculo")
                 console.log(this.calculoLote);
                 this.$alert(
                   "Calculo adicionado ao Lote.",
@@ -2290,7 +2300,8 @@ export default {
       console.log(this.calculoLote[this.calculoLote.length - 1]);
     },
     removerItemLote(dado) {
-      console.log(dado);
+      console.log(dado)
+      console.log(dado.id);
       this.$prompt("Digite seu nome de usuario").then((text) => {
         if (text == this.username) {
           this.loading = true;

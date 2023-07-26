@@ -145,7 +145,7 @@ import { salvarInformationForCalculo } from "../api/controle-usuario/information
 import { getInformationsForCalcule } from "../api/controle-usuario/informationCalculo/getInformationsForCalcule"
 import { getInformationFromSapienForSamir } from "../api/visao/getInformation/getInformationFromSapienForSamir"
 import { getBeneficios } from "../api/calculadora/beneficios/getBeneficios"
-
+import { EventBus } from "../eventBus/eventBus"
 
 export default {
   name: "Processos",
@@ -193,7 +193,9 @@ export default {
   methods: {
     //teste
     deletarInforPorID(dado) {
-
+      console.log("ENTROU POR")
+      console.log(typeof(dado.id))
+      console.log(dado.id)
       this.$prompt("Digite seu nome de usuario").then(async (text) => {
         if (text == this.username) {
           this.loading = true;
@@ -210,6 +212,19 @@ export default {
         }
         this.loading = false;
       });
+    },
+    async deletarPeloHome(dado){
+      console.log("ENTROU POR2")
+      console.log(dado)
+      console.log(typeof(dado))
+      this.loading = true;
+      try {
+            await deleteInformationForCalculoToID(dado)
+            this.getInfos();
+            this.loading = false;
+          } catch (error) {
+            this.$alert(error.message);
+          }
     },
     deletarTodosOsInfos() {
       this.$prompt("Digite seu CPF").then(async (text) => {
@@ -491,6 +506,7 @@ export default {
     getBeneficios().then((res) => {
       this.beneficiosInacumulveisBanco = res;
     });
+    EventBus.$on('deletarPeloHome', this.deletarPeloHome)
   },
 };
 </script>
