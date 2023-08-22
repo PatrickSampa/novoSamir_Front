@@ -6,9 +6,9 @@
         </v-toolbar>
   
         <v-form class="pa-3" v-model="valid" lazy-validation>
-          <v-text-field v-model="cpf" :rules="nameRules" label="CPF SAPIENS" required></v-text-field>
+          <v-text-field v-model="cpf" :rules="nameRules" label="CPF SAPIENS" @keydown.enter="loginUsuarioSapiens" required></v-text-field>
   
-          <v-text-field v-model="senha" :rules="passwordRules" label="SENHA SAPIENS" type="password" required></v-text-field>
+          <v-text-field v-model="senha" :rules="passwordRules" label="SENHA SAPIENS" type="password" required @keydown.enter="loginUsuarioSapiens"></v-text-field>
           <v-btn depressed :loading="loading" color="primary" @click="loginUsuarioSapiens">LOGIN</v-btn>
         </v-form>
       </v-card>

@@ -6,9 +6,9 @@
       </v-toolbar>
 
       <v-form class="pa-3" v-model="valid" lazy-validation>
-        <v-text-field v-model="username" :rules="nameRules" label="Username" required></v-text-field>
+        <v-text-field v-model="username" :rules="nameRules" label="Username" @keydown.enter="loginUsuario" required></v-text-field>
 
-        <v-text-field v-model="password" :rules="passwordRules" label="senha" type="password" required></v-text-field>
+        <v-text-field v-model="password" :rules="passwordRules" label="senha" type="password" @keydown.enter="loginUsuario" required></v-text-field>
         <v-btn depressed :loading="loading" color="primary" @click="loginUsuario">LOGIN</v-btn>
         <v-btn id="cadastrar" depressed :loading="loading" color="secondary" to="/cadastrar">Cadastrar</v-btn>
       </v-form>

@@ -65,11 +65,11 @@
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" md="3">
-            <label for="honorarios_Advocativos" class="labels pb-3">Honorários Advocatício Data</label>
+            <label for="honorarios_Advocativos" class="labels pb-3">Honorários Advocatício Até (Data)</label>
             <v-text-field v-mask="'##/##/####'" v-model="DataHonorarios" id="data-final" dense outlined></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="honorarios_Advocativos" class="labels pb-3">Honorários advocatícios até</label>
+            <label for="honorarios_Advocativos" class="labels pb-3">Honorários advocatícios Percentual</label>
             <v-text-field type="number" v-model="porcentagemHonorarios" id="data-final" dense outlined></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
@@ -97,7 +97,7 @@
             </v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="2">
-            <label for="dibAnterior" class="labels pb-2">DIB Anterior</label>
+            <label for="dibAnterior" class="labels pb-2">NB Anterior</label>
             <v-text-field v-mask="'##/##/####'" v-model="dibAnterior" id="dibAnterior" placeholder="Ex: 17/06/2022" dense
               outlined>
             </v-text-field>
@@ -865,7 +865,7 @@
             </tbody>
           </table>
 
-          <h4 class="center">REVISÃO DE BENEFÍCIOS</h4>
+          <h4 class="center">REVISE OS DADOS</h4>
           <div class="rowInputs">
             <div class="column">
               <label class="camposInput">Objeto:</label><label class="inputToPrint" id="objetoForm" />
@@ -884,11 +884,11 @@
               <label class="camposInput">Início do Juros:</label><label class="inputToPrint" id="inicioJurosForm" />
               {{ inicio_juros }}
               <br />
-              <label class="camposInput">Valido até: {{ atulizacao }}</label><label class="inputToPrint"
+              <label class="camposInput">Atualizar Até: {{ atulizacao }}</label><label class="inputToPrint"
                 id="calculadoEmForm" />
               <!--Função-->
               <br />
-              <label class="camposInput">Honorário:</label><label class="inputToPrint" id="honorarioForm" />
+              <label class="camposInput">Honorários Sucumbenciais:</label><label class="inputToPrint" id="honorarioForm" />
               {{ textoHonorarios }}
               <br />
             </div>
@@ -1634,6 +1634,10 @@ export default {
     },
   },
   methods: {
+    buscarNupDaUrl(url){
+      const urlTratada = url.split(/[=&]/)
+      return urlTratada[1]
+    },
     verificarDataParaBeneficioAcumulado( inicioCalculo, dip ,  dib, dcb ){
       return Date.parse(inicioCalculo.split('/').reverse().join('-')) <= Date.parse(dcb.split('/').reverse().join('-')) && Date.parse(dib.split('/').reverse().join('-')) <= Date.parse(dip.split('/').reverse().join('-'));  
     },
@@ -3518,6 +3522,7 @@ export default {
       this.valor_juros = Math.floor(this.valor_juros * 100) / 100;
       this.valor_corrigido =
         Math.floor((this.valor_total - this.valor_juros) * 100) / 100;
+        console.log("Valor corrigido1: " + this.valor_corrigido)
       this.total_processos =
         Math.floor(
           (this.valor_corrigido +
@@ -3526,6 +3531,7 @@ export default {
             this.pacelasVencidas) *
           100
         ) / 100;
+        this.valor_corrigido = 35
       this.formatacao();
       if (this.alcadaBoolean) {
         this.calculoDeOssada();
@@ -4558,6 +4564,7 @@ export default {
               minutas.push({
                 numeroprocesso: minuta.nome,
                 conteudo: minuta.conteudoHTML,
+                nup: this.buscarNupDaUrl(minuta.url)
               });
             });
             const body = {
