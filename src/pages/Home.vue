@@ -288,7 +288,6 @@
             <v-btn depressed color="primary" style="margin-left: 25px" :href="info_calculo.urlProcesso" target="_blank">
               Consultar Processo</v-btn>
           </v-col>
-
           <v-col cols="3">
             <v-btn depressed color="primary" style="margin-left: 145px" @click="verificarAdicaoNoLote()"
               target="_blank">Adicionar ao Lote</v-btn>
@@ -301,6 +300,10 @@
           <v-col cols="2">
             <v-btn :loading="loading" depressed color="primary" @click="(mode = 'table'), AnexarMinutas()"
               target="_blank">Anexar Minutas</v-btn>
+          </v-col>
+          <v-col cols="2">
+            <v-btn :loading="loading" depressed color="primary" @click="atualizarItemParaBanco()"
+              target="_blank">Atualizar</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -1634,6 +1637,38 @@ export default {
     },
   },
   methods: {
+    atualizarItemParaBanco(){
+      const novoObjetoParaAtualizar = {...this.info_calculo}
+      delete novoObjetoParaAtualizar.aps;
+      delete novoObjetoParaAtualizar.idUser;
+      if(this.nmprocesso!=""){
+        novoObjetoParaAtualizar.nome = this.nmprocesso
+      }
+
+      if(this.dtInicial != ""){
+        novoObjetoParaAtualizar.dibInicial = this.dtInicial
+      }
+
+      if(this.salarioInicial != ""){
+        novoObjetoParaAtualizar.dibFinal = this.dtFinal
+      }
+      
+      if(this.salarioInicial != ""){
+        novoObjetoParaAtualizar.rmi = this.salarioInicial
+      }
+
+      if(this.inicio_juros != ""){
+        novoObjetoParaAtualizar.citacao = this.inicio_juros
+      }
+
+
+      
+
+      
+
+      
+      
+    },
     buscarNupDaUrl(url){
       const urlTratada = url.split(/[=&]/)
       return urlTratada[1]
@@ -4555,9 +4590,9 @@ export default {
       // newWin.close();
     },
     AnexarMinutas() {
-      this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
+     /*  this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
         (etiqueta) => {
-          if (etiqueta) {
+          if (etiqueta) { */
             this.loading = true;
             let minutas = [];
             this.calculoLote.forEach((minuta) => {
@@ -4572,7 +4607,6 @@ export default {
                 cpf: this.cpfSapiens,
                 senha: this.senhaSapaiens,
               },
-              etiqueta,
               minutas,
             };
             console.log(body);
@@ -4599,9 +4633,9 @@ export default {
                 console.log(error.message);
                 console.log("error.message");
               });
-          }
+/*           }
         }
-      );
+      ); */
     },
 
     taxasPorAno(response = []) {
