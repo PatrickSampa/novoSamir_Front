@@ -1532,7 +1532,7 @@ export default {
       total_processos: 0,
       procntagem_acordo: null,
       boolJuros: true,
-
+      
       optionsJuros: [],
       tipoJuros: 0,
       optionsCorrecao: [],
@@ -1641,29 +1641,47 @@ export default {
       const novoObjetoParaAtualizar = {...this.info_calculo}
       delete novoObjetoParaAtualizar.aps;
       delete novoObjetoParaAtualizar.idUser;
-      if(this.nmprocesso!=""){
+      var message = "Propriedades alteradas: \n"
+      const arrayPropriedadesAlteradas = []
+      if(this.nmprocesso!=this.info_calculo.nome){
+        arrayPropriedadesAlteradas.push("Nome")
         novoObjetoParaAtualizar.nome = this.nmprocesso
       }
 
-      if(this.dtInicial != ""){
+      /* if(this.dtInicial != .+){
+        arrayPropriedadesAlteradas.push("Data Inicial")
         novoObjetoParaAtualizar.dibInicial = this.dtInicial
-      }
+      } */
 
       if(this.salarioInicial != ""){
+        arrayPropriedadesAlteradas.push("Data Final")
         novoObjetoParaAtualizar.dibFinal = this.dtFinal
       }
       
       if(this.salarioInicial != ""){
+        arrayPropriedadesAlteradas.push("RMI")
         novoObjetoParaAtualizar.rmi = this.salarioInicial
       }
 
       if(this.inicio_juros != ""){
+        arrayPropriedadesAlteradas.push("Citação")
         novoObjetoParaAtualizar.citacao = this.inicio_juros
       }
 
-
       
+        novoObjetoParaAtualizar.DataHonorarios = this.DataHonorarios
+        novoObjetoParaAtualizar.porcentagemHonorarios = this.porcentagemHonorarios  
+        novoObjetoParaAtualizar.procntagem_acordo = this.procntagem_acordo
+        novoObjetoParaAtualizar.porcentagemRMI = this.porcentagemRMI
+   
 
+      console.log(message)
+
+
+      console.log("novo",novoObjetoParaAtualizar)
+      console.log(this.info_calculo)
+      
+      
       
 
       
