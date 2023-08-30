@@ -1641,29 +1641,57 @@ export default {
       const novoObjetoParaAtualizar = {...this.info_calculo}
       delete novoObjetoParaAtualizar.aps;
       delete novoObjetoParaAtualizar.idUser;
+      const dibParaTratarMaisUm = this.dtFinal
+      const dibInfoCalculo = this.info_calculo.dip
       var message = "Propriedades alteradas: \n"
       const arrayPropriedadesAlteradas = []
+      let novoRmiSemVirgula = (this.info_calculo.rmi).replace(",","")
+      let novoRmiSemVirgulaInputSemVirgula = String((this.salarioInicial)).replace(",","")
+
+  
+
+      const arrayDib = dibParaTratarMaisUm.split("/")
+      const dia = Number(arrayDib[0])+1
+      const mes = arrayDib[1]
+      const ano = arrayDib[2]
+      const novaDataDib = new Date(`${ano}-${mes}-${String(dia)}`)
+      
+
+
+
+      const arrayDibCalculo = dibInfoCalculo.split("/")
+      const diaInfoCalculo = arrayDibCalculo[0]
+      const mesInfoCalculo = arrayDibCalculo[1]
+      const anoInfoCalculo = arrayDibCalculo[2]
+      const novaDataDibInfoCalculo = new Date(`${anoInfoCalculo}-${mesInfoCalculo}-${diaInfoCalculo}`)
+      
+      
+      
+
+
       if(this.nmprocesso!=this.info_calculo.nome){
         arrayPropriedadesAlteradas.push("Nome")
         novoObjetoParaAtualizar.nome = this.nmprocesso
       }
 
-      /* if(this.dtInicial != .+){
+      if(this.dtInicial != this.info_calculo.dibInicial){
         arrayPropriedadesAlteradas.push("Data Inicial")
         novoObjetoParaAtualizar.dibInicial = this.dtInicial
-      } */
-
-      if(this.salarioInicial != ""){
+      }
+      
+      
+      if(novaDataDib.getTime() != novaDataDibInfoCalculo.getTime()){
         arrayPropriedadesAlteradas.push("Data Final")
         novoObjetoParaAtualizar.dibFinal = this.dtFinal
       }
+
       
-      if(this.salarioInicial != ""){
+      if(novoRmiSemVirgula.replace(".","") != novoRmiSemVirgulaInputSemVirgula.replace(".","")){
         arrayPropriedadesAlteradas.push("RMI")
         novoObjetoParaAtualizar.rmi = this.salarioInicial
       }
-
-      if(this.inicio_juros != ""){
+ 
+      if(this.inicio_juros != this.info_calculo.citacao){
         arrayPropriedadesAlteradas.push("Citação")
         novoObjetoParaAtualizar.citacao = this.inicio_juros
       }
@@ -1680,6 +1708,21 @@ export default {
 
       console.log("novo",novoObjetoParaAtualizar)
       console.log(this.info_calculo)
+
+      Swal.fire({
+      title: `<strong>Você deseja atualizar os dados?</strong>\n${arrayPropriedadesAlteradas}`,
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Salvar',
+      denyButtonText: `Não salvar`,
+    }).then((result) => {
+   
+      if (result.isConfirmed) {
+        Swal.fire('Salvo!', '', 'success')
+      } else if (result.isDenied) {
+        Swal.fire('Mudanças não salvas', '', 'info')
+      }
+    })
       
       
       
