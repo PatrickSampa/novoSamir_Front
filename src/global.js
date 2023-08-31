@@ -3,8 +3,8 @@ export const userKey = '__gbelpa_user'
 
 
  /* export const samirControle = 'http://localhost:3015/' */
-/* export const samirControle = 'http://10.191.8.242:3010/' */
-export const samirControle = 'http://10.191.8.254:3001/'
+ export const samirControle = 'http://10.191.8.254:3001/' 
+//export const samirControle = 'http://localhost:3015/'
 // export const samirControle = 'http://localhost:3015/'
 
 /* export const apiSapiens = 'http://10.191.8.131:80/samir' */

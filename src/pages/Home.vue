@@ -288,25 +288,28 @@
             <v-btn depressed color="primary" style="margin-left: 25px" :href="info_calculo.urlProcesso" target="_blank">
               Consultar Processo</v-btn>
           </v-col>
-          <v-col cols="3">
-            <v-btn depressed color="primary" style="margin-left: 145px" @click="verificarAdicaoNoLote()"
-              target="_blank">Adicionar ao Lote</v-btn>
-          </v-col>
-          <v-col cols="3">
-            <v-btn :loading="loading" depressed color="red" style="margin-left: 145px" target="_blank"
-              @click="deletarLote()">Deletar lote
-            </v-btn>
-          </v-col>
           <v-col cols="2">
-            <v-btn :loading="loading" depressed color="primary" @click="(mode = 'table'), AnexarMinutas()"
-              target="_blank">Anexar Minutas</v-btn>
-          </v-col>
-          <v-col cols="2">
-            <v-btn :loading="loading" depressed color="primary" @click="atualizarItemParaBanco()"
+            <v-btn :loading="loading" depressed color="primary" style="margin-left: 145px" @click="atualizarItemParaBanco()"
               target="_blank">Atualizar</v-btn>
           </v-col>
         </v-row>
       </v-card>
+
+         
+    <br>
+    <br>
+    <br>
+  
+      <v-col cols="2">
+        <div style="display: flex; justify-content: space-between;">
+            <v-btn depressed color="blue" style="color: whitesmoke;" @click="verificarAdicaoNoLote()"
+              target="_blank">Adicionar ao Lote</v-btn>
+            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
+              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
+            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
+              @click="deletarLote()">Deletar lote</v-btn>
+          </div>
+      </v-col>
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
         Beneficios para calculo em lote
       </h3>
