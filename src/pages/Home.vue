@@ -1713,8 +1713,7 @@ export default {
       title: `<strong>Você deseja atualizar os dados?</strong>\n${arrayPropriedadesAlteradas}`,
       showDenyButton: true,
       showCancelButton: true,
-      confirmButtonText: 'Salvar',
-      denyButtonText: `Não salvar`,
+      confirmButtonText: 'Atualizar',
     }).then((result) => {
    
       if (result.isConfirmed) {
