@@ -1645,17 +1645,22 @@ export default {
       const dibInfoCalculo = this.info_calculo.dip
       var message = "Propriedades alteradas: \n"
       const arrayPropriedadesAlteradas = []
+      const valorInputRmi = (String(this.salarioInicial).indexOf(".")) > -1? this.salarioInicial: String(this.salarioInicial)+"0"+"0";
       let novoRmiSemVirgula = (this.info_calculo.rmi).replace(",","")
-      let novoRmiSemVirgulaInputSemVirgula = String((this.salarioInicial)).replace(",","")
+      let novoRmiSemVirgulaInputSemVirgula = String((valorInputRmi)).replace(",","")
 
-  
+      
 
       const arrayDib = dibParaTratarMaisUm.split("/")
-      const dia = Number(arrayDib[0])+1
+      let dia = String(Number(arrayDib[0])+1)
+      if(dia<=10){
+        dia = 0+dia
+      }
+      //let dia = 0+String(Number(arrayDib[0])+1)
       const mes = arrayDib[1]
       const ano = arrayDib[2]
-      const novaDataDib = new Date(`${ano}-${mes}-${String(dia)}`)
-      
+      const novaDataDib = new Date(`${ano}-${mes}-${dia}`)
+     
 
 
 
@@ -1663,8 +1668,9 @@ export default {
       const diaInfoCalculo = arrayDibCalculo[0]
       const mesInfoCalculo = arrayDibCalculo[1]
       const anoInfoCalculo = arrayDibCalculo[2]
-      const novaDataDibInfoCalculo = new Date(`${anoInfoCalculo}-${mesInfoCalculo}-${diaInfoCalculo}`)
       
+      const novaDataDibInfoCalculo = new Date(`${anoInfoCalculo}-${mesInfoCalculo}-${diaInfoCalculo}`)
+      //console.log([novaDataDib,dibParaTratarMaisUm],[dibInfoCalculo,novaDataDibInfoCalculo])
       
       
 
@@ -1679,13 +1685,13 @@ export default {
         novoObjetoParaAtualizar.dibInicial = this.dtInicial
       }
       
-      
+      console.log(this.dtFinal,this.info_calculo.dip)
       if(novaDataDib.getTime() != novaDataDibInfoCalculo.getTime()){
         arrayPropriedadesAlteradas.push("Data Final")
         novoObjetoParaAtualizar.dibFinal = this.dtFinal
       }
 
-      
+      //console.log(novoRmiSemVirgula.replace(".","") , novoRmiSemVirgulaInputSemVirgula.replace(".",""))
       if(novoRmiSemVirgula.replace(".","") != novoRmiSemVirgulaInputSemVirgula.replace(".","")){
         arrayPropriedadesAlteradas.push("RMI")
         novoObjetoParaAtualizar.rmi = this.salarioInicial
@@ -1710,7 +1716,7 @@ export default {
       console.log(this.info_calculo)
 
       Swal.fire({
-      title: `<strong>Você deseja atualizar os dados?\n Os seguinte campos vão ser atualizados:</strong>\n ${arrayPropriedadesAlteradas}'`,
+      title: `<strong>Você deseja atualizar os dados?\n Os seguinte campos vão ser atualizados:\n<u><i>${arrayPropriedadesAlteradas}</i></u></strong>`,
       showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: 'Atualizar',
