@@ -1460,6 +1460,7 @@ import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
 import { calculoTabelaPrincipal } from "../Calculo/CalculoTabela";
 import { triagemBeneficiosValidos } from "../Calculo/CalculoTabela/BeneficioAcumulado/triagemBeneficiosValidos";
+import { updateInformationForCalculoList } from "../api/controle-usuario/informationCalculo/updateInformationForCalculoList"
 //import { deleteInformationForCalculoToID } from "../api/controle-usuario/informationCalculo/deleteInformationForCalculoToID";
 import { EventBus } from "../eventBus/eventBus"
 //import Popup from '../components/Popup.vue'
@@ -1637,13 +1638,12 @@ export default {
     },
   },
   methods: {
-    atualizarItemParaBanco(){
+    async atualizarItemParaBanco(){ 
       const novoObjetoParaAtualizar = {...this.info_calculo}
       delete novoObjetoParaAtualizar.aps;
       delete novoObjetoParaAtualizar.idUser;
       const dibParaTratarMaisUm = this.dtFinal
       const dibInfoCalculo = this.info_calculo.dip
-      var message = "Propriedades alteradas: \n"
       const arrayPropriedadesAlteradas = []
       const valorInputRmi = (String(this.salarioInicial).indexOf(".")) > -1? this.salarioInicial: String(this.salarioInicial)+"0"+"0";
       let novoRmiSemVirgula = (this.info_calculo.rmi).replace(",","")
@@ -1663,7 +1663,7 @@ export default {
      
 
 
-
+      
       const arrayDibCalculo = dibInfoCalculo.split("/")
       const diaInfoCalculo = arrayDibCalculo[0]
       const mesInfoCalculo = arrayDibCalculo[1]
@@ -1685,10 +1685,13 @@ export default {
         novoObjetoParaAtualizar.dibInicial = this.dtInicial
       }
       
-      console.log(this.dtFinal,this.info_calculo.dip)
+      
       if(novaDataDib.getTime() != novaDataDibInfoCalculo.getTime()){
         arrayPropriedadesAlteradas.push("Data Final")
-        novoObjetoParaAtualizar.dibFinal = this.dtFinal
+        const data = this.dtFinal.split("/")
+        let diaMenosUm = String(Number(data[0])-1)
+        const dataParaMandarAoBancoMenosUmDia = `${diaMenosUm}/${String(data[1])}/${String(data[2])}`
+        novoObjetoParaAtualizar.dibFinal = dataParaMandarAoBancoMenosUmDia
       }
 
       //console.log(novoRmiSemVirgula.replace(".","") , novoRmiSemVirgulaInputSemVirgula.replace(".",""))
@@ -1702,29 +1705,48 @@ export default {
         novoObjetoParaAtualizar.citacao = this.inicio_juros
       }
 
-      
-        novoObjetoParaAtualizar.DataHonorarios = this.DataHonorarios
-        novoObjetoParaAtualizar.porcentagemHonorarios = this.porcentagemHonorarios  
-        novoObjetoParaAtualizar.procntagem_acordo = this.procntagem_acordo
-        novoObjetoParaAtualizar.porcentagemRMI = this.porcentagemRMI
-   
+      if(this.DataHonorarios != undefined || this.info_calculo.DataHonorarios != undefined){
+        arrayPropriedadesAlteradas.push("Honorários Advocatício")
+        novoObjetoParaAtualizar.honorarioAdvocaticioAte = this.DataHonorarios
+      }
 
-      console.log(message)
+      if(this.porcentagemHonorarios != undefined || this.info_calculo.porcentagemHonorarios != undefined){
+        arrayPropriedadesAlteradas.push("Honorários advocatícios Percentual")
+        novoObjetoParaAtualizar.honorarioAdvocaticioPercentual = this.porcentagemHonorarios
+      }
+        /* novoObjetoParaAtualizar.DataHonorarios = this.DataHonorarios
+        novoObjetoParaAtualizar.porcentagemHonorarios = this.porcentagemHonorarios */  
+        novoObjetoParaAtualizar.acordo = this.procntagem_acordo
+        novoObjetoParaAtualizar.porcentagemRmi = this.porcentagemRMI
 
 
-      console.log("novo",novoObjetoParaAtualizar)
-      console.log(this.info_calculo)
+      /* await Swal.fire({
+      title: `<strong>Você deseja atualizar os dados?\n Os seguinte campos vão ser atualizados:\n<u><i>${arrayPropriedadesAlteradas}</i></u></strong>`,
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Atualizar',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        console.log("PASSOU")
+        await updateInformationForCalculoList(novoObjetoParaAtualizar)
+          Swal.fire('Salvo!', '', 'success')
+      } else if (result.isDenied) {
+        Swal.fire('Mudanças não salvas', '', 'info')
+      }
+    }) */
 
-      Swal.fire({
+
+    Swal.fire({
       title: `<strong>Você deseja atualizar os dados?\n Os seguinte campos vão ser atualizados:\n<u><i>${arrayPropriedadesAlteradas}</i></u></strong>`,
       showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: 'Atualizar',
     }).then((result) => {
-   
-      if (result.isConfirmed) {
-        Swal.fire('Salvo!', '', 'success')
-      } else if (result.isDenied) {
+      if (result.value) {
+        updateInformationForCalculoList(novoObjetoParaAtualizar).then(Swal.fire('Salvo!', '', 'success')).catch(
+          Swal.fire('Mudanças não salvas', '', 'info')
+        )
+      } else if(result.dismiss == "cancel"){
         Swal.fire('Mudanças não salvas', '', 'info')
       }
     })
