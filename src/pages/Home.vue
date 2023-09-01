@@ -1743,7 +1743,10 @@ export default {
       confirmButtonText: 'Atualizar',
     }).then((result) => {
       if (result.value) {
-        updateInformationForCalculoList(novoObjetoParaAtualizar).then(Swal.fire('Salvo!', '', 'success')).catch(
+        updateInformationForCalculoList(novoObjetoParaAtualizar).then((e) => {
+          Swal.fire('Salvo!', '', 'success')
+          console.log(e)
+        }).catch(
           Swal.fire('Mudanças não salvas', '', 'info')
         )
       } else if(result.dismiss == "cancel"){
