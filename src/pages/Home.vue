@@ -1649,7 +1649,7 @@ export default {
       let novoRmiSemVirgula = (this.info_calculo.rmi).replace(",","")
       let novoRmiSemVirgulaInputSemVirgula = String((valorInputRmi)).replace(",","")
 
-      
+    
 
       const arrayDib = dibParaTratarMaisUm.split("/")
       let dia = String(Number(arrayDib[0])+1)
@@ -1705,19 +1705,46 @@ export default {
         novoObjetoParaAtualizar.citacao = this.inicio_juros
       }
 
-      if(this.DataHonorarios != undefined || this.info_calculo.DataHonorarios != undefined){
+      /* if(this.DataHonorarios != undefined || this.info_calculo.DataHonorarios != undefined){
         arrayPropriedadesAlteradas.push("Honorários Advocatício")
+        novoObjetoParaAtualizar.honorarioAdvocaticioAte = this.DataHonorarios
+      } */
+
+      
+      if(this.DataHonorarios != this.info_calculo.honorarioAdvocaticioAte){
+        arrayPropriedadesAlteradas.push("Honorários Advocatício Até")
         novoObjetoParaAtualizar.honorarioAdvocaticioAte = this.DataHonorarios
       }
 
-      if(this.porcentagemHonorarios != undefined || this.info_calculo.porcentagemHonorarios != undefined){
+
+      
+      /* if(this.porcentagemHonorarios != undefined || this.info_calculo.porcentagemHonorarios != undefined){
+        arrayPropriedadesAlteradas.push("Honorários advocatícios Percentual")
+        novoObjetoParaAtualizar.honorarioAdvocaticioPercentual = this.porcentagemHonorarios
+      } */
+     
+
+      console.log(this.porcentagemHonorarios, this.info_calculo.honorarioAdvocaticioPercentual)
+      if(this.porcentagemHonorarios != this.info_calculo.honorarioAdvocaticioPercentual){
         arrayPropriedadesAlteradas.push("Honorários advocatícios Percentual")
         novoObjetoParaAtualizar.honorarioAdvocaticioPercentual = this.porcentagemHonorarios
       }
-        /* novoObjetoParaAtualizar.DataHonorarios = this.DataHonorarios
-        novoObjetoParaAtualizar.porcentagemHonorarios = this.porcentagemHonorarios */  
+      
+      //console.log("A: "+this.procntagem_acordo ,this.info_calculo.acordo == null)
+      if(parseFloat(this.procntagem_acordo) != parseFloat(this.info_calculo.acordo)){
+        arrayPropriedadesAlteradas.push("Acordo%")
         novoObjetoParaAtualizar.acordo = this.procntagem_acordo
-        novoObjetoParaAtualizar.porcentagemRmi = this.porcentagemRMI
+      }
+          
+        /* novoObjetoParaAtualizar.acordo = this.procntagem_acordo */
+        /* novoObjetoParaAtualizar.porcentagemRmi = this.porcentagemRMI */
+
+        if(this.porcentagemRMI != this.info_calculo.porcentagemRmi){
+        arrayPropriedadesAlteradas.push("Poercentagem RMI")
+        novoObjetoParaAtualizar.honorarioAdvocaticioPercentual = this.porcentagemRMI
+      }
+
+
 
 
       /* await Swal.fire({
@@ -3703,11 +3730,18 @@ export default {
         { value: "salarioJuros", text: "Salário Juros R$" },
         { value: "salarioTotal", text: "Total" },
       ];
+      /* this.porcentagemHonorarios = this.info_calculo.honorarioAdvocaticioPercentual
+      this.procntagem_acordo = this.info_calculo.acordo
+      this.porcentagemRMI = this.info_calculoinfo_calculo.porcentagemRMI */
       this.salarioInicial = this.info_calculo.rmi.replace(".", "");
       this.salarioInicial = this.salarioInicial.replace(",", ".");
       this.salarioInicial = parseFloat(this.salarioInicial);
       this.dtInicial = this.info_calculo.dibInicial;
       this.nmprocesso = this.info_calculo.nome;
+      this.procntagem_acordo = this.info_calculo.acordo
+      this.DataHonorarios = this.info_calculo.honorarioAdvocaticioAte
+      this.porcentagemHonorarios =  this.info_calculo.honorarioAdvocaticioPercentual
+      this.porcentagemRMI = this.info_calculo.porcentagemRmi
       let datafinal = this.info_calculo.dip.split("/");
       if (datafinal[0] == 1) {
         if (datafinal[1] == 1) {
@@ -3809,15 +3843,15 @@ export default {
       console.log("size: " + this.beneficioInacumulavel.length);
       this.inicio_juros = null;
       this.inicio_juros = this.info_calculo.citacao;
-      this.DataHonorarios = null;
-      this.porcentagemHonorarios = null;
+      //this.DataHonorarios = null;
+      //this.porcentagemHonorarios = null;
       this.valorHonorarios = 0;
       this.textoHonorarios = null;
       this.valorSalario13 = 0;
       this.arr_Salario13 = 0;
       this.dibAnterior = this.info_calculo.dibAnterior == "-" ? "" : this.info_calculo.dibAnterior;
       this.total_processos = 0;
-      this.procntagem_acordo = null;
+      //this.procntagem_acordo = null;
       this.alcadaValue = 0;
       this.competenciaAnoAtual = null;
       this.competenciaAnoAtual = null;
@@ -4759,9 +4793,8 @@ export default {
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");
     Axios.AxiosApiControleUsuario.get(`/calculoLote`)
       .then((response) => {
-        console.log("thenHomeMounted(): " + response.data)
         this.calculoLote = response.data;
-        console.log(response.data)
+        console.log("Lote: "+ this.calculoLote)
       })
       .catch((error) => {
         console.log("CatchHomeMounted(): " + error);
