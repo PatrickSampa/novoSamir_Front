@@ -18,6 +18,7 @@
         <v-tabs-slider color="green"></v-tabs-slider>
         <v-tab @click="add_taxa = false">Cálculo</v-tab>
         <v-tab @click="acessoPortalADM()">Portal ADM</v-tab>
+        <v-tab @click="acessoPortalADM()">Ajuda</v-tab>
       </v-tabs>
     </v-card>
     <PortalADM v-if="add_taxa" />
@@ -242,9 +243,6 @@
               </v-btn>
             </b-col>  
 
-
-
-
             <b-col sm="3" v-if="beneficio === true">
               <label for="beneficio" class="labels">Desconto obrigatório</label>
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
@@ -263,6 +261,12 @@
               <b-form-input type="text" v-model="obj_beneficioAcumulado.nb" id="beneficio" size="sm">
               </b-form-input>
             </b-col>
+            <b-col sm="2" v-if="beneficio === true">
+              <label for="beneficio" class="labels">Data N.B Anterior</label>
+              <b-form-input type="text" v-model="obj_beneficioAcumulado.nbAnterior" id="beneficio" size="sm">
+              </b-form-input>
+            </b-col>
+
           </b-row>
         </b-card>
 
@@ -1307,7 +1311,8 @@
                 this.info_calculo.dib == null || this.info_calculo.dib == ""
                 ? this.dtInicial
                 : this.info_calculo.dib
-              }} </label><label class="inputToPrintAlcada" id="dibJudPlanilha" />
+              }} </label>
+              <label class="inputToPrintAlcada" id="dibJudPlanilha" />
             <br />
             <label class="camposInputAlcada">DIB Anterior:
               {{
@@ -1512,6 +1517,7 @@ export default {
       ],
       logo: require("../assets/logo.png"),
       todas_taxas: [],
+      nbAnterior: null,
       all_info: [],
       calc_total: [],
       info_calculo: {},
@@ -1699,7 +1705,7 @@ export default {
         novoObjetoParaAtualizar.citacao = this.inicio_juros
       }
 
-      
+        console.log("tt: " + this.DataHonorarios)
         novoObjetoParaAtualizar.DataHonorarios = this.DataHonorarios
         novoObjetoParaAtualizar.porcentagemHonorarios = this.porcentagemHonorarios  
         novoObjetoParaAtualizar.procntagem_acordo = this.procntagem_acordo
@@ -1904,8 +1910,8 @@ export default {
         return [
           { value: "data", text: "Data" },
           { value: "reajusteAcumulado", text: "Reajuste" },
-          { value: "salario", text: "Salário R$" },
-          { value: "correcao", text: "Correção Salarial" },
+          { value: "salario", text: "Salário Reajustado" },
+          { value: "correcao", text: "Correção Monetária" },
           { value: "salarioCorrigido", text: "Salário Corrigido R$" },
           { value: "juros", text: "Juros" },
           { value: "salarioJuros", text: "Salário Juros R$" },
@@ -3696,6 +3702,11 @@ export default {
       this.salarioInicial = parseFloat(this.salarioInicial);
       this.dtInicial = this.info_calculo.dibInicial;
       this.nmprocesso = this.info_calculo.nome;
+      
+      this.porcentagemRMI = 1000
+      this.procntagem_acordo = 1000;
+      this.porcentagemHonorarios = 1000
+      this.DataHonorarios = "15/10/1998"
       let datafinal = this.info_calculo.dip.split("/");
       if (datafinal[0] == 1) {
         if (datafinal[1] == 1) {
@@ -3794,10 +3805,10 @@ export default {
         });
       });
       this.arrayBenficios = this.beneficioInacumulavel;
-      console.log("size: " + this.beneficioInacumulavel.length);
+      console.log("sizee: " + this.beneficioInacumulavel.length);
       this.inicio_juros = null;
       this.inicio_juros = this.info_calculo.citacao;
-      this.DataHonorarios = null;
+      // this.DataHonorarios = null;
       this.porcentagemHonorarios = null;
       this.valorHonorarios = 0;
       this.textoHonorarios = null;
