@@ -8,7 +8,7 @@
       <v-form class="pa-3" v-model="valid" lazy-validation>
         <v-text-field v-model="username" :rules="nameRules" label="Username" @keydown.enter="loginUsuario" required></v-text-field>
 
-        <v-text-field v-model="password" :rules="passwordRules" label="senha" :type="showPassword ? 'text' : 'password'" required>
+        <v-text-field v-model="password" :rules="passwordRules" label="senha" :type="showPassword ? 'text' : 'password'" required @keydown.enter="loginUsuario">
           <template v-slot:append>
         <v-icon @click="showPassword = !showPassword">
           {{ showPassword ? 'mdi-eye-off' : 'mdi-eye' }} <!-- Ícone de visibilidade -->

@@ -1461,6 +1461,7 @@ import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
 import { calculoTabelaPrincipal } from "../Calculo/CalculoTabela";
 import { triagemBeneficiosValidos } from "../Calculo/CalculoTabela/BeneficioAcumulado/triagemBeneficiosValidos";
 import { updateInformationForCalculoList } from "../api/controle-usuario/informationCalculo/updateInformationForCalculoList"
+import { getDataMaisAtualParaCampoAtualizarAte } from "../api/calculadora/getJuros/dataJurosSelic"
 //import { deleteInformationForCalculoToID } from "../api/controle-usuario/informationCalculo/deleteInformationForCalculoToID";
 import { EventBus } from "../eventBus/eventBus"
 //import Popup from '../components/Popup.vue'
@@ -1808,7 +1809,7 @@ export default {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Deletar Benefício!'
     }).then((result) => {
-      if (result.isConfirmed) {
+      if (result.value) {
         this.arrayBenficios =  this.arrayBenficios.filter(processos => processos.nb !== beneficio.nb);
         console.log("deletou")
         Swal.fire(
@@ -1925,6 +1926,7 @@ export default {
             beneficio: this.info_calculo.beneficio
           };
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
+          console.log("Retorno :", body, this.arrayBeneficioAcumuladosContaveis)
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
           this.totaisSalario()
@@ -3687,7 +3689,7 @@ export default {
             this.pacelasVencidas) *
           100
         ) / 100;
-        this.valor_corrigido = 35
+        /* this.valor_corrigido = 35 */
       this.formatacao();
       if (this.alcadaBoolean) {
         this.calculoDeOssada();
@@ -3714,7 +3716,7 @@ export default {
       this.valorHonorarios =
         (this.valorHonorarios * this.porcentagemHonorarios) / 100;
     },
-    atualizarTodosDados(info) {
+    async atualizarTodosDados(info) {
       this.alcadaArray = [];
       this.info_calculo = info;
       this.info_calculo.beneficio = this.refatoreNameBeneficio(
@@ -3766,7 +3768,24 @@ export default {
 
         }
       }
-      //this.dtFinal = this.info_calculo.dip;
+      
+
+      const datasSelic = await getDataMaisAtualParaCampoAtualizarAte();
+      let maiorData = new Date('01'-'01'-1990)
+      let menorData;
+      for await (let objeto of datasSelic){
+        const dataString = (objeto.data).split("-").reverse()
+        const newDate = new Date(dataString)
+        menorData = newDate
+        if(menorData > maiorData){
+          maiorData = menorData
+        }  
+      }
+      const data = new Date(String(maiorData))
+      const dataMaiorTratada = (`${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')}-${data.getFullYear()}`).split("-")
+      this.atulizacao = `${dataMaiorTratada[1]}/${dataMaiorTratada[2]}`
+
+
       this.pacelasVencidas = 0;
       this.pensaoPorMorte = "";
       this.calc_total = [];
