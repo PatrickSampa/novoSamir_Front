@@ -18,6 +18,7 @@
         <v-tabs-slider color="green"></v-tabs-slider>
         <v-tab @click="add_taxa = false">Cálculo</v-tab>
         <v-tab @click="acessoPortalADM()">Portal ADM</v-tab>
+        <v-tab @click="acessoPortalADM()">Ajuda</v-tab>
       </v-tabs>
     </v-card>
     <PortalADM v-if="add_taxa" />
@@ -263,6 +264,13 @@
               <b-form-input type="text" v-model="obj_beneficioAcumulado.nb" id="beneficio" size="sm">
               </b-form-input>
             </b-col>
+
+            <b-col sm="2" v-if="beneficio === true">
+              <label for="beneficio" class="labels">Data N.B Anterior</label>
+              <b-form-input type="text" v-model="obj_beneficioAcumulado.nbAnterior" id="beneficio" size="sm">
+              </b-form-input>
+            </b-col>
+
           </b-row>
         </b-card>
 
@@ -278,35 +286,38 @@
         </v-row>
         <v-row class="my-3">
           <v-col cols="1" class="mr-6">
-            <v-btn depressed color="primary" :loading="loading"
+            <v-btn depressed color="primary" style="margin-left: 5px; color: whitesmoke" :loading="loading"
               @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
           </v-col>
+
           <v-col cols="1">
-            <v-btn depressed color="secondary" @click="(mode = '')/*, calculo()*/">cancelar</v-btn>
-          </v-col>
-          <v-col cols="1">
-            <v-btn depressed color="primary" style="margin-left: 25px" :href="info_calculo.urlProcesso" target="_blank">
+            <v-btn depressed color="primary" style="margin-left: -5px; color: whitesmoke" :href="info_calculo.urlProcesso" target="_blank">
               Consultar Processo</v-btn>
           </v-col>
-          <v-col cols="3">
-            <v-btn depressed color="primary" style="margin-left: 145px" @click="verificarAdicaoNoLote()"
-              target="_blank">Adicionar ao Lote</v-btn>
-          </v-col>
-          <v-col cols="3">
-            <v-btn :loading="loading" depressed color="red" style="margin-left: 145px" target="_blank"
-              @click="deletarLote()">Deletar lote
-            </v-btn>
-          </v-col>
+
           <v-col cols="2">
-            <v-btn :loading="loading" depressed color="primary" @click="(mode = 'table'), AnexarMinutas()"
-              target="_blank">Anexar Minutas</v-btn>
-          </v-col>
-          <v-col cols="2">
-            <v-btn :loading="loading" depressed color="primary" @click="atualizarItemParaBanco()"
+            <v-btn :loading="loading" depressed color="primary" style="margin-left: 105px; color: whitesmoke" @click="atualizarItemParaBanco()"
               target="_blank">Atualizar</v-btn>
           </v-col>
         </v-row>
       </v-card>
+
+
+      <br>
+      <br>
+      <br>
+
+      <v-col cols="2">
+        <div style="display: flex; justify-content: space-between;">
+            <v-btn depressed color="blue" style="color: whitesmoke;" @click="verificarAdicaoNoLote()"
+              target="_blank">Adicionar ao Lote</v-btn>
+            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
+              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
+            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
+              @click="deletarLote()">Deletar lote</v-btn>
+          </div>
+      </v-col>
+
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
         Beneficios para calculo em lote
       </h3>
@@ -1945,8 +1956,8 @@ export default {
         return [
           { value: "data", text: "Data" },
           { value: "reajusteAcumulado", text: "Reajuste" },
-          { value: "salario", text: "Salário R$" },
-          { value: "correcao", text: "Correção Salarial" },
+          { value: "salario", text: "Salário Reajustado" },
+          { value: "correcao", text: "Correção Monetária" },
           { value: "salarioCorrigido", text: "Salário Corrigido R$" },
           { value: "juros", text: "Juros" },
           { value: "salarioJuros", text: "Salário Juros R$" },
@@ -4820,10 +4831,12 @@ export default {
       });
     axios.get(baseApiUrl + "/describeJuros").then((response) => {
       response.data.forEach((value) => {
-        this.optionsJuros.push({
+        if (value.type!=0){
+          this.optionsJuros.push({
           text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
           value: value.type,
-        });
+          });
+        }
       });
     });
 
