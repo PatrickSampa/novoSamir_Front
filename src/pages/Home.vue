@@ -282,18 +282,15 @@
         </v-row>
         <v-row class="my-3">
           <v-col cols="1" class="mr-6">
-            <v-btn depressed color="primary" :loading="loading"
+            <v-btn depressed color="primary" style="margin-left: 5px; color: whitesmoke" :loading="loading"
               @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
           </v-col>
           <v-col cols="1">
-            <v-btn depressed color="secondary" @click="(mode = '')/*, calculo()*/">cancelar</v-btn>
-          </v-col>
-          <v-col cols="1">
-            <v-btn depressed color="primary" style="margin-left: 25px" :href="info_calculo.urlProcesso" target="_blank">
+            <v-btn depressed color="primary" style="margin-left: -5px; color: whitesmoke" :href="info_calculo.urlProcesso" target="_blank">
               Consultar Processo</v-btn>
           </v-col>
           <v-col cols="2">
-            <v-btn :loading="loading" depressed color="primary" style="margin-left: 145px" @click="atualizarItemParaBanco()"
+            <v-btn :loading="loading" depressed color="primary" style="margin-left: 105px; color: whitesmoke" @click="atualizarItemParaBanco()"
               target="_blank">Atualizar</v-btn>
           </v-col>
         </v-row>
@@ -3793,6 +3790,7 @@ export default {
                 dcb: this.CalcularDataFinalMenorQueAnterior(value.dcb, value.dib),
                 rmi: value.rmi,
                 nb: value.nb,
+                nbAnterior: value.nbAnterior != "-" ? value.nbAnterior : "",
                 limiteMinimoMaximo: true,
                 salarioMinimo: false,
                 salario13: true,
@@ -4767,10 +4765,13 @@ export default {
       });
     axios.get(baseApiUrl + "/describeJuros").then((response) => {
       response.data.forEach((value) => {
-        this.optionsJuros.push({
+        if (value.type!=0){
+          this.optionsJuros.push({
           text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
           value: value.type,
         });
+        }
+        
       });
     });
 
