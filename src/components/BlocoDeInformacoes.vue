@@ -3,7 +3,7 @@
     <v-progress-linear v-if="!beneficiosInacumulveisBanco[0]" indeterminate color="teal"></v-progress-linear>
     <v-row>
       <button @click="dadosActive()" style="cursor: pointer">
-        Prencher dados Manualmente <v-icon>mdi-menu-up</v-icon>
+        Preencher Dados Manualmente <v-icon>mdi-menu-up</v-icon>
       </button>
     </v-row>
     <v-row v-if="exibir.tudo && beneficiosInacumulveisBanco[0]" class="mx-3">
@@ -108,7 +108,7 @@
         Tabela de Processos <v-icon>mdi-menu-up</v-icon>
       </button>
       <v-btn depressed :loading="loading" color="primary" @click="traigemAutomatico">Triar Automatico</v-btn>
-      <v-btn :loading="loading" depressed color="red" style="margin-left: 145px" target="_blank"
+      <v-btn :loading="loading" depressed color="red" style="margin-left: 460px; color: whitesmoke;" target="_blank"
         @click="deletarTodosOsInfos()">Deletar Todas as Informações
       </v-btn>
     </v-card-title>
