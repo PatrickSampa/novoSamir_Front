@@ -1926,7 +1926,7 @@ export default {
             beneficio: this.info_calculo.beneficio
           };
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
-          console.log("Retorno :", body, this.arrayBeneficioAcumuladosContaveis)
+          //console.log("Retorno :", body, this.arrayBeneficioAcumuladosContaveis)
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
           this.totaisSalario()
