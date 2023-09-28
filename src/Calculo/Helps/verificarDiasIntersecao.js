@@ -1,10 +1,17 @@
 import { ConverterToDate } from '../Helps/stringToDate'
 
-export  function verificarDiasDeIntersecao(dataInicioTabela,inicioCalculoAtivo, fimCalculoAtivo, inicioCalculoInacumulado, fimCalculoInacumulado){
-    console.log(ConverterToDate(inicioCalculoAtivo))
-    if(inicioCalculoAtivo > inicioCalculoInacumulado && fimCalculoAtivo < fimCalculoAtivo || fimCalculoAtivo){
-        const valorDiasRestantesMes = ConverterToDate(fimCalculoAtivo) - ConverterToDate(fimCalculoAtivo);
-        console.log(fimCalculoInacumulado)
-        return  valorDiasRestantesMes == 0 ? 1 : valorDiasRestantesMes;
-    }
+export  function verificarDiasDeIntersecao(inicioCalculo, dip, dib, dcb){
+    
+        const dataDcb = ConverterToDate(dcb) 
+        const dataInicioCalculo =ConverterToDate(inicioCalculo)
+        if(inicioCalculo.split("/")[1] == dcb.split("/")[1]){
+            return dataInicioCalculo - dataDcb == 0 ? 1 : dataInicioCalculo - dataDcb
+        }
+        
+        if(Number(inicioCalculo.split("/")[1]) < Number(dcb.split("/")[1])){
+            return (30 - Number(inicioCalculo.split("/")[0])) + 1
+        }
+        
+
+    console.log(inicioCalculo, dip, dib, dcb)
 }
