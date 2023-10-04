@@ -2,12 +2,14 @@ import { getcalculoBeneficioinacumulavel } from "../../../api/calculadora/calcul
 import { quantosDiasFaltaParaAcabarOMes } from "../../Helps/quantosDiasFaltaParaAcabarOMes";
 import { validarValorDoDiaSerConsideradoNaTabelaDeCalculo } from "../../Helps/validarValorDoDiaSerConsideradoNaTabelaDeCalculo";
 import { verificarDiasDeIntersecao } from "../../Helps/verificarDiasIntersecao";
+import { receberRecebidoParaDecimoTerceiroSalario } from "../../Helps/receberDataParaDecimoTerceiroSalarioRecebido"
 
 var contadorMesDe13SalarioBeneficioInacumulavel = 0;
 var contadorMesDe13SalarioSalarioBeneficioPrincipal = 0;
 var arrayDeQUnatidadeDeMessesDeCadaAno = []
+let beneficiosAcumuladosParaDecimoTerceiro;
 export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal, beneficiosAcumulados, tabelaPrincipal) {
-
+  beneficiosAcumuladosParaDecimoTerceiro = beneficiosAcumulados
   const { inicioCalculo, dip } = informationBeneficioPrincpal;
   tabelaPrincipal = tabelaPrincipal.map((linhaTabelaPrincipal) => {
     conatdorDe13SalarioBeneficioPrincipal(linhaTabelaPrincipal, inicioCalculo, dip)
@@ -32,6 +34,7 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
       salarioTotal: linhaTabelaPrincipal.salarioTotal,
     }
   });
+  
   const tabelasFeitas = await beneficiosAcumulados.map(async (beneficioInacumulavel) => {
 
 
@@ -49,41 +52,48 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
       salario13Obrigatorio: beneficioInacumulavel.salario13Obrigatorio,
       selic: informationBeneficioPrincpal.selic,
     };
+    
     const tabelaBeneficioInacumulavel = await getcalculoBeneficioinacumulavel(body)
-
+    console.log("LIXO ",tabelaBeneficioInacumulavel)
+    
 
     tabelaPrincipal = await Promise.all(tabelaPrincipal.map(async (linhaTabelaPrincipal) => {
+     
       let [, mesDCBBeneficioInacumulavel, anoDCBBeneficioInacumulavel] = beneficioInacumulavel.dcb.split("/")
       var [diaLinhaTabelaPrincipal, mesLinhaTabelaPrincipal, anoLinhaTabelaPrincipal] = linhaTabelaPrincipal.data.split("/")
       
       if(anoLinhaTabelaPrincipal > anoDCBBeneficioInacumulavel || (anoLinhaTabelaPrincipal == anoDCBBeneficioInacumulavel && mesLinhaTabelaPrincipal > mesDCBBeneficioInacumulavel) ){
+        //console.log("1 ", linhaTabelaPrincipal)
         return linhaTabelaPrincipal;
       }
       if (diaLinhaTabelaPrincipal != "01" && diaLinhaTabelaPrincipal != "13Salario") {
+        console.log("2")
         diaLinhaTabelaPrincipal = "01"
       }
       let linhaBeneficioInacumulavel = await tabelaBeneficioInacumulavel.find(linha => linha.data == (diaLinhaTabelaPrincipal + "/" + mesLinhaTabelaPrincipal + "/" + anoLinhaTabelaPrincipal))
+      
       if (linhaBeneficioInacumulavel !== undefined) {
+        console.log("3")
         if (beneficioInacumulavel.beneficio.includes("Seguro Desemprego") ||
           beneficioInacumulavel.beneficio.includes("Auxílio Emergencial") ||
           beneficioInacumulavel.beneficio.includes("Seguro Defesa")) {
-            console.log("Retornou1")
+            //console.log("Retornou1 ",await descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicioCalculo, dip, dib, dcb, beneficioInacumulavel.salario13))
           return await descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicioCalculo, dip, dib, dcb, beneficioInacumulavel.salario13);
         } else {
-          console.log("Retornou2")
-          //console.log("CHAMOU N VEZES", await decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicioCalculo, dip, dib, dcb, beneficioInacumulavel.salario13))
-          //console.log(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicioCalculo, dip, dib, dcb, beneficioInacumulavel.salario13)
+          console.log("Retornou2 ")
           return await decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicioCalculo, dip, dib, dcb, beneficioInacumulavel.salario13);
         }
       } else {
-        console.log("Retornou3")
+        //console.log("Retornou3 ",linhaTabelaPrincipal)
         return linhaTabelaPrincipal
       }
     }));
     return await tabelaPrincipal
   });
+  
   return tabelasFeitas[tabelasFeitas.length - 1];
 }
+
 
 async function conatdorDe13SalarioBeneficioPrincipal(linhaTabelaPrincipal, inicioCalculo, dip) {
   if (linhaTabelaPrincipal.data == inicioCalculo || linhaTabelaPrincipal.data == dip) {
@@ -117,6 +127,7 @@ async function descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioIn
     let mesRecibidosNoAno = arrayDeQUnatidadeDeMessesDeCadaAno.find(obj => obj.data === linhaTabelaPrincipal.data).quantidadeDeMes;
     recebido = (recebido / mesRecibidosNoAno) * contadorMesDe13SalarioBeneficioInacumulavel;
   }
+  
   return {
     data: linhaTabelaPrincipal.data,
     reajusteAcumulado: linhaTabelaPrincipal.reajusteAcumulado,
@@ -133,8 +144,8 @@ async function descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioIn
 }
 
 async function decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicioCalculo, dip, dib, dcb, salario13) {
+  //console.log("RECEBEU: ",linhaTabelaPrincipal)
   let recebido = await verificadorRecibidoEmDib_InicioCalculo_DIP_DCB(linhaTabelaPrincipal.data, dib, inicioCalculo, dip, dcb, linhaBeneficioInacumulavel.salario);
-  //console.log("RECEBIDO: ", linhaTabelaPrincipal.data, dib, inicioCalculo, dip, dcb, linhaBeneficioInacumulavel.salario)
   if (salario13 && recebido >= (linhaBeneficioInacumulavel.salario / 2) && linhaTabelaPrincipal.data.split("/")[0] != "13Salario") {
     contadorMesDe13SalarioBeneficioInacumulavel++;
     if (parseInt(linhaTabelaPrincipal.data.split("/")[1]) === 1) {
@@ -146,15 +157,18 @@ async function decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicio
     contadorMesDe13SalarioSalarioBeneficioPrincipal = 1;
   }
   if (linhaTabelaPrincipal.data.split("/")[0] == "13Salario") {
-    recebido = recebido * (contadorMesDe13SalarioBeneficioInacumulavel) / 12;
-
+    //recebido = recebido * (contadorMesDe13SalarioBeneficioInacumulavel-1) / 12;
+    const valoreRetornado = await receberRecebidoParaDecimoTerceiroSalario(beneficiosAcumuladosParaDecimoTerceiro.pop().dib) * (recebido/12)
+    recebido = valoreRetornado;
 
   }
+  
   return {
     data: linhaTabelaPrincipal.data,
     reajusteAcumulado: linhaTabelaPrincipal.reajusteAcumulado,
     devido: linhaTabelaPrincipal.devido,
-    reajusteRecebido: Math.floor((linhaTabelaPrincipal.reajusteAcumulado * linhaBeneficioInacumulavel.reajusteAcumulado) * 10000) / 10000,
+    //reajusteRecebido: Math.floor((linhaTabelaPrincipal.reajusteAcumulado * linhaBeneficioInacumulavel.reajusteAcumulado) * 10000) / 10000,
+    reajusteRecebido: linhaBeneficioInacumulavel.reajusteAcumulado,
     recebido: Math.floor((linhaTabelaPrincipal.recebido + recebido) * 100) / 100,
     salario: Math.floor((linhaTabelaPrincipal.salario - recebido) * 100) / 100,
     correcao: linhaTabelaPrincipal.correcao,
@@ -165,18 +179,17 @@ async function decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicio
   };
 }
 async function verificadorRecibidoEmDib_InicioCalculo_DIP_DCB(dataLinhaTabela, dib, inicioCalculo, dip, dcb, recebido) {
-  //console.log("RECEBIDO :", dataLinhaTabela, dib, inicioCalculo, dip, dcb)
   if (mesmoMesAno(dataLinhaTabela, dib) || mesmoMesAno(dataLinhaTabela, inicioCalculo) || mesmoMesAno(dataLinhaTabela, dip) || mesmoMesAno(dataLinhaTabela, dcb)) {
     const diasConsiderados = await calcularDiasConsiderados(dataLinhaTabela, dib, inicioCalculo, dip, dcb);
     if (diasConsiderados === null) {
-      console.log("sddsd")
+      //console.log("merd1", recebido)
       return recebido;
     } else {
-      console.log("aqui, ", recebido, diasConsiderados)
+      //console.log("merd2", recebido)
       return recebido * diasConsiderados / 30;
     }
   } else {
-    console.log("merd", recebido)
+    //console.log("merd3", recebido)
     return recebido;
   }
 }
@@ -199,8 +212,8 @@ async function calcularDiasConsiderados(dataLinhaTabela, dib, inicioCalculo, dip
     console.log("IF 2")
     return validarValorDoDiaSerConsideradoNaTabelaDeCalculo(quantosDiasFaltaParaAcabarOMes(dib), parseInt(dib.split("/")[1]));
   } else if (mesmoMesAno(dataLinhaTabela, inicioCalculo)) {
-    console.log("IF 3")
-    console.log("TESTE AQUI: ", /* verificarDiasDeIntersecao(inicioCalculo, dip, dib, dcb) */validarValorDoDiaSerConsideradoNaTabelaDeCalculo(verificarDiasDeIntersecao(inicioCalculo, dip, dib, dcb), inicioCalculo.split("/")[1]))
+    console.log("if 3")
+    console.log(inicioCalculo, dip, dib, dcb)
     return validarValorDoDiaSerConsideradoNaTabelaDeCalculo(verificarDiasDeIntersecao(inicioCalculo, dip, dib, dcb), inicioCalculo.split("/")[1]);
     //console.log(validarValorDoDiaSerConsideradoNaTabelaDeCalculo(verificarDiasDeIntersecao(inicioCalculo, dip, dib, dcb), inicioCalculo.split("/")[1]))
     //return validarValorDoDiaSerConsideradoNaTabelaDeCalculo(quantosDiasFaltaParaAcabarOMes(inicioCalculo), inicioCalculo.split("/")[1]);
