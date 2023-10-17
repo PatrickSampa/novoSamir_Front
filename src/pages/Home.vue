@@ -267,7 +267,7 @@
 
             <b-col sm="2" v-if="beneficio === true">
               <label for="beneficio" class="labels">Data N.B Anterior</label>
-              <b-form-input type="text" v-model="obj_beneficioAcumulado.nbAnterior" id="beneficio" size="sm">
+              <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.nbAnterior" id="beneficio" size="sm">
               </b-form-input>
             </b-col>
 
@@ -1499,6 +1499,7 @@ export default {
       dtFinal: "",
       nome: "",
       nb: "",
+      nbAnterior: "",
       nmprocesso: "",
       salarioInicial: "",
       objetoDoCalculo: "CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO",
@@ -3904,6 +3905,7 @@ export default {
         dcb: null,
         rmi: null,
         nb: null,
+        nbAnterior: null,
         obrigatorio: false,
         salario13: true,
         limiteMinimoMaximo: true,
@@ -4751,7 +4753,14 @@ export default {
      /*  this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
         (etiqueta) => {
           if (etiqueta) { */
-            this.loading = true;
+            Swal.fire({
+      title: `Deseja Anexar Minutas ao Sapiens?`,
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Anexar',
+    }).then((result) => {
+      if (result.value) {
+        this.loading = true;
             let minutas = [];
             this.calculoLote.forEach((minuta) => {
               minutas.push({
@@ -4774,7 +4783,7 @@ export default {
                 this.loading = false;
                 console.log(response);
                 this.$alert(
-                  response.data.length,
+                  response.data.length -1,
                   "Minutas anexadas: ",
                   "success"
                 );
@@ -4791,6 +4800,12 @@ export default {
                 console.log(error.message);
                 console.log("error.message");
               });
+      } else if(result.dismiss == "cancel"){
+        Swal.fire('Minutas Não Anexadas', '', 'info')
+      }
+    })
+       
+            
 /*           }
         }
       ); */

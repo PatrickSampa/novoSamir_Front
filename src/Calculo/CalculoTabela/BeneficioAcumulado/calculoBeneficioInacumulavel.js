@@ -50,11 +50,12 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
       salarioMinimo: beneficioInacumulavel.salarioMinimo,
       porcentagemRMI: parseFloat(beneficioInacumulavel.porcentagemRmi),
       salario13Obrigatorio: beneficioInacumulavel.salario13Obrigatorio,
+      dibAnterior: beneficioInacumulavel.nbAnterior,
       selic: informationBeneficioPrincpal.selic,
     };
     
     const tabelaBeneficioInacumulavel = await getcalculoBeneficioinacumulavel(body)
-    console.log("LIXO ",tabelaBeneficioInacumulavel)
+    
     
 
     tabelaPrincipal = await Promise.all(tabelaPrincipal.map(async (linhaTabelaPrincipal) => {

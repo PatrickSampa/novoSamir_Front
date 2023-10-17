@@ -13,7 +13,8 @@ export const userKey = '__gbelpa_user'
 //export const apiSapiens = 'http://10.191.9.2:80/samir'
 
 /* export const baseApiUrl = 'http://localhost:3000/' */
- export const baseApiUrl = 'http://10.191.8.254:3004'
+ //export const baseApiUrl = 'http://10.191.8.254:3004'
+ export const baseApiUrl = 'http://10.191.8.198:8888'
  //http://10.191.8.242:8888
 
 //TESTANDO NOVA BRANCH
