@@ -108,7 +108,7 @@
           <v-col cols="12" sm="6" md="3">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="limiteMinimoMaximo"
               :value="limiteMinimoMaximo" />
-            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Minimo e Máximo</label>
+            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Mínimo e Máximo</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salarioMinimo"
@@ -154,7 +154,7 @@
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salario13Obrigatorio"
               :value="salario13Obrigatorio" />
-            <label for="salario13" class="labels pb-2">13° Salário Obrigatorio</label>
+            <label for="salario13" class="labels pb-2">13° Salário Obrigatório</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="selic" :value="selic" />
@@ -208,7 +208,7 @@
           </b-row>
           <b-row>
             <b-col sm="3" v-if="beneficio === true">
-              <label for="beneficio" class="labels">Limite de Minimo e Maximo</label>
+              <label for="beneficio" class="labels">Limite de Mínimo e Máximo</label>
 
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
                 v-model="obj_beneficioAcumulado.limiteMinimoMaximo" :value="obj_beneficioAcumulado.limiteMinimoMaximo"
@@ -319,7 +319,7 @@
       </v-col>
 
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
-        Beneficios para calculo em lote
+        Benefícios para cálculo em lote
       </h3>
       
       <template v-if="exibirCalculoEmLote">
@@ -353,8 +353,10 @@
       
       <!-- TABELA PRNCIPAL -->
       <br />
+      <br>
+      <br>
       <h1 v-if="add_taxa == false" class="titulo">PREENCHA OS DADOS</h1>
-      <h4 v-if="add_taxa == false" class="center">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
+      <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
       <div v-if="add_taxa == false" class="rowInputs">
         <div v-if="add_taxa == false" class="column">
           <label class="camposInput">
@@ -390,7 +392,7 @@
             class="inputToPrint" id="inicioJurosForm" />
           <br />
           <!-- Criar Função -->
-          <label class="camposInput">Valido até:
+          <label class="camposInput">Válido até:
             <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label class="inputToPrint"
             id="calculadoEmForm" />
           <br />
@@ -400,7 +402,7 @@
           <br />
         </div>
       </div>
-      <h4 class="center" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
+      <h4 class="center-first" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
       <div v-if="add_taxa == false">
         <div class="resumoProcesso">
           <div class="columnResumoProcesso">
@@ -438,7 +440,7 @@
       <br />
       <div class="rowCalculo" v-if="add_taxa == false">
         <div class="columnRight">
-          <label class="camposInput">Soma do Principal: R$</label>
+          <label class="camposInput">Soma do Principal: R$ </label>
           <br />
           <label class="camposInput">Juros de mora: R$</label>
           <br />
@@ -655,7 +657,7 @@
         </div>
       </div>
 
-      <h4 class="center">PLANILHA DE CÁLCULO</h4>
+      <h4 class="center-first">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
         <div class="column">
           <label class="camposInputAlcada">
@@ -763,7 +765,7 @@
         Adicionar Linha</v-btn>
 
       <div id="tabelaImpostoRenda">
-        <h4 class="center">
+        <h4 class="center-first">
           RENDIMENTOS RECEBIDOS ACUMULADAMENTE PARA IMPOSTO DE RENDA
         </h4>
         <table id="impostoRenda">
@@ -852,28 +854,29 @@
       </div>
 
       <!-- Gerar pdf -->
-
-      <h1 v-if="add_taxa == false" class="titulo">GERADOR DE PDF</h1>
+      <br>
+      <br>
+      <br>
+      <h1 v-if="add_taxa == false" class="titulo">MEMÓRIA DE CÁLCULO</h1>
       
       <v-card v-if="!add_taxa" id="areaToPrint">
         <!-- <Popup v-if="showPopup" :showPopup="showPopup" :popupTitle="popupTitle" :popupMessage="popupMessage" @close="closePopup" /> -->
         <div>
-          <h3 class="centerAGU">AGU</h3>
+          <h3 class="centerAGU"><img src="../assets/agu.png" width="150" height="90" alt="Simbolo da Advocacia-Geral da União"></h3>
           <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
-          <h4 class="center">
-            EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
+          <h4 style="text-align: center">EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
           </h4>
 
           <table id="info-inicial">
             <tbody>
               <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Processo n°</td>
+                <td id="info-inicial-coluna">Processo n°:</td>
                 <td id="info-inicial-coluna">
                   {{ info_calculo.numeroDoProcesso }}
                 </td>
               </tr>
               <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Parte Autora</td>
+                <td id="info-inicial-coluna">Parte Autora:</td>
                 <td id="info-inicial-coluna">{{ info_calculo.nome }}</td>
               </tr>
             </tbody>
@@ -1582,7 +1585,7 @@ export default {
       salarioMinimo: false,
       atulizacao: "",
       headersCalculoLote: [
-        { value: "numeroDoProcesso", text: "Numero Do Processo" },
+        { value: "numeroDoProcesso", text: "Número Do Processo" },
         { value: "nome", text: "Autor" },
         { value: "tipo", text: "Tipo" },
         { value: "beneficio", text: "Recebeu Benefício" },
@@ -2519,40 +2522,7 @@ export default {
             console.log("error 1");
           });
       }
-
-      // this.calculoLote.push({
-      //   numeroDoProcesso: this.info_calculo.numeroDoProcesso,
-      //   nome: this.info_calculo.nome,
-      //   dataDeAjuizamento: this.info_calculo.dataAjuizamento,
-      //   inicio_juros: this.info_calculo.citacao,
-      //   numeroDoBeneficio: this.info_calculo.nb,
-      //   rmi: this.salarioInicial,
-      //   recebeuBeneficio: this.beneficio,
-      //   termoInicial: this.dtInicial,
-      //   termoFinal: this.dtFinal,
-      //   beneficio: this.info_calculo.beneficio,
-      //   cpf: this.info_calculo.cpf,
-      //   honorarioAdvocativosData: this.DataHonorarios,
-      //   honorariosAdvocativos: this.porcentagemHonorarios,
-      //   dataDePagamento: this.info_calculo.dip,
-      //   citacao: this.info_calculo.citacao,
-      //   nomeBeneficioBeneficioAcumulado,
-      //   dataDeInicioBeneficioAcumulado,
-      //   dataFinalBeneficioAcumulado,
-      //   rmilBeneficioAcumulado,
-      //   acordo: this.procntagem_acordo,
-      //   tipoJuros: this.tipoJuros,
-      //   tipoCorrecao: this.tipoCorrecao,
-      //   dibAnterior: this.dibAnterior,
-      //   atualizacao: this.atulizacao,
-      //   possuiDecimoTerceiro: this.salario13,
-      //   possuiJuros: this.boolJuros,
-      //   alcada: this.alcadaBoolean,
-      //   limiteMinimoMaximo: this.limiteMinimoMaximo,
-      //   salarioMinimo: this.salarioMinimo,
-      //   aps: this.info_calculo.aps,
-      //   usuario: 1
-      // })
+      
       console.log(this.calculoLote[this.calculoLote.length - 1]);
     },
     removerItemLote(dado) {
@@ -4272,6 +4242,7 @@ export default {
         }
 
         #info-inicial-coluna {
+
           width: 15%;
           text-align: left;
           border: 2px solid white;
@@ -4705,49 +4676,6 @@ export default {
       memoriaDeCalculo += "</body></html>";
 
       this.memoriaCalculoHTM = memoriaDeCalculo;
-      //console.log(memoriaDeCalculo);
-
-      // const body = {
-      //   login: {
-      //     cpf: "02127337298",
-      //     senha: "Senhasenh4",
-      //   },
-      //   etiqueta: "LIDO BOOT",
-      //   minutas: [
-      //     {
-      //       numeroprocesso: "10033030920204013502",
-      //       conteudo: memoriaDeCalculo,
-      //     }
-      //   ]
-      // };
-
-      // axios
-      // .post(`http://localhost:3000/teste`, body)
-      // .then((response) => {
-      //   console.log(response);
-      // })
-      // .catch((error) => {
-      //   console.log(error);
-      // });
-
-      // newWin.document.write("<html><head>");
-      // newWin.document.write(
-      //   `<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`
-      // ); // <title> CABEÇALHO DO PDF.
-      // newWin.document.write(style); // INCLUI UM ESTILO NA TAB HEAD
-      // newWin.document.write("</head>");
-      // newWin.document.write("<body>");
-      // // newWin.document.write(`<img class="logo" src="${this.logo}">`);
-      // newWin.document.write(`
-      // <div class="center">
-      // </div>`);
-
-      // newWin.document.write(divToPrint.outerHTML);
-      // newWin.document.write("</body></html>");
-
-      // newWin.print();
-
-      // newWin.close();
     },
     AnexarMinutas() {
      /*  this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
@@ -4949,8 +4877,18 @@ v-card {
   margin-left: 3%;
 }
 
+.center-first{
+  text-align: center;
+  background-color: #FBFACD;
+  border-radius: 10px;
+  padding: 3px;
+}
+
 .center {
   text-align: center;
+  background-color: rgb(194, 216, 235);
+  border-radius: 10px;
+  padding: 3px;
 }
 
 .centerAGU {
