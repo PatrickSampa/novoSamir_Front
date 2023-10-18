@@ -3,7 +3,7 @@
     <v-progress-linear v-if="!beneficiosInacumulveisBanco[0]" indeterminate color="teal"></v-progress-linear>
     <v-row>
       <button @click="dadosActive()" style="cursor: pointer">
-        Preencher Dados Manualmente <v-icon>mdi-menu-up</v-icon>
+        Prencher dados Manualmente <v-icon>mdi-menu-up</v-icon>
       </button>
     </v-row>
     <v-row v-if="exibir.tudo && beneficiosInacumulveisBanco[0]" class="mx-3">
@@ -108,34 +108,29 @@
         Tabela de Processos <v-icon>mdi-menu-up</v-icon>
       </button>
       <v-btn depressed :loading="loading" color="primary" @click="traigemAutomatico">Triar Automatico</v-btn>
-      <v-btn :loading="loading" depressed color="red" style="margin-left: 540px; color: whitesmoke;" target="_blank"
+      <v-btn :loading="loading" depressed color="red" style="margin-left: 145px" target="_blank"
         @click="deletarTodosOsInfos()">Deletar Todas as Informações
       </v-btn>
     </v-card-title>
     <v-data-table v-if="exibir.processos" :headers="headers" :items="infos" item-key="name" class="elevation-1">
       <template v-slot:item="{ item }">
         <tr @click="tranferir(item.id); itemClicked = item.id">
-          
-          <td  class="py-3 cell-clicked" :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent', cursor: 'pointer'}" @click="handleClick(item.id)">
-            <span style="color:#1976d2">{{ item.numeroDoProcesso }}</span>
+          <td  class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="tranferir(item.id); itemClicked = item.id">
+            {{ item.numeroDoProcesso }}
           </td>
-
-          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', 'background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">{{ item.nome }}</td>
-          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', 'background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">{{ item.tipo }}</td>
-          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', 'background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">{{ item.cpf }}</td>
-          
-          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', 'background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.nome }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.tipo }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.cpf }}</td>
+          <td>
             <v-icon v-if="item.beneficiosAcumulados[0]" color="green">
               mdi-check-outline
             </v-icon>
           </td>
-
-          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', 'background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">
+          <td>
             <v-btn :loading="loading" icon @click="deletarInforPorID(item)">
               <v-icon color="red">mdi-delete</v-icon>
             </v-btn>
           </td>
-          
         </tr>
       </template>
     </v-data-table>

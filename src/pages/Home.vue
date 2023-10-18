@@ -108,7 +108,7 @@
           <v-col cols="12" sm="6" md="3">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="limiteMinimoMaximo"
               :value="limiteMinimoMaximo" />
-            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Mínimo e Máximo</label>
+            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Minimo e Máximo</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salarioMinimo"
@@ -154,7 +154,7 @@
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salario13Obrigatorio"
               :value="salario13Obrigatorio" />
-            <label for="salario13" class="labels pb-2">13° Salário Obrigatório</label>
+            <label for="salario13" class="labels pb-2">13° Salário Obrigatorio</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="selic" :value="selic" />
@@ -208,7 +208,7 @@
           </b-row>
           <b-row>
             <b-col sm="3" v-if="beneficio === true">
-              <label for="beneficio" class="labels">Limite de Mínimo e Máximo</label>
+              <label for="beneficio" class="labels">Limite de Minimo e Maximo</label>
 
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
                 v-model="obj_beneficioAcumulado.limiteMinimoMaximo" :value="obj_beneficioAcumulado.limiteMinimoMaximo"
@@ -243,9 +243,6 @@
               </v-btn>
             </b-col>  
 
-
-
-
             <b-col sm="3" v-if="beneficio === true">
               <label for="beneficio" class="labels">Desconto obrigatório</label>
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
@@ -264,7 +261,6 @@
               <b-form-input type="text" v-model="obj_beneficioAcumulado.nb" id="beneficio" size="sm">
               </b-form-input>
             </b-col>
-
             <b-col sm="2" v-if="beneficio === true">
               <label for="beneficio" class="labels">Data N.B Anterior</label>
               <b-form-input type="text" v-model="obj_beneficioAcumulado.nbAnterior" id="beneficio" size="sm">
@@ -289,12 +285,10 @@
             <v-btn depressed color="primary" style="margin-left: 5px; color: whitesmoke" :loading="loading"
               @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
           </v-col>
-
           <v-col cols="1">
             <v-btn depressed color="primary" style="margin-left: -5px; color: whitesmoke" :href="info_calculo.urlProcesso" target="_blank">
               Consultar Processo</v-btn>
           </v-col>
-
           <v-col cols="2">
             <v-btn :loading="loading" depressed color="primary" style="margin-left: 105px; color: whitesmoke" @click="atualizarItemParaBanco()"
               target="_blank">Atualizar</v-btn>
@@ -302,11 +296,11 @@
         </v-row>
       </v-card>
 
-
-      <br>
-      <br>
-      <br>
-
+         
+    <br>
+    <br>
+    <br>
+  
       <v-col cols="2">
         <div style="display: flex; justify-content: space-between;">
             <v-btn depressed color="blue" style="color: whitesmoke;" @click="verificarAdicaoNoLote()"
@@ -317,9 +311,8 @@
               @click="deletarLote()">Deletar lote</v-btn>
           </div>
       </v-col>
-
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
-        Benefícios para cálculo em lote
+        Beneficios para calculo em lote
       </h3>
       
       <template v-if="exibirCalculoEmLote">
@@ -353,10 +346,8 @@
       
       <!-- TABELA PRNCIPAL -->
       <br />
-      <br>
-      <br>
       <h1 v-if="add_taxa == false" class="titulo">PREENCHA OS DADOS</h1>
-      <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
+      <h4 v-if="add_taxa == false" class="center">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
       <div v-if="add_taxa == false" class="rowInputs">
         <div v-if="add_taxa == false" class="column">
           <label class="camposInput">
@@ -392,7 +383,7 @@
             class="inputToPrint" id="inicioJurosForm" />
           <br />
           <!-- Criar Função -->
-          <label class="camposInput">Válido até:
+          <label class="camposInput">Valido até:
             <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label class="inputToPrint"
             id="calculadoEmForm" />
           <br />
@@ -402,7 +393,7 @@
           <br />
         </div>
       </div>
-      <h4 class="center-first" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
+      <h4 class="center" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
       <div v-if="add_taxa == false">
         <div class="resumoProcesso">
           <div class="columnResumoProcesso">
@@ -440,7 +431,7 @@
       <br />
       <div class="rowCalculo" v-if="add_taxa == false">
         <div class="columnRight">
-          <label class="camposInput">Soma do Principal: R$ </label>
+          <label class="camposInput">Soma do Principal: R$</label>
           <br />
           <label class="camposInput">Juros de mora: R$</label>
           <br />
@@ -657,7 +648,7 @@
         </div>
       </div>
 
-      <h4 class="center-first">PLANILHA DE CÁLCULO</h4>
+      <h4 class="center">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
         <div class="column">
           <label class="camposInputAlcada">
@@ -765,7 +756,7 @@
         Adicionar Linha</v-btn>
 
       <div id="tabelaImpostoRenda">
-        <h4 class="center-first">
+        <h4 class="center">
           RENDIMENTOS RECEBIDOS ACUMULADAMENTE PARA IMPOSTO DE RENDA
         </h4>
         <table id="impostoRenda">
@@ -854,29 +845,28 @@
       </div>
 
       <!-- Gerar pdf -->
-      <br>
-      <br>
-      <br>
-      <h1 v-if="add_taxa == false" class="titulo">MEMÓRIA DE CÁLCULO</h1>
+
+      <h1 v-if="add_taxa == false" class="titulo">GERADOR DE PDF</h1>
       
       <v-card v-if="!add_taxa" id="areaToPrint">
         <!-- <Popup v-if="showPopup" :showPopup="showPopup" :popupTitle="popupTitle" :popupMessage="popupMessage" @close="closePopup" /> -->
         <div>
-          <h3 class="centerAGU"><img src="../assets/agu.png" width="150" height="90" alt="Simbolo da Advocacia-Geral da União"></h3>
+          <h3 class="centerAGU">AGU</h3>
           <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
-          <h4 style="text-align: center">EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
+          <h4 class="center">
+            EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
           </h4>
 
           <table id="info-inicial">
             <tbody>
               <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Processo n°:</td>
+                <td id="info-inicial-coluna">Processo n°</td>
                 <td id="info-inicial-coluna">
                   {{ info_calculo.numeroDoProcesso }}
                 </td>
               </tr>
               <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Parte Autora:</td>
+                <td id="info-inicial-coluna">Parte Autora</td>
                 <td id="info-inicial-coluna">{{ info_calculo.nome }}</td>
               </tr>
             </tbody>
@@ -1318,7 +1308,8 @@
                 this.info_calculo.dib == null || this.info_calculo.dib == ""
                 ? this.dtInicial
                 : this.info_calculo.dib
-              }} </label><label class="inputToPrintAlcada" id="dibJudPlanilha" />
+              }} </label>
+              <label class="inputToPrintAlcada" id="dibJudPlanilha" />
             <br />
             <label class="camposInputAlcada">DIB Anterior:
               {{
@@ -1474,8 +1465,6 @@ import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
 import { calculoTabelaPrincipal } from "../Calculo/CalculoTabela";
 import { triagemBeneficiosValidos } from "../Calculo/CalculoTabela/BeneficioAcumulado/triagemBeneficiosValidos";
-import { updateInformationForCalculoList } from "../api/controle-usuario/informationCalculo/updateInformationForCalculoList"
-import { getDataMaisAtualParaCampoAtualizarAte } from "../api/calculadora/getJuros/dataJurosSelic"
 //import { deleteInformationForCalculoToID } from "../api/controle-usuario/informationCalculo/deleteInformationForCalculoToID";
 import { EventBus } from "../eventBus/eventBus"
 //import Popup from '../components/Popup.vue'
@@ -1496,7 +1485,6 @@ export default {
       mode: "",
       add_taxa: false,
       beneficio: false,
-      nbAnterior: null,
       pesquisa: {},
       infos: [],
       dtInicial: "",
@@ -1526,6 +1514,7 @@ export default {
       ],
       logo: require("../assets/logo.png"),
       todas_taxas: [],
+      nbAnterior: null,
       all_info: [],
       calc_total: [],
       info_calculo: {},
@@ -1585,7 +1574,7 @@ export default {
       salarioMinimo: false,
       atulizacao: "",
       headersCalculoLote: [
-        { value: "numeroDoProcesso", text: "Número Do Processo" },
+        { value: "numeroDoProcesso", text: "Numero Do Processo" },
         { value: "nome", text: "Autor" },
         { value: "tipo", text: "Tipo" },
         { value: "beneficio", text: "Recebeu Benefício" },
@@ -1654,39 +1643,34 @@ export default {
     },
   },
   methods: {
-    async atualizarItemParaBanco(){ 
+    atualizarItemParaBanco(){
       const novoObjetoParaAtualizar = {...this.info_calculo}
       delete novoObjetoParaAtualizar.aps;
       delete novoObjetoParaAtualizar.idUser;
       const dibParaTratarMaisUm = this.dtFinal
       const dibInfoCalculo = this.info_calculo.dip
+      var message = "Propriedades alteradas: \n"
       const arrayPropriedadesAlteradas = []
-      const valorInputRmi = (String(this.salarioInicial).indexOf(".")) > -1? this.salarioInicial: String(this.salarioInicial)+"0"+"0";
       let novoRmiSemVirgula = (this.info_calculo.rmi).replace(",","")
-      let novoRmiSemVirgulaInputSemVirgula = String((valorInputRmi)).replace(",","")
+      let novoRmiSemVirgulaInputSemVirgula = String((this.salarioInicial)).replace(",","")
 
-    
+  
 
       const arrayDib = dibParaTratarMaisUm.split("/")
-      let dia = String(Number(arrayDib[0])+1)
-      if(dia<=10){
-        dia = 0+dia
-      }
-      //let dia = 0+String(Number(arrayDib[0])+1)
+      const dia = Number(arrayDib[0])+1
       const mes = arrayDib[1]
       const ano = arrayDib[2]
-      const novaDataDib = new Date(`${ano}-${mes}-${dia}`)
-     
-
-
+      const novaDataDib = new Date(`${ano}-${mes}-${String(dia)}`)
       
+
+
+
       const arrayDibCalculo = dibInfoCalculo.split("/")
       const diaInfoCalculo = arrayDibCalculo[0]
       const mesInfoCalculo = arrayDibCalculo[1]
       const anoInfoCalculo = arrayDibCalculo[2]
-      
       const novaDataDibInfoCalculo = new Date(`${anoInfoCalculo}-${mesInfoCalculo}-${diaInfoCalculo}`)
-      //console.log([novaDataDib,dibParaTratarMaisUm],[dibInfoCalculo,novaDataDibInfoCalculo])
+      
       
       
 
@@ -1704,13 +1688,10 @@ export default {
       
       if(novaDataDib.getTime() != novaDataDibInfoCalculo.getTime()){
         arrayPropriedadesAlteradas.push("Data Final")
-        const data = this.dtFinal.split("/")
-        let diaMenosUm = String(Number(data[0])-1)
-        const dataParaMandarAoBancoMenosUmDia = `${diaMenosUm}/${String(data[1])}/${String(data[2])}`
-        novoObjetoParaAtualizar.dibFinal = dataParaMandarAoBancoMenosUmDia
+        novoObjetoParaAtualizar.dibFinal = this.dtFinal
       }
 
-      //console.log(novoRmiSemVirgula.replace(".","") , novoRmiSemVirgulaInputSemVirgula.replace(".",""))
+      
       if(novoRmiSemVirgula.replace(".","") != novoRmiSemVirgulaInputSemVirgula.replace(".","")){
         arrayPropriedadesAlteradas.push("RMI")
         novoObjetoParaAtualizar.rmi = this.salarioInicial
@@ -1721,84 +1702,51 @@ export default {
         novoObjetoParaAtualizar.citacao = this.inicio_juros
       }
 
-      /* if(this.DataHonorarios != undefined || this.info_calculo.DataHonorarios != undefined){
-        arrayPropriedadesAlteradas.push("Honorários Advocatício")
-        novoObjetoParaAtualizar.honorarioAdvocaticioAte = this.DataHonorarios
-      } */
+        console.log("tt: " + this.DataHonorarios)
+        novoObjetoParaAtualizar.DataHonorarios = this.DataHonorarios
+        novoObjetoParaAtualizar.porcentagemHonorarios = this.porcentagemHonorarios  
+        novoObjetoParaAtualizar.procntagem_acordo = this.procntagem_acordo
+        novoObjetoParaAtualizar.porcentagemRMI = this.porcentagemRMI
+   
 
-      
-      if(this.DataHonorarios != this.info_calculo.honorarioAdvocaticioAte){
-        arrayPropriedadesAlteradas.push("Honorários Advocatício Até")
-        novoObjetoParaAtualizar.honorarioAdvocaticioAte = this.DataHonorarios
-      }
+      console.log(message)
 
 
-      
-      /* if(this.porcentagemHonorarios != undefined || this.info_calculo.porcentagemHonorarios != undefined){
-        arrayPropriedadesAlteradas.push("Honorários advocatícios Percentual")
-        novoObjetoParaAtualizar.honorarioAdvocaticioPercentual = this.porcentagemHonorarios
-      } */
-     
+      console.log("novo",novoObjetoParaAtualizar)
+      console.log(this.info_calculo)
 
-      console.log(this.porcentagemHonorarios, this.info_calculo.honorarioAdvocaticioPercentual)
-      if(this.porcentagemHonorarios != this.info_calculo.honorarioAdvocaticioPercentual){
-        arrayPropriedadesAlteradas.push("Honorários advocatícios Percentual")
-        novoObjetoParaAtualizar.honorarioAdvocaticioPercentual = this.porcentagemHonorarios
-      }
-      
-      //console.log("A: "+this.procntagem_acordo ,this.info_calculo.acordo == null)
-      if(parseFloat(this.procntagem_acordo) != parseFloat(this.info_calculo.acordo)){
-        arrayPropriedadesAlteradas.push("Acordo%")
-        novoObjetoParaAtualizar.acordo = this.procntagem_acordo
-      }
-          
-        /* novoObjetoParaAtualizar.acordo = this.procntagem_acordo */
-        /* novoObjetoParaAtualizar.porcentagemRmi = this.porcentagemRMI */
-
-        if(this.porcentagemRMI != this.info_calculo.porcentagemRmi){
-        arrayPropriedadesAlteradas.push("Poercentagem RMI")
-        novoObjetoParaAtualizar.honorarioAdvocaticioPercentual = this.porcentagemRMI
-      }
-
-
-
-
-      /* await Swal.fire({
-      title: `<strong>Você deseja atualizar os dados?\n Os seguinte campos vão ser atualizados:\n<u><i>${arrayPropriedadesAlteradas}</i></u></strong>`,
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonText: 'Atualizar',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        console.log("PASSOU")
-        await updateInformationForCalculoList(novoObjetoParaAtualizar)
-          Swal.fire('Salvo!', '', 'success')
-      } else if (result.isDenied) {
-        Swal.fire('Mudanças não salvas', '', 'info')
-      }
-    }) */
-
-
-    Swal.fire({
-      title: `<strong>Você deseja atualizar os dados?\n Os seguinte campos vão ser atualizados:\n<u><i>${arrayPropriedadesAlteradas}</i></u></strong>`,
+      Swal.fire({
+      title: `<strong>Você deseja atualizar os dados?</strong>\n${arrayPropriedadesAlteradas}`,
       showDenyButton: true,
       showCancelButton: true,
       confirmButtonText: 'Atualizar',
     }).then((result) => {
-      if (result.value) {
-        updateInformationForCalculoList(novoObjetoParaAtualizar).then((e) => {
-          Swal.fire('Salvo!', '', 'success')
-          console.log(e)
-        }).catch(
-          Swal.fire('Mudanças não salvas', '', 'info')
-        )
-      } else if(result.dismiss == "cancel"){
+   
+      if (result.isConfirmed) {
+        Swal.fire('Salvo!', '', 'success')
+      } else if (result.isDenied) {
         Swal.fire('Mudanças não salvas', '', 'info')
       }
     })
       
       
- 
+      Swal.fire({
+      title: '<strong>HTML <u>example</u></strong>',
+      icon: 'info',
+      html:
+        'You can use <b>bold text</b>, ' +
+        ' ' +
+        'and other HTML tags',
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText:
+        '<i class="fa fa-thumbs-up"></i> Great!',
+      confirmButtonAriaLabel: 'Thumbs up, great!',
+      cancelButtonText:
+        '<i class="fa fa-thumbs-down"></i>',
+      cancelButtonAriaLabel: 'Thumbs down'
+    })
 
 
       
@@ -1824,7 +1772,7 @@ export default {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Deletar Benefício!'
     }).then((result) => {
-      if (result.value) {
+      if (result.isConfirmed) {
         this.arrayBenficios =  this.arrayBenficios.filter(processos => processos.nb !== beneficio.nb);
         console.log("deletou")
         Swal.fire(
@@ -1941,7 +1889,6 @@ export default {
             beneficio: this.info_calculo.beneficio
           };
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
-          console.log("Retorno :", body, this.arrayBeneficioAcumuladosContaveis)
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
           this.totaisSalario()
@@ -2522,7 +2469,40 @@ export default {
             console.log("error 1");
           });
       }
-      
+
+      // this.calculoLote.push({
+      //   numeroDoProcesso: this.info_calculo.numeroDoProcesso,
+      //   nome: this.info_calculo.nome,
+      //   dataDeAjuizamento: this.info_calculo.dataAjuizamento,
+      //   inicio_juros: this.info_calculo.citacao,
+      //   numeroDoBeneficio: this.info_calculo.nb,
+      //   rmi: this.salarioInicial,
+      //   recebeuBeneficio: this.beneficio,
+      //   termoInicial: this.dtInicial,
+      //   termoFinal: this.dtFinal,
+      //   beneficio: this.info_calculo.beneficio,
+      //   cpf: this.info_calculo.cpf,
+      //   honorarioAdvocativosData: this.DataHonorarios,
+      //   honorariosAdvocativos: this.porcentagemHonorarios,
+      //   dataDePagamento: this.info_calculo.dip,
+      //   citacao: this.info_calculo.citacao,
+      //   nomeBeneficioBeneficioAcumulado,
+      //   dataDeInicioBeneficioAcumulado,
+      //   dataFinalBeneficioAcumulado,
+      //   rmilBeneficioAcumulado,
+      //   acordo: this.procntagem_acordo,
+      //   tipoJuros: this.tipoJuros,
+      //   tipoCorrecao: this.tipoCorrecao,
+      //   dibAnterior: this.dibAnterior,
+      //   atualizacao: this.atulizacao,
+      //   possuiDecimoTerceiro: this.salario13,
+      //   possuiJuros: this.boolJuros,
+      //   alcada: this.alcadaBoolean,
+      //   limiteMinimoMaximo: this.limiteMinimoMaximo,
+      //   salarioMinimo: this.salarioMinimo,
+      //   aps: this.info_calculo.aps,
+      //   usuario: 1
+      // })
       console.log(this.calculoLote[this.calculoLote.length - 1]);
     },
     removerItemLote(dado) {
@@ -3671,7 +3651,7 @@ export default {
             this.pacelasVencidas) *
           100
         ) / 100;
-        /* this.valor_corrigido = 35 */
+        this.valor_corrigido = 35
       this.formatacao();
       if (this.alcadaBoolean) {
         this.calculoDeOssada();
@@ -3698,7 +3678,7 @@ export default {
       this.valorHonorarios =
         (this.valorHonorarios * this.porcentagemHonorarios) / 100;
     },
-    async atualizarTodosDados(info) {
+    atualizarTodosDados(info) {
       this.alcadaArray = [];
       this.info_calculo = info;
       this.info_calculo.beneficio = this.refatoreNameBeneficio(
@@ -3714,18 +3694,16 @@ export default {
         { value: "salarioJuros", text: "Salário Juros R$" },
         { value: "salarioTotal", text: "Total" },
       ];
-      /* this.porcentagemHonorarios = this.info_calculo.honorarioAdvocaticioPercentual
-      this.procntagem_acordo = this.info_calculo.acordo
-      this.porcentagemRMI = this.info_calculoinfo_calculo.porcentagemRMI */
       this.salarioInicial = this.info_calculo.rmi.replace(".", "");
       this.salarioInicial = this.salarioInicial.replace(",", ".");
       this.salarioInicial = parseFloat(this.salarioInicial);
       this.dtInicial = this.info_calculo.dibInicial;
       this.nmprocesso = this.info_calculo.nome;
-      this.procntagem_acordo = this.info_calculo.acordo
-      this.DataHonorarios = this.info_calculo.honorarioAdvocaticioAte
-      this.porcentagemHonorarios =  this.info_calculo.honorarioAdvocaticioPercentual
-      this.porcentagemRMI = this.info_calculo.porcentagemRmi
+      
+      this.porcentagemRMI = 1000
+      this.procntagem_acordo = 1000;
+      this.porcentagemHonorarios = 1000
+      this.DataHonorarios = "15/10/1998"
       let datafinal = this.info_calculo.dip.split("/");
       if (datafinal[0] == 1) {
         if (datafinal[1] == 1) {
@@ -3750,24 +3728,7 @@ export default {
 
         }
       }
-      
-
-      const datasSelic = await getDataMaisAtualParaCampoAtualizarAte();
-      let maiorData = new Date('01'-'01'-1990)
-      let menorData;
-      for await (let objeto of datasSelic){
-        const dataString = (objeto.data).split("-").reverse()
-        const newDate = new Date(dataString)
-        menorData = newDate
-        if(menorData > maiorData){
-          maiorData = menorData
-        }  
-      }
-      const data = new Date(String(maiorData))
-      const dataMaiorTratada = (`${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')}-${data.getFullYear()}`).split("-")
-      this.atulizacao = `${dataMaiorTratada[1]}/${dataMaiorTratada[2]}`
-
-
+      //this.dtFinal = this.info_calculo.dip;
       this.pacelasVencidas = 0;
       this.pensaoPorMorte = "";
       this.calc_total = [];
@@ -3842,18 +3803,18 @@ export default {
         });
       });
       this.arrayBenficios = this.beneficioInacumulavel;
-      console.log("size: " + this.beneficioInacumulavel.length);
+      console.log("sizee: " + this.beneficioInacumulavel.length);
       this.inicio_juros = null;
       this.inicio_juros = this.info_calculo.citacao;
-      //this.DataHonorarios = null;
-      //this.porcentagemHonorarios = null;
+      // this.DataHonorarios = null;
+      this.porcentagemHonorarios = null;
       this.valorHonorarios = 0;
       this.textoHonorarios = null;
       this.valorSalario13 = 0;
       this.arr_Salario13 = 0;
       this.dibAnterior = this.info_calculo.dibAnterior == "-" ? "" : this.info_calculo.dibAnterior;
       this.total_processos = 0;
-      //this.procntagem_acordo = null;
+      this.procntagem_acordo = null;
       this.alcadaValue = 0;
       this.competenciaAnoAtual = null;
       this.competenciaAnoAtual = null;
@@ -4242,7 +4203,6 @@ export default {
         }
 
         #info-inicial-coluna {
-
           width: 15%;
           text-align: left;
           border: 2px solid white;
@@ -4676,6 +4636,49 @@ export default {
       memoriaDeCalculo += "</body></html>";
 
       this.memoriaCalculoHTM = memoriaDeCalculo;
+      //console.log(memoriaDeCalculo);
+
+      // const body = {
+      //   login: {
+      //     cpf: "02127337298",
+      //     senha: "Senhasenh4",
+      //   },
+      //   etiqueta: "LIDO BOOT",
+      //   minutas: [
+      //     {
+      //       numeroprocesso: "10033030920204013502",
+      //       conteudo: memoriaDeCalculo,
+      //     }
+      //   ]
+      // };
+
+      // axios
+      // .post(`http://localhost:3000/teste`, body)
+      // .then((response) => {
+      //   console.log(response);
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // });
+
+      // newWin.document.write("<html><head>");
+      // newWin.document.write(
+      //   `<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`
+      // ); // <title> CABEÇALHO DO PDF.
+      // newWin.document.write(style); // INCLUI UM ESTILO NA TAB HEAD
+      // newWin.document.write("</head>");
+      // newWin.document.write("<body>");
+      // // newWin.document.write(`<img class="logo" src="${this.logo}">`);
+      // newWin.document.write(`
+      // <div class="center">
+      // </div>`);
+
+      // newWin.document.write(divToPrint.outerHTML);
+      // newWin.document.write("</body></html>");
+
+      // newWin.print();
+
+      // newWin.close();
     },
     AnexarMinutas() {
      /*  this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
@@ -4753,8 +4756,9 @@ export default {
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");
     Axios.AxiosApiControleUsuario.get(`/calculoLote`)
       .then((response) => {
+        console.log("thenHomeMounted(): " + response.data)
         this.calculoLote = response.data;
-        console.log("Lote: "+ this.calculoLote)
+        console.log(response.data)
       })
       .catch((error) => {
         console.log("CatchHomeMounted(): " + error);
@@ -4765,8 +4769,9 @@ export default {
           this.optionsJuros.push({
           text: `Tipo: ${value.type}. Descrição: ${value.describe}`,
           value: value.type,
-          });
+        });
         }
+        
       });
     });
 
@@ -4877,18 +4882,8 @@ v-card {
   margin-left: 3%;
 }
 
-.center-first{
-  text-align: center;
-  background-color: #FBFACD;
-  border-radius: 10px;
-  padding: 3px;
-}
-
 .center {
   text-align: center;
-  background-color: rgb(194, 216, 235);
-  border-radius: 10px;
-  padding: 3px;
 }
 
 .centerAGU {

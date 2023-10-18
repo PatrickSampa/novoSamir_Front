@@ -30,8 +30,6 @@ export async function calculoBeneficioInacumulavel(informationBeneficioPrincpal,
       salarioTotal: linhaTabelaPrincipal.salarioTotal,
     }
   });
-
-  console.log("================================",tabelaPrincipal )
   const tabelasFeitas = await beneficiosAcumulados.map(async (beneficioInacumulavel) => {
 
 

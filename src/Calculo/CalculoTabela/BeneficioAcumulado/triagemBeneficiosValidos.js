@@ -1,5 +1,5 @@
 export async function triagemBeneficiosValidos({ beneficio, inicioCalculo, dip }, arrayBeneficiosAcumaladosRecebido, listBeneficiosInacumulaveis) {
-  console.log("Teste: ",{ beneficio, inicioCalculo, dip }, arrayBeneficiosAcumaladosRecebido, listBeneficiosInacumulaveis)
+
   const beneficioPrincipal = listBeneficiosInacumulaveis.find(beneficioDetalhado => parseInt(beneficioDetalhado.name.split("-")[0]) === parseInt(beneficio.split("-")[0]));
   const arrayBeneficioAcumuladosContaveis = [];
   
@@ -17,6 +17,7 @@ export async function triagemBeneficiosValidos({ beneficio, inicioCalculo, dip }
   })
 
  console.log("Contaveis: ", test)
+ console.log("Contaveis: ", arrayBeneficioAcumuladosContaveis)
   return arrayBeneficioAcumuladosContaveis.sort((evento1, evento2) => {
     const data1 = new Date(evento1.dcb.split('/').reverse().join('-'));
     const data2 = new Date(evento2.dcb.split('/').reverse().join('-'));
