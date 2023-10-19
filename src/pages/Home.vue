@@ -18,7 +18,7 @@
         <v-tabs-slider color="green"></v-tabs-slider>
         <v-tab @click="add_taxa = false">Cálculo</v-tab>
         <v-tab @click="acessoPortalADM()">Portal ADM</v-tab>
-        <v-tab @click="acessoPortalADM()">Ajuda</v-tab>
+        <v-tab @click="add_taxa = false">Ajuda</v-tab>
       </v-tabs>
     </v-card>
     <PortalADM v-if="add_taxa" />
@@ -108,7 +108,7 @@
           <v-col cols="12" sm="6" md="3">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="limiteMinimoMaximo"
               :value="limiteMinimoMaximo" />
-            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Minimo e Máximo</label>
+            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Mínimo e Máximo</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salarioMinimo"
@@ -154,7 +154,7 @@
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salario13Obrigatorio"
               :value="salario13Obrigatorio" />
-            <label for="salario13" class="labels pb-2">13° Salário Obrigatorio</label>
+            <label for="salario13" class="labels pb-2">13° Salário Obrigatório</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="selic" :value="selic" />
@@ -173,7 +173,7 @@
             </label>
           </b-col>
           <b-col sm="2" v-if="beneficio === true">
-            <b-button id="button-beneficio" color="primary" @click="pushBeneficiosAcumulados()">Adicionar Beneficio
+            <b-button id="button-beneficio" color="primary" @click="pushBeneficiosAcumulados()">Adicionar Benefício
             </b-button>
           </b-col>
         </b-row>
@@ -187,7 +187,7 @@
               </v-autocomplete>
             </b-col>
             <b-col sm="3" v-if="beneficio === true">
-              <label for="beneficio_inicial" class="labels">Inicio do Desconto</label>
+              <label for="beneficio_inicial" class="labels">Início do Desconto</label>
               <b-form-input v-mask="'##/##/####'" id="beneficio_inicial" v-model="obj_beneficioAcumulado.dib" type="text"
                 size="sm">
               </b-form-input>
@@ -208,20 +208,20 @@
           </b-row>
           <b-row>
             <b-col sm="3" v-if="beneficio === true">
-              <label for="beneficio" class="labels">Limite de Minimo e Maximo</label>
+              <label for="beneficio" class="labels">Limite de Mínimo e Máximo</label>
 
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
                 v-model="obj_beneficioAcumulado.limiteMinimoMaximo" :value="obj_beneficioAcumulado.limiteMinimoMaximo"
                 class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
             </b-col>
             <b-col sm="2" v-if="beneficio === true">
-              <label for="beneficio" class="labels">13 Salario</label>
+              <label for="beneficio" class="labels">13° Salário</label>
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
                 v-model="obj_beneficioAcumulado.salario13" :value="obj_beneficioAcumulado.salario13"
                 class="form-check-input" style="margin-left: 5px" type="checkbox" id="beneficio" size="sm" />
             </b-col>
             <b-col sm="2" v-if="beneficio === true">
-              <label for="beneficio" class="labels">Salario Minimo</label>
+              <label for="beneficio" class="labels">Salário Mínimo</label>
 
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
                 v-model="obj_beneficioAcumulado.salarioMinimo" :value="obj_beneficioAcumulado.salarioMinimo"
@@ -229,7 +229,7 @@
             </b-col>
 
             <b-col sm="3" v-if="beneficio === true">
-              <label for="beneficio" class="labels">13 Salario Obrigatorio</label>
+              <label for="beneficio" class="labels">13° Salário Obrigatório</label>
 
               <input :disabled="disableBeneficiosEspecial(obj_beneficioAcumulado)"
                 v-model="obj_beneficioAcumulado.salario13Obrigatorio" :value="obj_beneficioAcumulado.salario13Obrigatorio"
@@ -282,48 +282,38 @@
         </v-row>
         <v-row class="my-3">
           <v-col cols="1" class="mr-6">
-            <v-btn depressed color="primary" style="margin-left: 5px; color: whitesmoke" :loading="loading"
+            <v-btn depressed color="blue" style="margin-left: 5px; color: whitesmoke" :loading="loading"
               @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
           </v-col>
           <v-col cols="1">
-            <v-btn depressed color="primary" style="margin-left: -5px; color: whitesmoke" :href="info_calculo.urlProcesso" target="_blank">
+            <v-btn depressed color="blue" style="margin-left: -5px; color: whitesmoke" :href="info_calculo.urlProcesso" target="_blank">
               Consultar Processo</v-btn>
           </v-col>
           <v-col cols="2">
-            <v-btn :loading="loading" depressed color="primary" style="margin-left: 105px; color: whitesmoke" @click="atualizarItemParaBanco()"
+            <v-btn :loading="loading" depressed color="blue" style="margin-left: 105px; color: whitesmoke" @click="atualizarItemParaBanco()"
               target="_blank">Atualizar</v-btn>
           </v-col>
         </v-row>
       </v-card>
 
          
-    <br>
-    <br>
-    <br>
+      <br/>
   
-      <v-col cols="2">
-        <div style="display: flex; justify-content: space-between;">
-            <v-btn depressed color="blue" style="color: whitesmoke;" @click="verificarAdicaoNoLote()"
-              target="_blank">Adicionar ao Lote</v-btn>
-            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
-              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
-            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
-              @click="deletarLote()">Deletar lote</v-btn>
-          </div>
-      </v-col>
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
-        Beneficios para calculo em lote
+        Benefícios para Cálculo em Lote
       </h3>
       
       <template v-if="exibirCalculoEmLote">
         <v-data-table :headers="headersCalculoLote" :items="calculoLote" class="elevation-1">
           <template v-slot:item="{ item }">
             <tr>
-              <td class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="atulizarInfosLote(item)">
-                {{ item.numeroDoProcesso }}
+
+              <td  class="py-3" :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}" @click="atulizarInfosLote(item)">
+                <span style="color:#1976d2">{{ item.numeroDoProcesso }}</span>
               </td>
-              <td>{{ item.nome }}</td>
-              <td>{{ item.tipo }}</td>
+
+              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.nome }}</td>
+              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.tipo }}</td>
               <td>
                 <v-icon v-if="item.nomeBeneficioBeneficioAcumulado[0]" color="red">
                   mdi-check-outline
@@ -342,12 +332,25 @@
         </v-data-table>
       </template>
 
+      <v-col cols="2">
+        <div style="display: flex; justify-content: space-between;">
+            <v-btn depressed color="blue" style="color: whitesmoke" @click="verificarAdicaoNoLote()"
+              target="_blank">Adicionar ao Lote</v-btn>
+            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
+              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
+            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
+              @click="deletarLote()">Deletar lote</v-btn>
+          </div>
+      </v-col>
+
       <portal-a-d-m v-if="add_taxa == true" />
       
       <!-- TABELA PRNCIPAL -->
       <br />
+      <br>
+      <br>
       <h1 v-if="add_taxa == false" class="titulo">PREENCHA OS DADOS</h1>
-      <h4 v-if="add_taxa == false" class="center">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
+      <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
       <div v-if="add_taxa == false" class="rowInputs">
         <div v-if="add_taxa == false" class="column">
           <label class="camposInput">
@@ -393,7 +396,7 @@
           <br />
         </div>
       </div>
-      <h4 class="center" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
+      <h4 class="center-first" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
       <div v-if="add_taxa == false">
         <div class="resumoProcesso">
           <div class="columnResumoProcesso">
@@ -648,7 +651,7 @@
         </div>
       </div>
 
-      <h4 class="center">PLANILHA DE CÁLCULO</h4>
+      <h4 class="center-first">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
         <div class="column">
           <label class="camposInputAlcada">
@@ -756,7 +759,7 @@
         Adicionar Linha</v-btn>
 
       <div id="tabelaImpostoRenda">
-        <h4 class="center">
+        <h4 class="center-first">
           RENDIMENTOS RECEBIDOS ACUMULADAMENTE PARA IMPOSTO DE RENDA
         </h4>
         <table id="impostoRenda">
@@ -845,16 +848,17 @@
       </div>
 
       <!-- Gerar pdf -->
-
-      <h1 v-if="add_taxa == false" class="titulo">GERADOR DE PDF</h1>
+      <br />
+      <br>
+      <br>
+      <h1 v-if="add_taxa == false" class="titulo">MEMÓRIA DE CÁLCULO</h1>
       
       <v-card v-if="!add_taxa" id="areaToPrint">
         <!-- <Popup v-if="showPopup" :showPopup="showPopup" :popupTitle="popupTitle" :popupMessage="popupMessage" @close="closePopup" /> -->
         <div>
-          <h3 class="centerAGU">AGU</h3>
+          <h3 class="centerAGU"><img src="../assets/agu.png" width="150" height="90" alt="Simbolo da Advocacia-Geral da União"></h3>
           <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
-          <h4 class="center">
-            EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
+          <h4 style="text-align: center">EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
           </h4>
 
           <table id="info-inicial">
@@ -1574,7 +1578,7 @@ export default {
       salarioMinimo: false,
       atulizacao: "",
       headersCalculoLote: [
-        { value: "numeroDoProcesso", text: "Numero Do Processo" },
+        { value: "numeroDoProcesso", text: "Número Do Processo" },
         { value: "nome", text: "Autor" },
         { value: "tipo", text: "Tipo" },
         { value: "beneficio", text: "Recebeu Benefício" },
@@ -1770,13 +1774,13 @@ export default {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Deletar Benefício!'
+      confirmButtonText: 'Deletar Benefício'
     }).then((result) => {
       if (result.isConfirmed) {
         this.arrayBenficios =  this.arrayBenficios.filter(processos => processos.nb !== beneficio.nb);
         console.log("deletou")
         Swal.fire(
-          'Deletado!',
+          'Deletado',
           'Seu Processo foi deletado',
           'success'
         )
@@ -2260,12 +2264,7 @@ export default {
                 this.DataHonorarios;
             }
           })
-          // .then(() => {
-          //   this.honorarios(
-          //     this.DataHonorarios.split("/")[1],
-          //     this.DataHonorarios.split("/")[2]
-          //   );
-          // })
+          
           .then(() => {
             if (this.alcadaBoolean) {
               this.calculoDeOssada();
@@ -2274,21 +2273,7 @@ export default {
           .then(() => {
             this.totaisSalario();
           })
-          // .then(() => {
-          //   const print = () => {
-          //     return new Promise((resolve) => {
-          //       setTimeout(() => {
-          //         resolve("The request is successful. " + this.printDiv());
-          //       });
-          //     }, timer);
-          //   };
-          //   const sleep = async () => {
-          //     let second_response = await print();
-          //     console.log(second_response);
-          //   };
-
-          //   sleep();
-          // })
+          
           .catch((error) => {
             console.log(error);
             console.log("error Calculo");
@@ -2454,7 +2439,7 @@ export default {
                 console.log("Calculo")
                 console.log(this.calculoLote);
                 this.$alert(
-                  "Calculo adicionado ao Lote.",
+                  "Cálculo adicionado ao Lote.",
                   "Success",
                   "success"
                 ).then(() => console.log("Closed"));
@@ -4636,54 +4621,9 @@ export default {
       memoriaDeCalculo += "</body></html>";
 
       this.memoriaCalculoHTM = memoriaDeCalculo;
-      //console.log(memoriaDeCalculo);
 
-      // const body = {
-      //   login: {
-      //     cpf: "02127337298",
-      //     senha: "Senhasenh4",
-      //   },
-      //   etiqueta: "LIDO BOOT",
-      //   minutas: [
-      //     {
-      //       numeroprocesso: "10033030920204013502",
-      //       conteudo: memoriaDeCalculo,
-      //     }
-      //   ]
-      // };
-
-      // axios
-      // .post(`http://localhost:3000/teste`, body)
-      // .then((response) => {
-      //   console.log(response);
-      // })
-      // .catch((error) => {
-      //   console.log(error);
-      // });
-
-      // newWin.document.write("<html><head>");
-      // newWin.document.write(
-      //   `<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`
-      // ); // <title> CABEÇALHO DO PDF.
-      // newWin.document.write(style); // INCLUI UM ESTILO NA TAB HEAD
-      // newWin.document.write("</head>");
-      // newWin.document.write("<body>");
-      // // newWin.document.write(`<img class="logo" src="${this.logo}">`);
-      // newWin.document.write(`
-      // <div class="center">
-      // </div>`);
-
-      // newWin.document.write(divToPrint.outerHTML);
-      // newWin.document.write("</body></html>");
-
-      // newWin.print();
-
-      // newWin.close();
     },
     AnexarMinutas() {
-     /*  this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
-        (etiqueta) => {
-          if (etiqueta) { */
             this.loading = true;
             let minutas = [];
             this.calculoLote.forEach((minuta) => {
@@ -4882,8 +4822,18 @@ v-card {
   margin-left: 3%;
 }
 
+.center-first{
+  text-align: center;
+  background-color: #FBFACD;
+  border-radius: 10px;
+  padding: 3px;
+}
+
 .center {
   text-align: center;
+  background-color: rgb(194, 216, 235);
+  border-radius: 10px;
+  padding: 3px;
 }
 
 .centerAGU {

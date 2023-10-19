@@ -177,10 +177,11 @@ function mesmoMesAno(data1, data2) {
 
 
 async function calcularDiasConsiderados(dataLinhaTabela, dib, inicioCalculo, dip, dcb) {
-  if (mesmoMesAno(dib, inicioCalculo) && mesmoMesAno(dataLinhaTabela, dib)) {
+  if (mesmoMesAno(dib, inicioCalculo) && mesmoMesAno(dataLinhaTabela, dib)){
+    console.log("Primeiro")
     return parseInt(dib.split("/")[0]) > parseInt(inicioCalculo.split("/")[0])
       ? validarValorDoDiaSerConsideradoNaTabelaDeCalculo(quantosDiasFaltaParaAcabarOMes(dib), parseInt(dib.split("/")[1]))
-      : validarValorDoDiaSerConsideradoNaTabelaDeCalculo(quantosDiasFaltaParaAcabarOMes(inicioCalculo), inicioCalculo.split("/")[1]);
+      : validarValorDoDiaSerConsideradoNaTabelaDeCalculo(quantosDiasFaltaParaAcabarOMes(inicioCalculo), inicioCalculo.split("/")[1])
   } else if (mesmoMesAno(dataLinhaTabela, dib)) {
     return validarValorDoDiaSerConsideradoNaTabelaDeCalculo(quantosDiasFaltaParaAcabarOMes(dib), parseInt(dib.split("/")[1]));
   } else if (mesmoMesAno(dataLinhaTabela, inicioCalculo)) {
