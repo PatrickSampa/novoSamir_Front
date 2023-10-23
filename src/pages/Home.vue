@@ -1634,13 +1634,15 @@ export default {
             parseFloat(this.pacelasVencidas)) *
           this.formatarPorcentagemAcordo()
         ) / 100;
+      console.log("Valor Analisar", valorAnalissar, "Salario Minimo Atual", this.salarioMinimoAnoAtual)
       if (valorAnalissar < this.salarioMinimoAnoAtual) {
         return "RPV";
       } else {
         if (this.indentificadorDePersistenciaUtrapassagemDeAcordo != this.info_calculo.nb && (this.procntagem_acordo != 0 && this.procntagem_acordo != null)) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.indentificadorDePersistenciaUtrapassagemDeAcordo = this.info_calculo.nb;
-          this.$confirm("Acordo ultrapassa os 60 salarios minimos", "Ultrapassagem de limite de ACORDO", "error")
+          console.log("jdjdejfffgrg", this.indentificadorDePersistenciaUtrapassagemDeAcordo,"    ", this.info_calculo.nb)
+          this.$confirm("Acordo ultrapassa os 60 salários mínimos", "Ultrapassagem de limite de ACORDO", "error")
         }
         return "Precatório";
       }
@@ -2572,7 +2574,7 @@ export default {
             dib: dado.dataDeInicioBeneficioAcumulado[index],
             dcb: dado.dataFinalBeneficioAcumulado[index],
             rmi: dado.rmilBeneficioAcumulado[index],
-/*             nb: dado.rmilBeneficioAcumulado[index], */
+                /*             nb: dado.rmilBeneficioAcumulado[index], */
             limiteMinimoMaximo:
               dado.limiteMinimoMaximoBeneficioAcumulado[index],
             salario13: dado.salario13BeneficioAcumulado[index],
@@ -4664,10 +4666,7 @@ export default {
                 console.log(error.message);
                 console.log("error.message");
               });
-/*           }
-        }
-      ); */
-    },
+      },
 
     taxasPorAno(response = []) {
       const taxas = {};
@@ -4689,7 +4688,6 @@ export default {
       this.$router.push({ name: "processos" }).catch(() => { });
     },
   },
-
   mounted() {
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
     this.username = localStorage.getItem("Username");
@@ -4711,7 +4709,6 @@ export default {
           value: value.type,
         });
         }
-        
       });
     });
 
@@ -4740,7 +4737,7 @@ export default {
       .then((res) => {
         console.log("Salrio minimo ano atual",res.data[res.data.length - 1]);
         this.salarioMinimoAnoAtual = res.data[res.data.length - 1].valor * 60;
-      });
+      });  
   },
 };
 </script>
@@ -4820,6 +4817,7 @@ v-card {
 .camposInput {
   text-align: left;
   margin-left: 3%;
+  margin-right: 5px
 }
 
 .center-first{
