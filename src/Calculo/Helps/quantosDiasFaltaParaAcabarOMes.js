@@ -16,6 +16,7 @@ export function quantosDiasFaltaParaAcabarOMes(data) {
     else if(parseInt(mes) === 2 && diasTrabalhados >= 28){
         return 30;
     }else{
+        console.log("RETORNO GRAHALHO "+diasTrabalhados)
         return diasTrabalhados;
     }
 

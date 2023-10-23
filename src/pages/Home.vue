@@ -1811,7 +1811,6 @@ export default {
       return Date.parse(inicioCalculo.split('/').reverse().join('-')) <= Date.parse(dcb.split('/').reverse().join('-')) && Date.parse(dib.split('/').reverse().join('-')) <= Date.parse(dip.split('/').reverse().join('-'));  
     },
     async deletarBeneficio(beneficio){    
-      
          await Swal.fire({
       title: 'Deseja Continuar?',
       text: "",
@@ -1820,10 +1819,9 @@ export default {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Deletar Benefício!'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.value) {
         this.arrayBenficios =  this.arrayBenficios.filter(processos => processos.nb !== beneficio.nb);
-        console.log("deletou")
         Swal.fire(
           'Deletado!',
           'Seu Processo foi deletado',
@@ -1911,6 +1909,8 @@ export default {
       if (this.verificadoInformacoes()) {
         try {
           this.loading = true;
+          console.log("TESTEEEEEE AQUI A DIB " + this.info_calculo.dibInicial)
+          
           const body = {
             inicioCalculo: this.dtInicial,
             dip: this.dtFinal,
@@ -1938,7 +1938,6 @@ export default {
             beneficio: this.info_calculo.beneficio
           };
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
-          //console.log("Retorno :", body, this.arrayBeneficioAcumuladosContaveis)
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
           this.totaisSalario()
