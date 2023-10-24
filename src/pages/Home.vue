@@ -1897,7 +1897,7 @@ export default {
     },
     acessoPortalADM() {
       this.$prompt("Digite a senha de acesso").then((text) => {
-        if (text == "Beremiz Samir") {
+        if (text == "1") {
           this.add_taxa = true;
         } else {
           this.add_taxa = false;
@@ -4288,6 +4288,7 @@ export default {
       style = style + "</style>";
 
       var id = new Date().getTime();
+      console.log("foi aqui")
       var newWin = window.open(
         window.location.href + "?printerFriendly=true",
         id,
