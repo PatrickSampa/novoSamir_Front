@@ -107,10 +107,18 @@
       <button @click="exibirActive(), redirectToCalculo()" style="cursor: pointer">
         Tabela de Processos <v-icon>mdi-menu-up</v-icon>
       </button>
-      <v-btn depressed :loading="loading" color="blue" style="color: whitesmoke" @click="traigemAutomatico">Triar Automático</v-btn>
-      <v-btn :loading="loading" depressed color="red" style="margin-left: 540px; color: whitesmoke;" target="_blank"
-        @click="deletarTodosOsInfos()">Deletar Todas as Informações
-      </v-btn>
+
+      <template>
+        <v-row>
+          <v-col cols="2" md="0" class="text-center">
+            <v-btn depressed :loading="loading" color="blue white--text" class="mr-md-3" @click="traigemAutomatico">Triar Automático</v-btn>
+          </v-col>
+          <v-col cols="2" md="10" class="text-center">
+            <v-btn :loading="loading" depressed color="red white--text" target="_blank" @click="deletarTodosOsInfos()">Deletar Todas as Informações</v-btn>
+          </v-col>
+        </v-row>
+      </template>
+
     </v-card-title>
     <v-data-table v-if="exibir.processos" :headers="headers" :items="infos" item-key="name" class="elevation-1">
       <template v-slot:item="{ item }">

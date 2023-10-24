@@ -11,7 +11,8 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1>Samir</h1>
+      <h1 style="font-size: 60px; color: #3876BF; text-align: center">
+      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="55" height="55"></h1>
     </div>
     <v-card>
       <v-tabs>
@@ -280,23 +281,26 @@
             </label>
           </v-col>
         </v-row>
+        
         <v-row class="my-3">
-          <v-col cols="1" class="mr-6">
-            <v-btn depressed color="blue" style="margin-left: 5px; color: whitesmoke" :loading="loading"
-              @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
-          </v-col>
-          <v-col cols="1">
-            <v-btn depressed color="blue" style="margin-left: -5px; color: whitesmoke" :href="info_calculo.urlProcesso" target="_blank">
-              Consultar Processo</v-btn>
-          </v-col>
-          <v-col cols="2">
-            <v-btn :loading="loading" depressed color="blue" style="margin-left: 105px; color: whitesmoke" @click="atualizarItemParaBanco()"
-              target="_blank">Atualizar</v-btn>
+          <v-col cols="12" md="6" lg="4">
+            <div class="d-flex flex-column flex-md-row align-center justify-between">
+              <v-btn depressed color="blue white--text" class="mr-md-2 mb-2 mb-md-0" :loading="loading" @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">
+                Calcular
+              </v-btn>
+                
+              <v-btn depressed color="blue white--text" class="mr-md-2" :href="info_calculo.urlProcesso" target="_blank">
+                Consultar Processo
+              </v-btn>
+                
+              <v-btn :loading="loading" depressed color="blue white--text" class="mt-2 mt-md-0" @click="atualizarItemParaBanco()">
+                Atualizar
+              </v-btn>
+            </div>
           </v-col>
         </v-row>
       </v-card>
-
-         
+   
       <br/>
   
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
@@ -4613,7 +4617,8 @@ export default {
       //   "toolbar=1,scrollbars=1,location=0,statusbar=0,menubar=1,resizable=1,width=800,height=600,left = 240,top = 212"
       // );
 
-      let memoriaDeCalculo = `<html><head> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`;
+      let memoriaDeCalculo = `<html><head> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`;
       memoriaDeCalculo += style;
       memoriaDeCalculo += "</head>";
       memoriaDeCalculo += "<body>";
