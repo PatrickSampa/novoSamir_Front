@@ -9,6 +9,15 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import vuetify from './plugins/vuetify'
 import router from './config/routes/router'
 
+export default {
+  data () {
+    return {
+      headers: {
+        frameOptions: 'deny',
+      },
+    };
+  },
+};
 
 import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
@@ -24,9 +33,12 @@ Vue.use(VueSimpleAlert);
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
+
 Vue.use(IconsPlugin)
 
+
 Vue.config.productionTip = false
+
 
 new Vue({
   router,

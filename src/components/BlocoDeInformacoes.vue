@@ -3,7 +3,7 @@
     <v-progress-linear v-if="!beneficiosInacumulveisBanco[0]" indeterminate color="teal"></v-progress-linear>
     <v-row>
       <button @click="dadosActive()" style="cursor: pointer">
-        Prencher dados Manualmente <v-icon>mdi-menu-up</v-icon>
+        Preencher Dados Manualmente <v-icon>mdi-menu-up</v-icon>
       </button>
     </v-row>
     <v-row v-if="exibir.tudo && beneficiosInacumulveisBanco[0]" class="mx-3">
@@ -108,21 +108,21 @@
         Tabela de Processos <v-icon>mdi-menu-up</v-icon>
       </button>
       <v-btn depressed :loading="loading" color="primary" @click="traigemAutomatico">Triar Automatico</v-btn>
-      <v-btn :loading="loading" depressed color="red" style="margin-left: 145px" target="_blank"
+      <v-btn :loading="loading" depressed color="red" style="margin-left: 460px; color: whitesmoke;" target="_blank"
         @click="deletarTodosOsInfos()">Deletar Todas as Informações
       </v-btn>
     </v-card-title>
     <v-data-table v-if="exibir.processos" :headers="headers" :items="infos" item-key="name" class="elevation-1">
       <template v-slot:item="{ item }">
-        <tr @click="tranferir(item.id)">
-          <td class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="tranferir(item.id)">
+        <tr @click="tranferir(item.id); itemClicked = item.id">
+          <td  class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="tranferir(item.id); itemClicked = item.id">
             {{ item.numeroDoProcesso }}
           </td>
-          <td>{{ item.nome }}</td>
-          <td>{{ item.tipo }}</td>
-          <td>{{ item.cpf }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.nome }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.tipo }}</td>
+          <td :style="{ color: itemClicked === item.id ? 'rgba(128, 128, 128, 0.5)' : 'inherit' }">{{ item.cpf }}</td>
           <td>
-            <v-icon v-if="item.beneficiosAcumulados[0]" color="red">
+            <v-icon v-if="item.beneficiosAcumulados[0]" color="green">
               mdi-check-outline
             </v-icon>
           </td>
@@ -145,6 +145,8 @@ import { salvarInformationForCalculo } from "../api/controle-usuario/information
 import { getInformationsForCalcule } from "../api/controle-usuario/informationCalculo/getInformationsForCalcule"
 import { getInformationFromSapienForSamir } from "../api/visao/getInformation/getInformationFromSapienForSamir"
 import { getBeneficios } from "../api/calculadora/beneficios/getBeneficios"
+import { EventBus } from "../eventBus/eventBus"
+
 export default {
   name: "Processos",
   props: ["exibir"],
@@ -166,13 +168,14 @@ export default {
       urlProcesso: "",
       tipo: "",
       dibAnterior: "",
+      itemClicked: null,
       beneficiosInacumulveisBanco: [],
       headers: [
         { value: "numeroDoProcesso", text: "Número do Processo" },
         { value: "nome", text: "Nome" },
-        { value: "tipo", text: "Tipo" },
+        { value: "tipo", text: "Benefício" },
         { value: "cpf", text: "CPF" },
-        { value: "beneficioAcumuladoBoolean", text: "Recebeu Benefício" },
+        { value: "beneficioAcumuladoBoolean", text: "Benefício Acumulado" },
         { value: "actions", text: "Delete" },
       ],
       infos: [],
@@ -190,7 +193,9 @@ export default {
   methods: {
     //teste
     deletarInforPorID(dado) {
-      console.log(dado);
+      console.log("ENTROU POR")
+      console.log(typeof(dado.id))
+      console.log(dado.id)
       this.$prompt("Digite seu nome de usuario").then(async (text) => {
         if (text == this.username) {
           this.loading = true;
@@ -207,6 +212,19 @@ export default {
         }
         this.loading = false;
       });
+    },
+    async deletarPeloHome(dado){
+      console.log("ENTROU POR2")
+      console.log(dado)
+      console.log(typeof(dado))
+      this.loading = true;
+      try {
+            await deleteInformationForCalculoToID(dado)
+            this.getInfos();
+            this.loading = false;
+          } catch (error) {
+            this.$alert(error.message);
+          }
     },
     deletarTodosOsInfos() {
       this.$prompt("Digite seu CPF").then(async (text) => {
@@ -248,7 +266,6 @@ export default {
           this.loading = true;
           try {
             let informationCalculo = await getInformationFromSapienForSamir(body);
-            console.log("Calculo: " + informationCalculo);
             await salvarInformationForCalculoList(informationCalculo);
             this.infos.push(informationCalculo);
             this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
@@ -270,6 +287,7 @@ export default {
     },
     dadosActive() {
       let dados = !this.exibir.tudo;
+     console.log("DADOSSSSSSSSSSSSSSSSSSSSSSSSS: ".dados)
       this.$emit("dados", dados);
     },
     exibirActive() {
@@ -300,12 +318,14 @@ export default {
         beneficioAcumuladoBoolean: this.beneficioAcumuladoBoolean,
         tipo: this.tipo,
       };
+
       this.loading = true;
       salvarInformationForCalculo(body).then(() => {
         this.$alert(1, "Processo adicionado: ", "success");
         this.$emit("processos", true);
         this.loading = false;
         this.getInfos();
+        console.log("Chamou a saveInfos Novamente")
         this.saveInfos();
         this.cleanFields();
       }).catch(error => {
@@ -320,7 +340,6 @@ export default {
      getInfos() {
        getInformationsForCalcule().then((response) => {
         this.infos = response;
-        console.log(response);
         this.saveInfos();
         this.$emit("processos", true);
       }).catch((error) => {
@@ -378,8 +397,6 @@ export default {
       this.urlProcesso = processo.urlProcesso;
       this.dibAnterior = processo.dibAnterior;
       this.tipo = processo.tipo;
-      console.log(processo.beneficioAcumuladoBoolean);
-      console.log(processo.beneficiosAcumulados);
     },
     pushBeneficio() {
       let dataDib = this.beneficioAcumulado.dib.split("/");
@@ -403,6 +420,7 @@ export default {
       }
     },
     verificarBeneficio() {
+      console.log("Chamou verificarBeneficio")
       let beneficiovalido;
       this.beneficiosInacumulveisBanco.forEach((value) => {
         if (
@@ -410,7 +428,6 @@ export default {
           parseInt(this.beneficio.split("-")[0])
         ) {
           value.inacumulavel.forEach((dado, index) => {
-            console.log(parseInt(dado.split("-")[0]));
             if (
               parseInt(dado.split("-")[0]) ==
               parseInt(this.beneficioAcumulado.beneficio.split("-")[0])
@@ -422,7 +439,6 @@ export default {
           });
         }
       });
-      console.log("benefio e " + beneficiovalido);
       return beneficiovalido;
     },
     beneficiosInacumulveilVerificadorPeriodo(
@@ -431,23 +447,31 @@ export default {
       dataincial,
       dataFinal
     ) {
+      console.log("BeneficioNoPeriodo")
       if (dataDib[2] <= dataFinal[2] && dataDcb[2] >= dataincial[2]) {
         if (dataDcb[2] == dataincial[2]) {
           if (dataDcb[1] == dataincial[1]) {
             if (dataDcb[0] >= dataincial[0]) {
+              console.log("Retornou true")
               return true;
             } else {
+              console.log("Retornou false")
               return false;
+              
             }
           } else if (dataDcb[1] > dataincial[1]) {
+            console.log("Retornou true2")
             return true;
           } else {
+            console.log("Retornou false2")
             return false;
           }
         } else {
+          console.log("Retornou true3")
           return true;
         }
       } else {
+        console.log("Retornou false4")
         return false;
       }
     },
@@ -460,6 +484,7 @@ export default {
       };
     },
     tranferir(y) {
+      this.isNomeActive = true;
       this.redirectToCalculo();
       this.preencherFields(y);
       this.calculo = this.infos.find((info) => info.id == y);
@@ -467,8 +492,6 @@ export default {
     },
   },
   mounted() {
-    console.log("CPF: " + localStorage.getItem("sapiensCPF"))
-    console.log("Senha: " + localStorage.getItem("Username"));
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
     this.username = localStorage.getItem("Username");
     this.senhaSapaiens = localStorage.getItem("sapiensSenha");
@@ -483,8 +506,20 @@ export default {
     getBeneficios().then((res) => {
       this.beneficiosInacumulveisBanco = res;
     });
+    EventBus.$on('deletarPeloHome', this.deletarPeloHome)
   },
 };
 </script>
 
-<style ></style>
+<style >
+
+.active-item {
+  color: red; /* Adicione a sombra desejada */
+}
+
+.shadowed-text {
+  color: red; /* Adicione a sombra no texto quando estiver ativo */
+}
+
+
+</style>

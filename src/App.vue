@@ -41,8 +41,6 @@ export default {
   }),
   methods: {
     verificaoLogin() {
-      console.log(this.$route.name);
-      console.log((localStorage.getItem("authToken") == "" || localStorage.getItem("authToken") == null));
       if ((localStorage.getItem("authToken") == "" || localStorage.getItem("authToken") == null) && (this.$route.name != "login" && this.$route.name != "cadastrar")) {
         localStorage.removeItem("authToken");
         localStorage.removeItem("authRefreshToken");

@@ -6,9 +6,14 @@
         </v-toolbar>
   
         <v-form class="pa-3" v-model="valid" lazy-validation>
-          <v-text-field v-model="cpf" :rules="nameRules" label="CPF SAPIENS" required></v-text-field>
+          <v-text-field v-model="cpf" :rules="nameRules" label="CPF SAPIENS" @keydown.enter="loginUsuarioSapiens" required></v-text-field>
   
-          <v-text-field v-model="senha" :rules="passwordRules" label="SENHA SAPIENS" type="password" required></v-text-field>
+          <v-text-field v-model="senha" :rules="passwordRules" label="SENHA SAPIENS" :type="showPassword ? 'text' : 'password'" required @keydown.enter="loginUsuarioSapiens">
+            <template v-slot:append>
+        <v-icon @click="showPassword = !showPassword">
+          {{ showPassword ? 'mdi-eye-off' : 'mdi-eye' }} <!-- Ícone de visibilidade -->
+        </v-icon>
+      </template></v-text-field>
           <v-btn depressed :loading="loading" color="primary" @click="loginUsuarioSapiens">LOGIN</v-btn>
         </v-form>
       </v-card>
@@ -17,13 +22,14 @@
 
 <script>
 import { VerificarUserSapiens } from '../api/verificar_login_sapiens_visao/users';
-/* import { validationToken } from "../api/controle-usuario/users/validationToken"; */
+import { ValidationTokenSapiens } from '../api/verificar_login_sapiens_visao/validationTokenSapiens'
 export default {
   name: "SapiensLogin",
   data: () => {
     return {
       cpf: "",
       senha: "",
+      showPassword: false,
       valid: true,
       nameRules: [(v) => !!v || "Digite o Nome!"],
       passwordRules: [
@@ -34,10 +40,10 @@ export default {
     };
   },
   methods: {
-    /* async getUsuario() {
-        await validationToken().then(() => this.$router.push({ name: "sapienslogin" }))
+    async getUsuarioSapiens() {
+        await ValidationTokenSapiens().then(() => this.$router.push({ name: "home" }))
       
-    }, */
+    },
     async loginUsuarioSapiens() {
       let body = {
         cpf: this.cpf,
@@ -52,6 +58,7 @@ export default {
         this.loading = false;
         this.valid = true;
         this.$router.push({ name: "home" })
+ /*        window.open("http://10.191.8.198:8080/home"); */
       } catch (error) {
         this.loading = false;
         let message = await error.message;
@@ -65,9 +72,9 @@ export default {
       }
     },
   },
-  /* mounted() {
-    this.getUsuario()
-  } */
+  mounted() {
+    this.getUsuarioSapiens()
+  }
 };
 </script>
 

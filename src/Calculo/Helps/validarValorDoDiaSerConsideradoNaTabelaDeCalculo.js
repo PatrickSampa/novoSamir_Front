@@ -1,4 +1,5 @@
 export function validarValorDoDiaSerConsideradoNaTabelaDeCalculo(diasConsiderado, mes) {
+    console.log("ana, ",diasConsiderado, mes)
     diasConsiderado = parseInt(diasConsiderado);
     mes = parseInt(mes);
     if (diasConsiderado > 30) {

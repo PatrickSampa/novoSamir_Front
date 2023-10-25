@@ -6,15 +6,14 @@
       </v-toolbar>
 
       <v-form class="pa-3" v-model="valid" lazy-validation>
-        <v-text-field v-model="username" :rules="nameRules" label="Username" required></v-text-field>
+        <v-text-field v-model="username" :rules="nameRules" label="Username" @keydown.enter="loginUsuario" required></v-text-field>
 
-        <v-text-field v-model="password" :rules="passwordRules" label="senha" :type="showPassword ? 'text' : 'password'" required>
+        <v-text-field v-model="password" :rules="passwordRules" label="senha" :type="showPassword ? 'text' : 'password'" required @keydown.enter="loginUsuario">
           <template v-slot:append>
         <v-icon @click="showPassword = !showPassword">
           {{ showPassword ? 'mdi-eye-off' : 'mdi-eye' }} <!-- Ícone de visibilidade -->
         </v-icon>
       </template></v-text-field>
-        <!-- <v-checkbox v-model="isChecked" label="Mostrar Senha"></v-checkbox> -->
         <v-btn depressed :loading="loading" color="primary" @click="loginUsuario">LOGIN</v-btn>
         <v-btn id="cadastrar" depressed :loading="loading" color="secondary" to="/cadastrar">Cadastrar</v-btn>
       </v-form>
@@ -30,8 +29,8 @@ export default {
   data: () => {
     return {
       username: "",
-      showPassword: false,
       password: "",
+      showPassword: false,
       valid: true,
       nameRules: [(v) => !!v || "Digite o Nome!"],
       passwordRules: [

@@ -3,6 +3,7 @@
     <ValidadorDossiePrevidenciario/>
    <AtualizadorDosPrev/>
    <VerificadorDeProcessoDuplicado/>
+   <AtualizadorTaxaSelic/>
   </v-card>
 </template>
 
@@ -12,11 +13,14 @@ import { baseApiUrl } from "../global";
 import AtualizadorDosPrev from "../components/AtualizadorDosPrev.vue";
 import ValidadorDossiePrevidenciario from "../components/ValidadorDossiePrevidenciario.vue";
 import VerificadorDeProcessoDuplicado from "../components/VerificadorDeProcessoDuplicado.vue";
+import AtualizadorTaxaSelic from "../components/AtualizadorTaxaSelic.vue";
+
 export default {
   components: {
     AtualizadorDosPrev: AtualizadorDosPrev,
     ValidadorDossiePrevidenciario: ValidadorDossiePrevidenciario,
-    VerificadorDeProcessoDuplicado: VerificadorDeProcessoDuplicado
+    AtualizadorTaxaSelic: AtualizadorTaxaSelic,
+    VerificadorDeProcessoDuplicado: VerificadorDeProcessoDuplicado,
   },
 
   //name: "AdicionarTaxa",

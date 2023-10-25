@@ -4,6 +4,7 @@ import { validarValorDoDiaSerConsideradoNaTabelaDeCalculo } from "../../Helps/va
 
 export async function calculoBeneficioPrincipal(informationBeneficioPrincpal) {
     const tabelaPrincipal = await getcalculoBeneficioPrincipal(informationBeneficioPrincpal);
+    console.log("RETROTRNOU " + tabelaPrincipal)
     return await ajusteDevidoNaDataDibEDipNatabelaPrincipal(informationBeneficioPrincpal, tabelaPrincipal);
 }
 
@@ -13,6 +14,7 @@ async function ajusteDevidoNaDataDibEDipNatabelaPrincipal(informationBeneficioPr
     let [diasTrabalhadoNoMesDIP, mesDip] = dip.split('/');
 
     let diasTrabalhadosNoInicioCalculo = quantosDiasFaltaParaAcabarOMes(inicioCalculo);
+    
 
     diasTrabalhadosNoInicioCalculo = validarValorDoDiaSerConsideradoNaTabelaDeCalculo(diasTrabalhadosNoInicioCalculo, mesInicioCalculo);
     diasTrabalhadoNoMesDIP = validarValorDoDiaSerConsideradoNaTabelaDeCalculo(diasTrabalhadoNoMesDIP, mesDip);
