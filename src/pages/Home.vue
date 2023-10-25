@@ -11,15 +11,14 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1 style="font-size: 60px; color: #3876BF; text-align: center">
-      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="55" height="55"></h1>
+      <h1 style="font-size: 50px; color: #3876BF; text-align: center">
+      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="50" height="50"></h1>
     </div>
     <v-card>
       <v-tabs>
         <v-tabs-slider color="green"></v-tabs-slider>
         <v-tab @click="add_taxa = false">Cálculo</v-tab>
         <v-tab @click="acessoPortalADM()">Portal ADM</v-tab>
-        <v-tab @click="add_taxa = false">Ajuda</v-tab>
       </v-tabs>
     </v-card>
     <PortalADM v-if="add_taxa" />
@@ -1459,6 +1458,16 @@
       </div>
     </v-container>
 
+      <div>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-icon class="sticky-icon" v-on="on">mdi-help-circle</v-icon>
+          </template>
+          <span>Informações breves sobre este item.</span>
+        </v-tooltip>
+      </div>
+
+    
   </v-container>
 </template>
 
@@ -5105,5 +5114,14 @@ td {
   width: 100%;
   text-align: left;
   border: 2px solid white;
+}
+</style>
+
+<style scoped>
+.sticky-icon {
+  position: fixed;
+  top: 95%; /* Ajuste a posição vertical como necessário */
+  right: 20px; /* Ajuste a posição horizontal como necessário */
+  z-index: 1000; /* Garanta que o ícone esteja acima de outros elementos */
 }
 </style>
