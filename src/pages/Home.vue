@@ -11,8 +11,8 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1 style="font-size: 50px; color: #3876BF; text-align: center">
-      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="50" height="50"></h1>
+      <h1 style="font-size: 30px; color: #3876BF; text-align: center">
+      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="30" height="30"></h1>
     </div>
     <v-card>
       <v-tabs>
@@ -1458,14 +1458,14 @@
       </div>
     </v-container>
 
+    <template>
       <div>
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on }">
-            <v-icon class="sticky-icon" v-on="on">mdi-help-circle</v-icon>
-          </template>
-          <span>Informações breves sobre este item.</span>
-        </v-tooltip>
+        <div class="sticky-icon" @click="ExibirAjuda">
+          <v-icon>mdi-help-circle</v-icon>
+        </div>
       </div>
+    </template>
+
 
     
   </v-container>
@@ -4701,6 +4701,21 @@ export default {
     redirectToCalculo() {
       this.$router.push({ name: "processos" }).catch(() => { });
     },
+
+    ExibirAjuda() {
+      Swal.fire({
+        title: 'Regras de cálculo do Samir', 
+        html: `<p>Cálculo de Reajuste (α) = Valor da RMI x Índice de Reajuste<br>
+               Reajuste Salarial (ß) = α x Correção Monetária<br>
+               Taxa Juros (δ) = ß x Juros<br>
+               Total (γ) = δ + Salário Corrigido<br>
+               Valor Devido: α + ß + δ + γ</p>`,
+        icon: 'info',
+        customClass: {
+          content: 'estilo-content-sweet'
+        }
+      });
+    }
   },
   mounted() {
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
@@ -5115,13 +5130,17 @@ td {
   text-align: left;
   border: 2px solid white;
 }
-</style>
-
-<style scoped>
 .sticky-icon {
   position: fixed;
-  top: 95%; /* Ajuste a posição vertical como necessário */
-  right: 20px; /* Ajuste a posição horizontal como necessário */
-  z-index: 1000; /* Garanta que o ícone esteja acima de outros elementos */
+  display:flex;
+  top: 95%;
+  right: 2%; 
+  z-index: 1000;
+  font-size: 25px;
+  cursor:pointer
+}
+
+.estilo-content-sweet{
+  text-align: left
 }
 </style>
