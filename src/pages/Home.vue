@@ -1897,7 +1897,7 @@ export default {
     },
     acessoPortalADM() {
       this.$prompt("Digite a senha de acesso").then((text) => {
-        if (text == "1") {
+        if (text == "cadinho") {
           this.add_taxa = true;
         } else {
           this.add_taxa = false;
