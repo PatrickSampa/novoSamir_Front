@@ -11,8 +11,8 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1 style="font-size: 30px; color: #3876BF; text-align: center">
-      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="30" height="30"></h1>
+      <h1 style="font-size: 33px; color: #3876BF; text-align: center">
+      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="40" height="40"></h1>
     </div>
     <v-card>
       <v-tabs>
@@ -350,8 +350,7 @@
       
       <!-- TABELA PRNCIPAL -->
       <br />
-      <br>
-      <br>
+      <br/>
       <h1 v-if="add_taxa == false" class="titulo">PREENCHA OS DADOS</h1>
       <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
       <div v-if="add_taxa == false" class="rowInputs">
@@ -436,121 +435,144 @@
       </div>
       <br />
       <div class="rowCalculo" v-if="add_taxa == false">
-        <div class="columnRight">
-          <label class="camposInput">Soma do Principal: R$</label>
-          <br />
-          <label class="camposInput">Juros de mora: R$</label>
-          <br />
-          <label class="camposInput">12 Parcelas Vincendas: R$</label>
-          <br />
-          <br />
-          <label class="camposInput">Devido ao(s) Reclamante(s): R$</label>
-          <br />
-          <label class="camposInput">Honorários Advocatícios: R$</label>
-          <br />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Acordo: %</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Devido ao(s) Reclamante(s)
-            (Acordo): R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label v-if="procntagem_acordo != 0 && procntagem_acordo != null" class="camposInput">Honorários Advocatícios
-            (Acordo): R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br />
-          <label class="camposInput">Total do Processo: R$</label>
-          <br />
-          <br />
-        </div>
+        <div class="centerResumProcesso">
+          <div class="columnResumo">
+            <div class="align-text">
+              <label class="inputCalculo">Soma do Principal:</label>
+              <label class="inputCifrao">R$ </label>
+            </div>
+            <div class="align-text">
+              <label class="inputCalculo">Juros de mora:</label>
+              <label class="inputCifrao">R$ </label>
+            </div>
+            <div class="align-text">
+              <label class="inputCalculo">12 Parcelas Vincendas:</label>
+              <label class="inputCifrao">R$</label>
+            </div>
+            
+            <div class="align-text">
+              <label class="inputCalculo">Devido ao(s) Reclamante(s):</label>
+              <label class="inputCifrao">R$</label>
+            </div>
+            <div class="align-text">
+              <label class="inputCalculo">Honorários Advocatícios:</label>
+              <label class="inputCifrao">R$</label>
+            </div>
+            <br/>
+            <div class="align-text" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+              <label class="inputCalculo">Acordo: %</label>
+              <label class="inputCifrao">R$</label>
+            </div>
+            <div class="align-text" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+              <label class="inputCalculo">Devido ao(s) Reclamante(s) (Acordo):</label>
+              <label class="inputCifrao">R$</label>
+            </div>
+            <div class="align-text" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+              <label class="inputCalculo">Honorários Advocatícios (Acordo):</label>
+              <label class="inputCifrao">R$</label>
+            </div>
+            <div class="align-text">
+              <label class="inputCalculo">Total do Processo:</label>
+              <label class="inputCifrao">R$</label>
+            </div>
+          </div>
+          
+        
 
-        <div class="column">
-          <input type="number" v-model="valor_corrigido" placeholder="XX.XXX,XX" />
-          <label class="inputCalculo" id="somaPrincipal" />
-          <br />
-          <input type="number" v-model="valor_juros" placeholder="XX.XXX,XX" />
-          <label class="inputCalculo" id="somaJuros" />
-          <br />
-          <input type="number" placeholder="XX.XXX,XX" v-model="pacelasVencidas" />
-          <label class="inputCalculo" id="parcelasVincendas" />
-          <br />
-          <br />
 
-          {{
-            Math.floor(
-              (parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) *
-              100
-            ) / 100
-          }}
-          <br />
-          <input type="number" v-model="valorHonorarios" placeholder="XX.XXX,XX" id="honorariosAdvocativos" />
-          <label class="inputCalculo" />
-          <br />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <input type="number" v-if="procntagem_acordo != 0 && procntagem_acordo != null" v-model="procntagem_acordo"
-            placeholder="XX.XXX,XX" />
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
 
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
-            procntagem_acordo != 0 && procntagem_acordo != null
-            ? Math.floor(
-              (((parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) *
-                parseFloat(procntagem_acordo)) /
-                100) *
-              100
-            ) / 100
-            : Math.floor(
-              (parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) *
-              100
-            ) / 100
-          }}
-          </b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
 
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
-            procntagem_acordo != 0 && procntagem_acordo != null
-            ? Math.floor(
-              ((parseFloat(valorHonorarios) * parseFloat(procntagem_acordo)) /
-                100) *
-              100
-            ) / 100
-            : Math.floor(parseFloat(valorHonorarios) * 100) / 100
-          }}</b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br />
 
-          {{
-            procntagem_acordo != 0 && procntagem_acordo != null
-            ? Math.floor(
-              (((parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas) +
-                parseFloat(valorHonorarios)) *
-                parseFloat(procntagem_acordo)) /
-                100) *
-              100
-            ) / 100
-            : Math.floor(
-              (parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas) +
-                parseFloat(valorHonorarios)) *
-              100
-            ) / 100
-          }}
 
-          <label class="inputCalculo" id="totalProcesso" />
-          <br />
+            <div class="column">
+              <input type="number" v-model="valor_corrigido" placeholder="XX.XXX,XX" />
+              <label class="inputCalculo" id="somaPrincipal" />
+              <br />
+              <input type="number" v-model="valor_juros" placeholder="XX.XXX,XX" />
+              <label class="inputCalculo" id="somaJuros" />
+              <br />
+              <input type="number" placeholder="XX.XXX,XX" v-model="pacelasVencidas" />
+              <label class="inputCalculo" id="parcelasVincendas" />
+              <br />
+
+              {{
+                Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                  100
+                ) / 100
+              }}
+              <br />
+              <input type="number" v-model="valorHonorarios" placeholder="XX.XXX,XX" id="honorariosAdvocativos" />
+              <label class="inputCalculo" />
+              <br />
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+              <input type="number" v-if="procntagem_acordo != 0 && procntagem_acordo != null" v-model="procntagem_acordo"
+                placeholder="XX.XXX,XX" />
+              <label class="inputCalculo" id="honorariosAdvocativos" />
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+
+              <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
+                  (((parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                    parseFloat(procntagem_acordo)) /
+                    100) *
+                  100
+                ) / 100
+                : Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                  100
+                ) / 100
+              }}
+              </b>
+              <label class="inputCalculo" id="honorariosAdvocativos" />
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+
+              <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
+                  ((parseFloat(valorHonorarios) * parseFloat(procntagem_acordo)) /
+                    100) *
+                  100
+                ) / 100
+                : Math.floor(parseFloat(valorHonorarios) * 100) / 100
+              }}</b>
+              <label class="inputCalculo" id="honorariosAdvocativos" />
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+              <br />
+
+              {{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
+                  (((parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas) +
+                    parseFloat(valorHonorarios)) *
+                    parseFloat(procntagem_acordo)) /
+                    100) *
+                  100
+                ) / 100
+                : Math.floor(
+                (parseFloat(valor_corrigido) +
+                  parseFloat(valor_juros) -
+                  parseFloat(pacelasVencidas) +
+                  parseFloat(valorHonorarios)) *
+                100
+              ) / 100
+              }}
+
+              <label class="inputCalculo" id="totalProcesso" />
+              <br />
+            </div>
         </div>
       </div>
+      <br/>
       <v-row class="mx-3" v-for="beneficio of arrayBeneficioAcumuladosContaveis" :key="beneficio.dib">
         <v-col cols="12" sm="6" md="3">
           <p>Beneficio recebido: {{ beneficio.beneficio }}</p>
@@ -695,7 +717,7 @@
             <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="inputToPrint"
             id="dataFinalPlanilha" />
           <br />
-          <label for="13salario" class="labels pb-2" style="margin-left: 18px">13º Salário
+          <label for="13salario" class="labels pb-2" style="margin-left: 190px">13º Salário
           </label>
           <input class="form-check-input" type="checkbox" style="margin-left: 5px" v-model="salario13"
             :value="salario13" />
@@ -1454,7 +1476,7 @@
         :items-per-page="alcadaArray.length" item-key="data" class="elevation-1" hide-default-footer>
       </v-data-table>
       <div v-if="add_taxa == false" v-show="mode === 'table'">
-        <b-button variant="primary" @click="printDiv()"><i class="fa fa-file"></i></b-button>
+        <b-button variant="primary" @click="printDiv()">Imprimir PDF <i class="fa fa-file"></i></b-button>
       </div>
     </v-container>
 
@@ -4024,7 +4046,7 @@ export default {
           text-align: left;
           margin-left: 3%;
           font-size: 16px;
-          width: 30%;
+          width: 100%;
         }
         
 
@@ -4422,9 +4444,10 @@ export default {
 
         .camposInputAlcada {
           text-align: left;
-          margin-left: 3%;
+          margin-left: 30%;
           font-size: 16px;
-          width: 30%;
+          width: 100%;
+          margin-right: 5px;
         }
         
 
@@ -4845,20 +4868,29 @@ v-card {
 
 .camposInput {
   text-align: left;
-  margin-left: 3%;
-  margin-right: 5px
+  margin-left: 30%;
+  margin-right: 5px;
+}
+
+tr:nth-child(even){
+  background-color: #f2f2f2
+}
+
+tr:nth-child(odd) {
+  background-color: #ffffff;
 }
 
 .center-first{
   text-align: center;
-  background-color: #FBFACD;
+  background-color: rgb(219, 228, 240);
   border-radius: 10px;
-  padding: 3px;
+  padding: 4px;
+  margin: 10px
 }
 
 .center {
   text-align: center;
-  background-color: rgb(194, 216, 235);
+  background-color: rgb(154, 186, 215);
   border-radius: 10px;
   padding: 3px;
 }
@@ -4871,6 +4903,33 @@ v-card {
 .column {
   float: left;
   width: 50%;
+}
+
+.columnResumo {
+  float: left;
+}
+
+.centerResumProcesso {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 370px;
+}
+
+.align-text{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 250px
+}
+
+.inputCalculo {
+  text-align: left;
+}
+
+.inputCifrao {
+  text-align: right;
+  margin-right: 5px;
 }
 
 .columnRight {
@@ -4922,10 +4981,6 @@ v-card {
   width: 500px;
 }
 
-.inputCalculo {
-  text-align: left;
-  margin-left: 1%;
-}
 
 .rowCalculo:after {
   content: "";
@@ -4965,6 +5020,14 @@ v-card {
 .inputTetoAlcada {
   max-width: 10%;
 }
+
+.camposInputAlcada {
+  text-align: left;
+  margin-left: 30%;
+  width: 50%;
+  margin-right: 5px;
+}
+        
 
 table,
 th {

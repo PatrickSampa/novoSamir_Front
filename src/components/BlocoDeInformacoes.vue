@@ -124,21 +124,21 @@
       <template v-slot:item="{ item }">
         <tr @click="tranferir(item.id); itemClicked = item.id">
           
-          <td  class="py-3" :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent', cursor: 'pointer'}" @click="handleClick(item.id)">
+          <td  class="py-3" :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', backgroundColor: itemClicked === item.id ? '#dcdcdc' : 'transparent', cursor: 'pointer'}" @click="handleClick(item.id)">
             <span style="color:#1976d2">{{ item.numeroDoProcesso }}</span>
           </td>
           
-          <td :style="{color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer','background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">{{ item.nome }}</td>
-          <td :style="{color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer','background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">{{ item.tipo }}</td>
-          <td :style="{color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer','background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">{{ item.cpf }}</td>
+          <td :style="{color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer','background-color': itemClicked === item.id ? '#dcdcdc' : 'inherit' }">{{ item.nome }}</td>
+          <td :style="{color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer','background-color': itemClicked === item.id ? '#dcdcdc' : 'inherit' }">{{ item.tipo }}</td>
+          <td :style="{color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer','background-color': itemClicked === item.id ? '#dcdcdc' : 'inherit' }">{{ item.cpf }}</td>
           
-          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer', 'background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">
+          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', cursor: 'pointer', 'background-color': itemClicked === item.id ? '#dcdcdc' : 'inherit' }">
             <v-icon v-if="item.beneficiosAcumulados[0]" color="green">
               mdi-check-outline
             </v-icon>
           </td>
 
-          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', 'background-color': itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'inherit' }">
+          <td :style="{ color: itemClicked === item.id ? 'rgba(0, 0, 0)' : 'inherit', 'background-color': itemClicked === item.id ? '#dcdcdc' : 'inherit' }">
             <v-btn :loading="loading" icon @click="deletarInforPorID(item)">
               <v-icon color="red">mdi-delete</v-icon>
             </v-btn>
