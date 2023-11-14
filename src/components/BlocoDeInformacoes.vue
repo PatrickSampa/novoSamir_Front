@@ -114,7 +114,7 @@
             <v-btn depressed :loading="loading" color="blue white--text" class="mr-md-3" @click="traigemAutomatico">Triar Automático</v-btn>
           </v-col>
           <v-col cols="2" md="10" class="text-center">
-            <v-btn :loading="loading" depressed color="red white--text" target="_blank" @click="deletarTodosOsInfos()">Deletar Todas as Informações</v-btn>
+            <v-btn :loading="loading" depressed color="red white--text" margin-right=20px; target="_blank" style="margin-right: 2px; float: right;" @click="deletarTodosOsInfos()">Deletar Todas as Informações</v-btn>
           </v-col>
         </v-row>
       </template>

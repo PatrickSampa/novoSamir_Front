@@ -11,7 +11,7 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1 style="font-size: 33px; color: #3876BF; text-align: center">
+      <h1 style="font-size: 38px; color: #3876BF; text-align: center">
       Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="40" height="40"></h1>
     </div>
     <v-card>
@@ -351,48 +351,48 @@
       <!-- TABELA PRNCIPAL -->
       <br />
       <br/>
-      <h1 v-if="add_taxa == false" class="titulo">PREENCHA OS DADOS</h1>
+      <h1 v-if="add_taxa == false" class="titulo" style="background-color: rgb(254, 254, 225)">PREENCHA OS DADOS</h1>
       <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
       <div v-if="add_taxa == false" class="rowInputs">
         <div v-if="add_taxa == false" class="column">
           <label class="camposInput">
-            Processo:
+            <span>Processo:</span>
             <input v-model="info_calculo.numeroDoProcesso" @input="atulizarvalor()"
               placeholder="XXXX-XX.XXXX.XXX.XXXX" /></label>
           <label class="inputToPrint" id="processoForm" />
           <br />
           <label class="camposInput">
-            Autor:
+          <span>Autor:</span>
             <input v-model="info_calculo.nome" @input="atulizarvalor()" placeholder="Jennifer Walters" /></label>
           <label class="inputToPrint" id="autorForm" />
           <br />
-          <label class="camposInput">Objeto:
+          <label class="camposInput"><span>Objeto:</span>
             <input v-model="objetoDoCalculo" placeholder="Ex.: CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO" /></label><label
             class="inputToPrint" id="objetoForm" />
           <br />
-          <label class="camposInput">Vara:
+          <label class="camposInput"><span>Vara:</span>
             <input v-model="varaPrevidenciaria" placeholder="Ex.: Previdenciária" /></label><label class="inputToPrint"
             id="varaForm" />
           <br />
-          <label class="camposInput">Juros: <input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label><label
+          <label class="camposInput"><span>Juros:</span><input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label><label
             class="inputToPrint" id="jurosForm" />
           <br />
         </div>
         <div class="column">
-          <label class="camposInput">Ajuizamento:
+          <label class="camposInput"><span>Ajuizamento:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dataAjuizamento" @input="atulizarvalor()"
               placeholder="XX/XX/XXXX" /></label><label class="inputToPrint" id="ajuizamentoForm" />
           <br />
-          <label class="camposInput">Início do Juros:
+          <label class="camposInput"><span>Início do Juros:</span>
             <input v-mask="'##/##/####'" v-model="inicio_juros" placeholder="XX/XXXX" /></label><label
             class="inputToPrint" id="inicioJurosForm" />
           <br />
           <!-- Criar Função -->
-          <label class="camposInput">Valido até:
+          <label class="camposInput"><span>Valido até:</span>
             <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label class="inputToPrint"
             id="calculadoEmForm" />
           <br />
-          <label class="camposInput">Honorário:
+          <label class="camposInput"><span>Honorário:</span>
             <input placeholder="Ex.:" v-model="textoHonorarios" /></label><label class="inputToPrint"
             id="honorarioForm" />
           <br />
@@ -439,11 +439,11 @@
           <div class="columnResumo">
             <div class="align-text">
               <label class="inputCalculo">Soma do Principal:</label>
-              <label class="inputCifrao">R$ </label>
+              <label class="inputCifrao">R$</label>
             </div>
             <div class="align-text">
               <label class="inputCalculo">Juros de mora:</label>
-              <label class="inputCifrao">R$ </label>
+              <label class="inputCifrao">R$</label>
             </div>
             <div class="align-text">
               <label class="inputCalculo">12 Parcelas Vincendas:</label>
@@ -717,7 +717,7 @@
             <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="inputToPrint"
             id="dataFinalPlanilha" />
           <br />
-          <label for="13salario" class="labels pb-2" style="margin-left: 190px">13º Salário
+          <label for="13salario" class="labels pb-2" style="margin-left: 170px">13º Salário
           </label>
           <input class="form-check-input" type="checkbox" style="margin-left: 5px" v-model="salario13"
             :value="salario13" />
@@ -875,8 +875,7 @@
       <!-- Gerar pdf -->
       <br />
       <br>
-      <br>
-      <h1 v-if="add_taxa == false" class="titulo">MEMÓRIA DE CÁLCULO</h1>
+      <h1 v-if="add_taxa == false" class="titulo" style="background-color: rgb(254, 254, 225)">MEMÓRIA DE CÁLCULO</h1>
       
       <v-card v-if="!add_taxa" id="areaToPrint">
         <!-- <Popup v-if="showPopup" :showPopup="showPopup" :popupTitle="popupTitle" :popupMessage="popupMessage" @close="closePopup" /> -->
@@ -904,27 +903,27 @@
           <h4 class="center">REVISE OS DADOS</h4>
           <div class="rowInputs">
             <div class="column">
-              <label class="camposInput">Objeto:</label><label class="inputToPrint" id="objetoForm" />
+              <label class="camposInputMemoriaCalculo">Objeto:</label><label class="inputToPrint" id="objetoForm" />
               {{ objetoDoCalculo }}
               <br />
-              <label class="camposInput">Vara:</label><label class="inputToPrint" id="varaForm" />
+              <label class="camposInputMemoriaCalculo">Vara:</label><label class="inputToPrint" id="varaForm" />
               {{ varaPrevidenciaria }}
               <br />
-              <label class="camposInput">N.B: {{ info_calculo.nb }}</label><label class="inputToPrint" id="jurosForm" />
+              <label class="camposInputMemoriaCalculo">N.B: {{ info_calculo.nb }}</label><label class="inputToPrint" id="jurosForm" />
               <br />
             </div>
             <div class="column">
-              <label class="camposInput">Ajuizamento:</label><label class="inputToPrint" id="ajuizamentoForm" />
+              <label class="camposInputMemoriaCalculo">Ajuizamento:</label><label class="inputToPrint" id="ajuizamentoForm" />
               {{ info_calculo.dataAjuizamento }}
               <br />
-              <label class="camposInput">Início do Juros:</label><label class="inputToPrint" id="inicioJurosForm" />
+              <label class="camposInputMemoriaCalculo">Início do Juros:</label><label class="inputToPrint" id="inicioJurosForm" />
               {{ inicio_juros }}
               <br />
-              <label class="camposInput">Atualizar Até: {{ atulizacao }}</label><label class="inputToPrint"
+              <label class="camposInputMemoriaCalculo">Atualizar Até: {{ atulizacao }}</label><label class="inputToPrint"
                 id="calculadoEmForm" />
               <!--Função-->
               <br />
-              <label class="camposInput">Honorários Sucumbenciais:</label><label class="inputToPrint" id="honorarioForm" />
+              <label class="camposInputMemoriaCalculo">Honorários Sucumbenciais:</label><label class="inputToPrint" id="honorarioForm" />
               {{ textoHonorarios }}
               <br />
             </div>
@@ -1476,7 +1475,7 @@
         :items-per-page="alcadaArray.length" item-key="data" class="elevation-1" hide-default-footer>
       </v-data-table>
       <div v-if="add_taxa == false" v-show="mode === 'table'">
-        <b-button variant="primary" @click="printDiv()">Imprimir PDF <i class="fa fa-file"></i></b-button>
+        <b-button variant="primary" @click="printDiv()"> Imprimir <img src="../assets/impressora.png" width="20" height="20"></b-button>
       </div>
     </v-container>
 
@@ -1498,7 +1497,7 @@ import Axios from "../config/configAxios";
 // import TabelaDib from "../features/TabelaDib.vue";
 //import { pararJurosTeste } from "../features/pararJuros";
 import { baseApiUrl, apiSapiens } from "../global";
-import jsPDF from "jspdf";
+import html2pdf from "html2pdf.js";
 import axios from "axios";
 import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
@@ -2878,34 +2877,29 @@ export default {
       });
     },
     imprimirPdf(dado) {
-      // eslint-disable-next-line no-undef
-      var doc = new jsPDF("portrait", "pt", "a4"),
-        data = new Date();
-      let margins = {
-        top: 40,
-        bottom: 60,
-        left: 40,
-        width: 1000,
+    // eslint-disable-next-line no-undef
+      const element = document.getElementById("areaToPrint");
+      const pdfOptions = {
+        margin: 10,
+        image: {type: "jpeg", quality: 0.98},
+        html2canvas: {scale: 2},
+        jsPDF:{unit: "mm", format: "a4", orientation:"portrait"},
       };
-      var divToPrint = document.getElementById("areaToPrint");
-      doc.fromHTML(
-        divToPrint,
-        margins.left, // x coord
-        margins.top,
-        { pagesplit: true },
-        function () {
-          doc.save(
-            "Relatorio - " +
-            dado.nome +
-            " " +
-            data.getDate() +
-            "/" +
-            data.getMonth() +
-            "/" +
-            data.getFullYear() +
-            ".pdf"
-          );
-        }
+
+      const pdf = html2pdf().from(element).set(pdfOptions).outputPdf();
+
+      const nomeDoArquivo = `${this.numeroDoProcesso}.pdf`;
+
+      pdf.save(
+        "Relatório - " +
+          dado.nome +
+        " " +
+        new Date().getDate() +
+        "/" +
+        (new Date().getMonth() + 1) +
+        "/" +
+        new Date().getFullYear() +
+        " - " + nomeDoArquivo + ".pdf"
       );
     },
     calculoDeOssada() {
@@ -3887,6 +3881,7 @@ export default {
         .center {
           margin: auto;
           width: 60%;
+          background-color: rgb(154, 186, 215);
           padding: 10px;
           text-align: center
 
@@ -3935,10 +3930,12 @@ export default {
 
         .center {
           text-align: center;
+          background-color: rgb(154, 186, 215);
         }
 
         .centerAGU {
           text-align: center;
+          background-color: rgb(154, 186, 215);
           padding-top: 10px;
         }
 
@@ -4287,6 +4284,7 @@ export default {
         .center {
           margin: auto;
           width: 60%;
+          background-color: rgb(154, 186, 215);
           padding: 10px;
           text-align: center
 
@@ -4335,11 +4333,13 @@ export default {
 
         .center {
           text-align: center;
+          background-color: rgb(154, 186, 215);
         }
 
         .centerAGU {
           text-align: center;
           padding-top: 10px;
+          background-color: rgb(154, 186, 215);
         }
 
         .column {
@@ -4867,8 +4867,31 @@ v-card {
 }
 
 .camposInput {
+  text-align: right;
+  margin-left: 27%;
+  margin-right: 5px;
+  height: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.camposInputMemoriaCalculo {
   text-align: left;
-  margin-left: 30%;
+  margin-right: 3%;
+
+}
+
+.camposInput input{
+  flex-grow: 1;
+  box-sizing: border-box;
+  white-space:nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: none;
+  padding: 0;
+}
+
+.camposInput span {
   margin-right: 5px;
 }
 
@@ -4890,7 +4913,7 @@ tr:nth-child(odd) {
 
 .center {
   text-align: center;
-  background-color: rgb(154, 186, 215);
+  background-color: rgb(190, 212, 231);
   border-radius: 10px;
   padding: 3px;
 }
@@ -4929,7 +4952,7 @@ tr:nth-child(odd) {
 
 .inputCifrao {
   text-align: right;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .columnRight {
@@ -4958,8 +4981,13 @@ tr:nth-child(odd) {
 
 .columnResumoProcessoParte {
   float: left;
-  width: 39%;
+  width: 35%;
   margin-left: 1%;
+}
+
+.columnResumoProcessoParte input {
+  width: 45%;
+  box-sizing: border-box;
 }
 
 .centerMargin {
@@ -5023,8 +5051,9 @@ tr:nth-child(odd) {
 
 .camposInputAlcada {
   text-align: left;
-  margin-left: 30%;
+  margin-left: 27%;
   width: 50%;
+  height: 30px;
   margin-right: 5px;
 }
         
