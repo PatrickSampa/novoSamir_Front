@@ -679,41 +679,41 @@
       <h4 class="center-first">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
         <div class="column">
-          <label class="camposInputAlcada">
+          <label class="camposInput">
             Parte:
             <input v-model="info_calculo.nome" @input="atulizarvalor()"
               placeholder="Nome + (CPF 000.000.000-00)" /></label>
           <label class="inputToPrint" id="partePlanilha" />
           <br />
-          <label class="camposInputAlcada">
+          <label class="camposInput">
             Espécie:
             <input v-model="info_calculo.beneficio" @input="atulizarvalor()" placeholder="XX(XXXXXXXXXX)" /></label>
           <label class="inputToPrintAlcada" id="autorPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Jud:
+          <label class="camposInput">DIB Jud:
             <input v-mask="'##/##/####'" v-model="info_calculo.dib" placeholder="00/00/0000" /></label><label
             class="inputToPrint" id="dibJudPlanilha" />
           <br />
-          <label class="camposInputAlcada">DIB Anterior:
+          <label class="camposInput">DIB Anterior:
             <input v-mask="'##/##/####'" v-model="info_calculo.dibAnterior" @input="atulizarvalor()"
               placeholder="00/00/0000" /></label><label class="inputToPrint" id="dibAnteriorPlanilha" />
           <br />
-          <label class="camposInputAlcada">RMI Jud.:
+          <label class="camposInput">RMI Jud.:
             <input type="number" v-model="salarioInicial" placeholder="00/00" /></label><label class="inputToPrint"
             id="rmiJudPlanilha" />
           <br />
         </div>
         <div class="column">
-          <label class="camposInputAlcada">%RMI:
+          <label class="camposInput">%RMI:
             <input type="number" placeholder="000,00" v-model="porcentagemRMI" /></label><label class="inputToPrint"
             id="porCententagemRmiPlanilha" />
           <br />
-          <label class="camposInputAlcada">Período (Data de Início):
+          <label class="camposInput">Período (Data de Início):
             <input v-mask="'##/##/####'" v-model="dtInicial" placeholder="XX/XX/XXXX" /></label><label
             class="inputToPrint" id="dataInicialPlanilha" />
           <br />
           <!-- Criar Função -->
-          <label class="camposInputAlcada">Período (Data de Fim):
+          <label class="camposInput">Período (Data de Fim):
             <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="inputToPrint"
             id="dataFinalPlanilha" />
           <br />
@@ -1497,7 +1497,7 @@ import Axios from "../config/configAxios";
 // import TabelaDib from "../features/TabelaDib.vue";
 //import { pararJurosTeste } from "../features/pararJuros";
 import { baseApiUrl, apiSapiens } from "../global";
-import html2pdf from "html2pdf.js";
+import jsPDF from 'jspdf';
 import axios from "axios";
 import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
@@ -1668,14 +1668,12 @@ export default {
             parseFloat(this.pacelasVencidas)) *
           this.formatarPorcentagemAcordo()
         ) / 100;
-      console.log("Valor Analisar", valorAnalissar, "Salario Minimo Atual", this.salarioMinimoAnoAtual)
       if (valorAnalissar < this.salarioMinimoAnoAtual) {
         return "RPV";
       } else {
         if (this.indentificadorDePersistenciaUtrapassagemDeAcordo != this.info_calculo.nb && (this.procntagem_acordo != 0 && this.procntagem_acordo != null)) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.indentificadorDePersistenciaUtrapassagemDeAcordo = this.info_calculo.nb;
-          console.log("jdjdejfffgrg", this.indentificadorDePersistenciaUtrapassagemDeAcordo,"    ", this.info_calculo.nb)
           this.$confirm("Acordo ultrapassa os 60 salários mínimos", "Ultrapassagem de limite de ACORDO", "error")
         }
         return "Precatório";
@@ -2869,7 +2867,6 @@ export default {
         // const promiseAtulizar =  new Promise(() => this.atulizarInfosLote(dado));
         // promiseAtulizar.then(() => this.imprimirPdf());
         // this.atulizarInfosLote(dado);
-        // this.imprimirPdf();
         console.log("dado: " + dado);
         console.log(dado);
         //this.printDiv()
@@ -2877,29 +2874,34 @@ export default {
       });
     },
     imprimirPdf(dado) {
-    // eslint-disable-next-line no-undef
-      const element = document.getElementById("areaToPrint");
-      const pdfOptions = {
-        margin: 10,
-        image: {type: "jpeg", quality: 0.98},
-        html2canvas: {scale: 2},
-        jsPDF:{unit: "mm", format: "a4", orientation:"portrait"},
+      // eslint-disable-next-line no-undef
+      var doc = new jsPDF("portrait", "pt", "a4"),
+        data = new Date();
+      let margins = {
+        top: 40,
+        bottom: 60,
+        left: 40,
+        width: 1000,
       };
-
-      const pdf = html2pdf().from(element).set(pdfOptions).outputPdf();
-
-      const nomeDoArquivo = `${this.numeroDoProcesso}.pdf`;
-
-      pdf.save(
-        "Relatório - " +
-          dado.nome +
-        " " +
-        new Date().getDate() +
-        "/" +
-        (new Date().getMonth() + 1) +
-        "/" +
-        new Date().getFullYear() +
-        " - " + nomeDoArquivo + ".pdf"
+      var divToPrint = document.getElementById("areaToPrint");
+      doc.fromHTML(
+        divToPrint,
+        margins.left, // x coord
+        margins.top,
+        { pagesplit: true },
+        function () {
+          doc.save(
+            "Relatorio - " +
+            dado.nome +
+            " " +
+            data.getDate() +
+            "/" +
+            data.getMonth() +
+            "/" +
+            data.getFullYear() +
+            ".pdf"
+          );
+        }
       );
     },
     calculoDeOssada() {
@@ -4878,7 +4880,6 @@ v-card {
 .camposInputMemoriaCalculo {
   text-align: left;
   margin-right: 3%;
-
 }
 
 .camposInput input{
@@ -4986,7 +4987,7 @@ tr:nth-child(odd) {
 }
 
 .columnResumoProcessoParte input {
-  width: 45%;
+  width: 100%;
   box-sizing: border-box;
 }
 
@@ -5050,11 +5051,10 @@ tr:nth-child(odd) {
 }
 
 .camposInputAlcada {
-  text-align: left;
-  margin-left: 27%;
-  width: 50%;
-  height: 30px;
+  margin-left: 10%;
   margin-right: 5px;
+  white-space:nowrap;
+  overflow:hidden;
 }
         
 
