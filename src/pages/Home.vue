@@ -392,9 +392,11 @@
             <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label class="inputToPrint"
             id="calculadoEmForm" />
           <br />
-          <label class="camposInput"><span>Honorário:</span>
-            <input placeholder="Ex.:" v-model="textoHonorarios" /></label><label class="inputToPrint"
-            id="honorarioForm" />
+          <label class="camposInput">
+            <span>Honorário:</span>
+            <input placeholder="Ex.:" v-model="textoHonorarios" />
+          </label>
+          <label class="inputToPrint" id="honorarioForm"></label>
           <br />
         </div>
       </div>
@@ -680,40 +682,40 @@
       <div class="rowInputs">
         <div class="column">
           <label class="camposInput">
-            Parte:
+            <span>Parte:</span>
             <input v-model="info_calculo.nome" @input="atulizarvalor()"
               placeholder="Nome + (CPF 000.000.000-00)" /></label>
           <label class="inputToPrint" id="partePlanilha" />
           <br />
           <label class="camposInput">
-            Espécie:
+            <span>Espécie:</span>
             <input v-model="info_calculo.beneficio" @input="atulizarvalor()" placeholder="XX(XXXXXXXXXX)" /></label>
           <label class="inputToPrintAlcada" id="autorPlanilha" />
           <br />
-          <label class="camposInput">DIB Jud:
+          <label class="camposInput"><span>DIB Jud:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dib" placeholder="00/00/0000" /></label><label
             class="inputToPrint" id="dibJudPlanilha" />
           <br />
-          <label class="camposInput">DIB Anterior:
+          <label class="camposInput"><span>DIB Anterior:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dibAnterior" @input="atulizarvalor()"
               placeholder="00/00/0000" /></label><label class="inputToPrint" id="dibAnteriorPlanilha" />
           <br />
-          <label class="camposInput">RMI Jud.:
+          <label class="camposInput"><span>RMI Jud.:</span>
             <input type="number" v-model="salarioInicial" placeholder="00/00" /></label><label class="inputToPrint"
             id="rmiJudPlanilha" />
           <br />
         </div>
         <div class="column">
-          <label class="camposInput">%RMI:
+          <label class="camposInput"><span>%RMI:</span>
             <input type="number" placeholder="000,00" v-model="porcentagemRMI" /></label><label class="inputToPrint"
             id="porCententagemRmiPlanilha" />
           <br />
-          <label class="camposInput">Período (Data de Início):
+          <label class="camposInput"><span>Período (Data de Início):</span>
             <input v-mask="'##/##/####'" v-model="dtInicial" placeholder="XX/XX/XXXX" /></label><label
             class="inputToPrint" id="dataInicialPlanilha" />
           <br />
           <!-- Criar Função -->
-          <label class="camposInput">Período (Data de Fim):
+          <label class="camposInput"><span>Período (Data de Fim):</span>
             <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="inputToPrint"
             id="dataFinalPlanilha" />
           <br />
@@ -1320,49 +1322,49 @@
         <h4 class="center">PLANILHA DE CÁLCULO</h4>
         <div class="rowInputs">
           <div class="column">
-            <label class="camposInputAlcada">
+            <label class="camposInput">
               Parte:
               {{ info_calculo.nome }} (CPF {{ info_calculo.cpf }})</label>
-            <label class="inputToPrintAlcada" id="partePlanilha" />
+            <label class="inputToPrint" id="partePlanilha" />
             <br />
-            <label class="camposInputAlcada">
+            <label class="camposInput">
               Espécie:
               {{ info_calculo.beneficio }}
             </label>
-            <label class="inputToPrintAlcada" id="autorPlanilha" />
+            <label class="inputToPrint" id="autorPlanilha" />
             <br />
-            <label class="camposInputAlcada">DIB Jud:
+            <label class="camposInput">DIB Jud:
               {{
                 this.info_calculo.dib == null || this.info_calculo.dib == ""
                 ? this.dtInicial
                 : this.info_calculo.dib
               }} </label>
-              <label class="inputToPrintAlcada" id="dibJudPlanilha" />
+              <label class="inputToPrint" id="dibJudPlanilha" />
             <br />
-            <label class="camposInputAlcada">DIB Anterior:
+            <label class="camposInput">DIB Anterior:
               {{
                 this.dibAnterior == null || this.dibAnterior == ""
                 ? "Não consta"
                 : this.dibAnterior
-              }} </label><label class="inputToPrintAlcada" id="dibAnteriorPlanilha" />
+              }} </label><label class="inputToPrint" id="dibAnteriorPlanilha" />
             <br />
-            <label class="camposInputAlcada">RMI Jud.: R${{ salarioInicial }} </label><label class="inputToPrintAlcada"
+            <label class="camposInput">RMI Jud.: R${{ salarioInicial }} </label><label class="inputToPrint"
               id="rmiJudPlanilha" />
             <br />
           </div>
           <div class="column">
-            <label class="camposInputAlcada" id="porCententagemRmiPlanilha">%RMI: {{ porcentagemRMI == 0 ? 100 :
+            <label class="camposInput" id="porCententagemRmiPlanilha">%RMI: {{ porcentagemRMI == 0 ? 100 :
               porcentagemRMI }}
             </label>
             <br />
-            <label class="camposInputAlcada">Período (Data de Início): {{ dtInicial }} </label><label
-              class="inputToPrintAlcada" id="dataInicialPlanilha" />
+            <label class="camposInput">Período (Data de Início): {{ dtInicial }} </label><label
+              class="inputToPrint" id="dataInicialPlanilha" />
             <br />
             <!-- Criar Função -->
-            <label class="camposInputAlcada">Período (Data de Fim): {{ dtFinal }} </label><label
-              class="inputToPrintAlcada" id="dataFinalPlanilha" />
+            <label class="camposInput">Período (Data de Fim): {{ dtFinal }} </label><label
+              class="inputToPrint" id="dataFinalPlanilha" />
             <br />
-            <label for="13salario" class="labels pb-2" style="margin-left: 18px">13º Salário: {{ exibirBoolean(salario13)
+            <label for="13salario" class="labels pb-2" style="margin-left: 168px">13º Salário: {{ exibirBoolean(salario13)
             }}
             </label>
             <br />
@@ -3721,7 +3723,6 @@ export default {
       this.porcentagemRMI = 1000
       this.procntagem_acordo = 1000;
       this.porcentagemHonorarios = 1000
-      this.DataHonorarios = "15/10/1998"
       let datafinal = this.info_calculo.dip.split("/");
       if (datafinal[0] == 1) {
         if (datafinal[1] == 1) {
@@ -3825,7 +3826,7 @@ export default {
       this.inicio_juros = null;
       this.inicio_juros = this.info_calculo.citacao;
       // this.DataHonorarios = null;
-      this.porcentagemHonorarios = null;
+      this.porcentagemHonorarios = "";
       this.valorHonorarios = 0;
       this.textoHonorarios = null;
       this.valorSalario13 = 0;
@@ -4875,11 +4876,6 @@ v-card {
   height: 5px;
   display: flex;
   align-items: center;
-}
-
-.camposInputMemoriaCalculo {
-  text-align: left;
-  margin-right: 3%;
 }
 
 .camposInput input{
