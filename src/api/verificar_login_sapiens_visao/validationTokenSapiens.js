@@ -11,7 +11,7 @@ export async function ValidationTokenSapiens(){
 
         //const res = await axios_visao.post("http://10.191.9.2:8080/samir/login",body);
         
-        const res = await axios_visao.post("http://10.191.8.198:3000/samir/login",body);
+        const res = await axios_visao.post("/login",body);
             console.log("RRRRRRRRRRRERADSSHBJFDESAFG " +(res.data))
         if ((res.data).trim()=="Acesso negado, verifique se o CPF e a senha est�o corretos!") {
             return Promise.reject(new Error("usuario nao logado"));

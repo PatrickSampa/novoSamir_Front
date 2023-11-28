@@ -2,7 +2,7 @@ import { getcalculoBeneficioinacumulavel } from "../../../api/calculadora/calcul
 import { quantosDiasFaltaParaAcabarOMes } from "../../Helps/quantosDiasFaltaParaAcabarOMes";
 import { validarValorDoDiaSerConsideradoNaTabelaDeCalculo } from "../../Helps/validarValorDoDiaSerConsideradoNaTabelaDeCalculo";
 import { verificarDiasDeIntersecao } from "../../Helps/verificarDiasIntersecao";
-import { receberRecebidoParaDecimoTerceiroSalario } from "../../Helps/receberDataParaDecimoTerceiroSalarioRecebido"
+//import { receberRecebidoParaDecimoTerceiroSalario } from "../../Helps/receberDataParaDecimoTerceiroSalarioRecebido"
 
 var contadorMesDe13SalarioBeneficioInacumulavel = 0;
 var contadorMesDe13SalarioSalarioBeneficioPrincipal = 0;
@@ -61,6 +61,7 @@ try{
       porcentagemRMI: parseFloat(beneficioInacumulavel.porcentagemRmi),
       salario13Obrigatorio: beneficioInacumulavel.salario13Obrigatorio,
       dibAnterior: beneficioInacumulavel.nbAnterior,
+      dib: beneficioInacumulavel.dibInicial,
       selic: informationBeneficioPrincpal.selic,
     };
     
@@ -151,9 +152,11 @@ async function descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioIn
   }
   if (linhaTabelaPrincipal.data.split("/")[0] == "13Salario") {
     let mesRecibidosNoAno = arrayDeQUnatidadeDeMessesDeCadaAno.find(obj => obj.data === linhaTabelaPrincipal.data).quantidadeDeMes;
+    console.log("RECEBIDOOOOOOOOOOOOO  = " + recebido)
     recebido = (recebido / mesRecibidosNoAno) * contadorMesDe13SalarioBeneficioInacumulavel;
+    console.log("RECEBIDOOOOOOOOOOOOO  = " + recebido)
   }
-  
+  console.log("RECEBIDOOOOOOOOOOOOO2222  = " + recebido)
   return {
     data: linhaTabelaPrincipal.data,
     reajusteAcumulado: linhaTabelaPrincipal.reajusteAcumulado,
@@ -198,11 +201,12 @@ async function decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicio
   console.log("CHEGOU AQUI PARTE 5")
   console.log(linhaTabelaPrincipal.data.split("/"))
   if (linhaTabelaPrincipal.data.split("/")[0] == "13Salario") {
+    //VERIFICAR CASO PRECISE DE ALGUMA REGRA PARA O 13SALARIO, IR TESTANDO COM A KELEN
     console.log("CHEGOU AQUI PARTE 6" + beneficiosAcumuladosParaDecimoTerceiro + " ESSE CODIGO E LIXO")
-    //recebido = recebido * (contadorMesDe13SalarioBeneficioInacumulavel-1) / 12;
-    const valoreRetornado = await receberRecebidoParaDecimoTerceiroSalario(dib) * (recebido/12)
-    console.log("CHEGOU AQUI PARTE 7")
-    recebido = valoreRetornado;
+   // recebido = recebido * (contadorMesDe13SalarioBeneficioInacumulavel-1) / 12;
+    //const valoreRetornado = await receberRecebidoParaDecimoTerceiroSalario(dib) * (recebido/12)
+    //console.log("CHEGOU AQUI PARTE 7 " + valoreRetornado + " t " + recebido)
+    //recebido = valoreRetornado;
 
   }
   console.log("CHEGOU AQUI PARTE 8")

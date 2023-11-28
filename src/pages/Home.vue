@@ -266,11 +266,19 @@
             </b-col>
 
             <b-col sm="2" v-if="beneficio === true">
+              <label for="beneficio" class="labels">DIB</label>
+              <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.dibInicial" id="beneficio" size="sm">
+              </b-form-input>
+            </b-col>
+
+
+            <b-col sm="2" v-if="beneficio === true">
               <label for="beneficio" class="labels">Data N.B Anterior</label>
               <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.nbAnterior" id="beneficio" size="sm">
               </b-form-input>
             </b-col>
-
+            
+            
           </b-row>
         </b-card>
 
@@ -739,7 +747,7 @@
                 v-model="item.salario" :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
-              <input v-model="item.correcao" :disabled="disableLinhaTable(item.data)" />
+                <input type="number" v-model="item.correcao" :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
               <input type="number" v-model="item.salarioCorrigido" disabled />
@@ -1500,6 +1508,7 @@ export default {
       nome: "",
       nb: "",
       nbAnterior: "",
+      dibInicialAcumulados: "", 
       nmprocesso: "",
       salarioInicial: "",
       objetoDoCalculo: "CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO",
@@ -1651,6 +1660,10 @@ export default {
     },
   },
   methods: {
+  tratamentoDeNumeroDaCorrecao(numero){
+    const numeros = numero.toString();
+    return parseFloat(numeros.substring(0,6))
+  }, 
     async atualizarItemParaBanco(){ 
       const novoObjetoParaAtualizar = {...this.info_calculo}
       delete novoObjetoParaAtualizar.aps;
@@ -1897,7 +1910,7 @@ export default {
     },
     acessoPortalADM() {
       this.$prompt("Digite a senha de acesso").then((text) => {
-        if (text == "1") {
+        if (text == "cadinho") {
           this.add_taxa = true;
         } else {
           this.add_taxa = false;
@@ -1940,6 +1953,7 @@ export default {
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
+          console.log("SORTE = " + JSON.stringify(this.calc_total))
           this.totaisSalario()
         } catch (error) {
           let message = await error.message;
@@ -2113,7 +2127,7 @@ export default {
     disableLinhaTable(data) {
       let tamanhoDataVerificacao = data.toString().split("/");
       if (
-        tamanhoDataVerificacao.length == 3 &&
+        tamanhoDataVerificacao.length == 3 && 
         parseInt(tamanhoDataVerificacao[2]) >= 1995
       ) {
         return false;
@@ -2403,6 +2417,7 @@ export default {
         const calculo_salarioTotal = [];
 
         this.calc_total.forEach((value) => {
+        console.log("PASSA POR AQIO")
           calculoData.push(value.data);
           calculo_reajusteAcumulado.push(value.reajusteAcumulado);
           calculo_devido.push(value.devido);
@@ -2785,6 +2800,7 @@ export default {
           if (this.beneficio == true) {
             let beneficioProvisorio;
             this.beneficiosInacumulveisBanco.forEach((value) => {
+              
               if (
                 parseInt(value.name.split("-")[0]) ==
                 parseInt(this.info_calculo.beneficio.split("-")[0])
@@ -3596,7 +3612,8 @@ export default {
           Math.floor(value.salarioJuros * 100) / 100;
         this.calc_total[index].juros = Math.floor(value.juros * 10000) / 10000;
         this.calc_total[index].correcao =
-          Math.floor(value.correcao * 10000) / 10000;
+          //Math.floor(value.correcao * 10000) / 10000;
+          this.tratamentoDeNumeroDaCorrecao(value.correcao)
         index++;
       }
     },
@@ -3645,6 +3662,7 @@ export default {
       this.formatacao();
     },
     totaisSalario() {
+      console.log("TOTALLLL + " + JSON.stringify(this.calc_total))
       if (!this.porcentagemHonorarios && !this.DataHonorarios) {
         this.textoHonorarios = null;
       } else {
@@ -3831,6 +3849,8 @@ export default {
 
       let beneficioProvisorio;
       this.beneficiosInacumulveisBanco.forEach((value) => {
+        console.log("TESTANDO1 = " + JSON.stringify(value));
+        console.log("TESTANDO2 = " + this.info_calculo.beneficio)
         if (
           parseInt(value.name.split("-")[0]) ==
           parseInt(this.info_calculo.beneficio.split("-")[0])
@@ -3841,13 +3861,16 @@ export default {
           if (beneficioProvisorio.dcb) {
             this.pensaoPorMorte = "Beneficio com dcb";
           }
-        }
+        } 
       });
       console.log(this.arrayBenficios)
       console.log(beneficioProvisorio)
       this.arrayBenficios.forEach((value) => {
         beneficioProvisorio.inacumulavel.forEach((dado) => {
           if (value.beneficio && dado) {
+            /* console.log("TTTTTTTTTTTTTTTTTTTEST   = " + this.verificarDataParaBeneficioAcumulado(this.dtInicial, this.dtFinal, value.dib, this.CalcularDataFinalMenorQueAnterior(value.dcb, value.dib)))
+            console.log("teste2 "  +  parseInt(dado.split("-")[0]))
+            console.log("teste3 "  +  parseInt(value.beneficio.split("-")[0])) */
             if (
               parseInt(dado.split("-")[0]) ==
               parseInt(value.beneficio.split("-")[0])
@@ -3858,6 +3881,7 @@ export default {
                 dcb: this.CalcularDataFinalMenorQueAnterior(value.dcb, value.dib),
                 rmi: value.rmi,
                 nb: value.nb,
+                dibInicial: value.dib, 
                 limiteMinimoMaximo: true,
                 salarioMinimo: false,
                 salario13: true,
@@ -3905,6 +3929,7 @@ export default {
         rmi: null,
         nb: null,
         nbAnterior: null,
+        dibInicial: null,
         obrigatorio: false,
         salario13: true,
         limiteMinimoMaximo: true,

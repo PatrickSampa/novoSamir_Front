@@ -4,7 +4,7 @@ import { validarValorDoDiaSerConsideradoNaTabelaDeCalculo } from "../../Helps/va
 
 export async function calculoBeneficioPrincipal(informationBeneficioPrincpal) {
     const tabelaPrincipal = await getcalculoBeneficioPrincipal(informationBeneficioPrincpal);
-    console.log("RETROTRNOU " + tabelaPrincipal)
+    console.log("RETROTRNOU " + JSON.stringify(tabelaPrincipal))
     return await ajusteDevidoNaDataDibEDipNatabelaPrincipal(informationBeneficioPrincpal, tabelaPrincipal);
 }
 

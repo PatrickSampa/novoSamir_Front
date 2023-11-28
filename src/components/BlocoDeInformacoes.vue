@@ -266,14 +266,23 @@ export default {
           this.loading = true;
           try {
             let informationCalculo = await getInformationFromSapienForSamir(body);
-            await salvarInformationForCalculoList(informationCalculo);
-            this.infos.push(informationCalculo);
-            this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
-            this.saveInfos();
-            this.redirectToCalculo();
-            this.getInfos();
-            this.$emit("processos", true);
-            this.loading = false;
+            /* await salvarInformationForCalculoList(informationCalculo);
+            this.infos.push(informationCalculo); */
+            console.log("Tamanho array " + informationCalculo.length)
+            if(informationCalculo.length <=0 ){
+              this.$alert(informationCalculo.length, "Nenhum Processo Foi Adicionado", "warning");
+              this.loading = false;
+            }else{
+              await salvarInformationForCalculoList(informationCalculo);
+              this.infos.push(informationCalculo);
+              this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
+              this.saveInfos();
+              this.redirectToCalculo();
+              this.getInfos();
+              this.$emit("processos", true);
+              this.loading = false;
+            }
+            
           } catch (error) {
             this.loading = false;
             this.$alert(error.message);
@@ -412,6 +421,7 @@ export default {
         ) &&
         this.verificarBeneficio()
       ) {
+        console.log("ACUMULADOS BEM AQUI PSADADAD "+ this.beneficioAcumulado)
         this.array_beneficioAcumulado.push(this.beneficioAcumulado);
         this.beneficioAcumuladoBoolean = true;
         this.cleanBeneficio();
