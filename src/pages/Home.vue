@@ -11,8 +11,8 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1 style="font-size: 38px; color: #3876BF; text-align: center">
-      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="40" height="40"></h1>
+      <h1 style="font-size: 40px; color: #3876BF; text-align: center">
+      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="40" height="40" style="margin-top: -13px"></h1>
     </div>
     <v-card>
       <v-tabs>
@@ -133,20 +133,20 @@
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" md="3">
-            <label for="beneficio" class="labels">Qual Benefício?</label>
+            <label for="beneficio" class="labels pb-3">Qual Benefício?</label>
             <v-autocomplete @input="atulizarvalor()" dense outlined id="beneficio" value="info_calculo.beneficio"
               :items="beneficiosInacumulveisBancoName" v-model="info_calculo.beneficio" type="text" size="sm"
               placeholder="57 - APOSENTADORIA POR  TEMPO DE CONTRIBUIÇÃO DE PROFESSOR">
             </v-autocomplete>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="info_calculo.nb" class="labels">N.B</label>
+            <label for="info_calculo.nb" class="labels pb-3">N.B</label>
             <v-text-field @input="atulizarvalor()" dense outlined id="info_calculo.nb" v-model="info_calculo.nb"
               type="number" size="sm" placeholder="Ex: 01100110 01110101 01100011 01101011">
             </v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="info_calculo.dib" class="labels">DIB</label>
+            <label for="info_calculo.dib" class="labels pb-3">DIB</label>
             <v-text-field v-mask="'##/##/####'" @input="atulizarvalor()" dense outlined id="info_calculo.dib"
               v-model="info_calculo.dibInicial" type="text" size="sm" placeholder="Ex: 22/10/2020">
             </v-text-field>
@@ -274,7 +274,7 @@
 
         <v-row>
           <v-col>
-            <label for="valor-devido" class="labels alertCalculoComObservacoes"
+            <label for="valor-devido" class="labels alertCalculoComObservacoes" :style="{ fontSize: '18px' }"
               v-if="(alertCalculoComObservacoes() != '')">
               {{ alertCalculoComObservacoes() }}
             </label>
@@ -408,7 +408,7 @@
             <input type="number" v-model="info_calculo.nb" @input="atulizarvalor()" placeholder="XXX.XXX.XXX-X" />
             <label class="inputToPrintResumo" id="resumoNB" />
           </div>
-          <div class="columnResumoProcessoParte">
+          <div class="columnResumoProcesso" style="margin-left: 2%">
             <h6>Parte</h6>
             <input v-model="info_calculo.nome" @input="atulizarvalor()" placeholder="Ex.: Matthew M. Murdock" />
             <label class="inputToPrintResumoParte" id="resumoParte" />
@@ -451,7 +451,7 @@
               <label class="inputCalculo">12 Parcelas Vincendas:</label>
               <label class="inputCifrao">R$</label>
             </div>
-            
+
             <div class="align-text">
               <label class="inputCalculo">Devido ao(s) Reclamante(s):</label>
               <label class="inputCifrao">R$</label>
@@ -473,6 +473,7 @@
               <label class="inputCalculo">Honorários Advocatícios (Acordo):</label>
               <label class="inputCifrao">R$</label>
             </div>
+
             <div class="align-text">
               <label class="inputCalculo">Total do Processo:</label>
               <label class="inputCifrao">R$</label>
@@ -727,8 +728,6 @@
         </div>
       </div>
       <br />
-      <br />
-      <br />
       <v-data-table dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()" :items="calc_total"
         :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
         <template v-slot:item="{ item }">
@@ -782,9 +781,10 @@
           </tr>
         </template>
       </v-data-table>
-      <v-btn color="primary" v-if="mode === 'table'" @click="adicionarLinha()" primary>
+      <v-btn color="primary" v-if="mode === 'table'" @click="adicionarLinha()" primary style="margin-left:87%">
         Adicionar Linha</v-btn>
-
+        <br />
+        <br/>
       <div id="tabelaImpostoRenda">
         <h4 class="center-first">
           RENDIMENTOS RECEBIDOS ACUMULADAMENTE PARA IMPOSTO DE RENDA
@@ -884,69 +884,72 @@
         <div>
           <h3 class="centerAGU"><img src="../assets/agu.png" width="150" height="90" alt="Simbolo da Advocacia-Geral da União"></h3>
           <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
-          <h4 style="text-align: center">EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
-          </h4>
+          <h4 style="text-align: center">EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES</h4>
 
-          <table id="info-inicial">
-            <tbody>
-              <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Processo n°</td>
-                <td id="info-inicial-coluna">
-                  {{ info_calculo.numeroDoProcesso }}
-                </td>
-              </tr>
-              <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Parte Autora</td>
-                <td id="info-inicial-coluna">{{ info_calculo.nome }}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h4 class="center">REVISE OS DADOS</h4>
-          <div class="rowInputs">
-            <div class="column">
-              <label class="camposInputMemoriaCalculo">Objeto:</label><label class="inputToPrint" id="objetoForm" />
-              {{ objetoDoCalculo }}
-              <br />
-              <label class="camposInputMemoriaCalculo">Vara:</label><label class="inputToPrint" id="varaForm" />
-              {{ varaPrevidenciaria }}
-              <br />
-              <label class="camposInputMemoriaCalculo">N.B: {{ info_calculo.nb }}</label><label class="inputToPrint" id="jurosForm" />
-              <br />
+          
+            <div class="rowInputsDados">
+              <div class="column">
+                <label class="camposInputMemoriaCalculo">Processo n°:</label>
+                <label class="inputToPrint"/>
+                {{  info_calculo.numeroDoProcesso }}
+                <br />
+                <label class="camposInputMemoriaCalculo">Parte Autora:</label>
+                {{ info_calculo.nome }}
+                <br />
+                <label class="camposInputMemoriaCalculo">Objeto:</label>
+                <label class="inputToPrint" id="objetoForm" />
+                {{ objetoDoCalculo }}
+                <br />
+                <label class="camposInputMemoriaCalculo">Vara:</label>
+                <label class="inputToPrint" id="varaForm" />
+                {{ varaPrevidenciaria }}
+                <br >
+                <label class="camposInputMemoriaCalculo">N.B: {{ info_calculo.nb }}</label>
+                <label class="inputToPrint" id="jurosForm" />
+                <br />
+              </div>
+              
+              <div class="column">
+                <label class="camposInputMemoriaCalculo">Ajuizamento:</label>
+                <label class="inputToPrint" id="ajuizamentoForm" />
+                {{ info_calculo.dataAjuizamento }}
+                <br />
+                <label class="camposInputMemoriaCalculo">Início do Juros:</label>
+                <label class="inputToPrint" id="inicioJurosForm" />
+                {{ inicio_juros }}
+                <br />
+                <label class="camposInputMemoriaCalculo">Atualizar Até: {{ atulizacao }}</label>
+                <label class="inputToPrint"
+                  id="calculadoEmForm" />
+                <!--Função-->
+                <br />
+                <label class="camposInputMemoriaCalculo">Honorários Sucumbenciais:</label><label class="inputToPrint" id="honorarioForm" />
+                {{ textoHonorarios }}
+                <br />
+              </div>
             </div>
-            <div class="column">
-              <label class="camposInputMemoriaCalculo">Ajuizamento:</label><label class="inputToPrint" id="ajuizamentoForm" />
-              {{ info_calculo.dataAjuizamento }}
-              <br />
-              <label class="camposInputMemoriaCalculo">Início do Juros:</label><label class="inputToPrint" id="inicioJurosForm" />
-              {{ inicio_juros }}
-              <br />
-              <label class="camposInputMemoriaCalculo">Atualizar Até: {{ atulizacao }}</label><label class="inputToPrint"
-                id="calculadoEmForm" />
-              <!--Função-->
-              <br />
-              <label class="camposInputMemoriaCalculo">Honorários Sucumbenciais:</label><label class="inputToPrint" id="honorarioForm" />
-              {{ textoHonorarios }}
-              <br />
-            </div>
-          </div>
         </div>
+      
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
         <h4 class="center">RESUMO DO PROCESSO</h4>
-
         <br />
-
         <table id="testeTotal">
           <thead>
             <tr>
-              <th scope="col" id="thead-limpo-menor"></th>
+              <th scope="col" id="thead-limpo-menor">Descrição dos Valores</th>
               <th scope="col" id="thead-limpo">Total no Período de Cálculo</th>
               <th scope="col" id="thead-limpo">Cálculo para Execução</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td id="textosResumo"></td>
-              <td id="valoresResumo"></td>
+              <td id="textosResumo">Porcentagem:</td>
+              <td id="valoresResumo" style="text-align:center">_</td>
               <td id="valor-percentual-execucao">
                 ({{ formatarPorcentagemAcordo() }}%)
               </td>
@@ -954,10 +957,10 @@
             <tr>
               <td id="textosResumo">Soma do Principal:</td>
               <td id="valoresResumo">
-                R${{ Math.floor(valor_corrigido * 100) / 100 }}
+                R$ {{ Math.floor(valor_corrigido * 100) / 100 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(valor_corrigido * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
@@ -965,10 +968,10 @@
             <tr>
               <td id="textosResumo">Juros de mora:</td>
               <td id="valoresResumo">
-                R${{ Math.floor(valor_juros * 100) / 100 }}
+                R$ {{ Math.floor(valor_juros * 100) / 100 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(valor_juros * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
@@ -976,23 +979,22 @@
             <tr v-if="alcadaBoolean == true">
               <td id="textosResumo">12 Parcelas Vincendas:</td>
               <td id="valoresResumo">
-                R${{ Math.floor(pacelasVencidas * 100) / 100 }}
+                R$ {{ Math.floor(pacelasVencidas * 100) / 100 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(pacelasVencidas * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
             </tr>
           </tbody>
         </table>
-        <br />
         <table id="testeTotal">
           <tbody>
             <tr>
               <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
               <td id="valoresResumo">
-                R${{
+                R$ {{
                   Math.floor(
                     (parseFloat(valor_corrigido) +
                       parseFloat(valor_juros) -
@@ -1002,7 +1004,7 @@
                 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(
                     (parseFloat(valor_corrigido) +
                       parseFloat(valor_juros) -
@@ -1014,22 +1016,21 @@
             </tr>
             <tr>
               <td id="textosResumo">Honorários Advocatícios:</td>
-              <td id="valoresResumo">R${{ valorHonorarios }}</td>
+              <td id="valoresResumo">R$ {{ valorHonorarios }}</td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
             </tr>
           </tbody>
         </table>
-        <br />
 
         <table id="testeTotal">
           <tr>
             <td id="textosResumo">Total do Processo:</td>
             <td id="valoresResumo">
-              R${{
+              R$ {{
                 Math.floor(
                   (parseFloat(valor_corrigido) +
                     parseFloat(valor_juros) -
@@ -1040,7 +1041,7 @@
               }}
             </td>
             <td id="valoresResumoExecucao">
-              R${{
+              R$ {{
                 Math.floor(
                   (parseFloat(valor_corrigido) +
                     parseFloat(valor_juros) -
@@ -1075,78 +1076,77 @@
         <!-- Adições ao gerador de PDF (09/2022) -->
         <br />
         <div id="observacoes-div-texto">
-          Cálculo efetuado pelo vencimento do débito.
+          - Cálculo efetuado pelo vencimento do débito.
           {{
             textoHonorarios == null || textoHonorarios == ""
             ? "Sem honorários"
             : "Com honorários(" + textoHonorarios + ")"
           }}.<br />
-          Total para cada competência = Principal + atualização monetária + juros
-          de mora (se for o caso).<br />
-          <b>Juros de mora:</b>
-          <br />
-          <p class="describes">
-            {{
-              tipoJuros != 0
-              ? quebraLinhaDescribe(
-                optionsJuros
-                  .find((element) => element.value == tipoJuros)
-                  .text.split("Descrição:")[1]
-                  .split("")
-              )
-              : ""
-            }}.
-          </p>
-          <b>Correção:</b>
-          <br />
-          <p class="describes">
-            {{
-              tipoCorrecao != 0
-              ? quebraLinhaDescribe(
-                optionsCorrecao
-                  .find((element) => element.value == tipoCorrecao)
-                  .text.split("Descrição:")[1]
-                  .split("")
-              )
-              : ""
-            }}.
-          </p>
+          - Total para cada competência = Principal + Atualização Monetária + Juros
+          de Mora (se for o caso).<br />
 
+          <br />
+          <div>
+            <b>Juros de mora:</b>
+            <br />
+            <p class="describes">
+              {{
+                tipoJuros != 0
+                ? quebraLinhaDescribe(
+                  optionsJuros
+                    .find((element) => element.value == tipoJuros)
+                    .text.split("Descrição:")[1]
+                    .split("")
+                )
+                : ""
+              }}.
+            </p>
+            <b>Correção:</b>
+            <br />
+            <p class="describes">
+              {{
+                tipoCorrecao != 0
+                ? quebraLinhaDescribe(
+                  optionsCorrecao
+                    .find((element) => element.value == tipoCorrecao)
+                    .text.split("Descrição:")[1]
+                    .split("")
+                )
+                : ""
+              }}.
+            </p>
+          </div>
           <b v-if="selic">Observação:</b>
           <br v-if="selic" />
           <p v-if="selic" class="describes">
-            CACULO UTILIZA SELIC PREV. EC/113 Até 2025.
+            CÁCULO UTILIZA SELIC PREV. EC/113 Até 2025.
           </p>
         </div>
-        <table id="tabelaResumo">
+        <!-- <table id="tabelaResumo">
           <thead>
-            <tr>
-              <th scope="col" id="thead-centro">
+            <tr scope="col" id="thead-centro"> -->
+              <div scope="col" class="thead-centro">
                 <h4>Resumo</h4>
-              </th>
-              <th scope="col" id="thead-invisivel"></th>
+              </div>
+             <!--  <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
             </tr>
           </thead>
-        </table>
-        <div id="linha-horizontal"></div>
+        </table> -->
         <table id="tabelaResumo">
           <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">Benefício:</td>
               <td id="colunaResumoDireita">{{ info_calculo.beneficio }}</td>
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">DER:</td>
               <td id="colunaResumoDireita">-</td>
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">DIB:</td>
               <td id="colunaResumoDireita">
                 {{
@@ -1158,13 +1158,11 @@
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">DIP:</td>
               <td id="colunaResumoDireita">{{ dtFinal }}</td>
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">Valor Principal (R$):</td>
               <td id="colunaResumoDireita">
                 {{
@@ -1179,7 +1177,6 @@
               <td id="colunaVaziaDireita">({{ rpvOuPrecatorio }})</td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">Valor Honorários (R$):</td>
               <td id="colunaResumoDireita">
                 {{
@@ -1190,35 +1187,26 @@
             </tr>
           </tbody>
         </table>
-
-
         <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
-        <table id="tabelaResumo">
+        <!-- <table id="tabelaResumo">
           <thead>
-            <tr>
-              <th scope="col" id="thead-centro">
+            <tr> -->
+              <div scope="col" class="thead-centro">
                 <h4>Análise de Competência do Juizado Especial Federal</h4>
-              </th>
-              <th scope="col" id="thead-invisivel"></th>
+              </div>
+              <!-- <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
             </tr>
           </thead>
-        </table>
-        <div id="linha-horizontal"></div>
+        </table> -->
+
         <table id="tabelaResumo">
           <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                Total de parcelas devidas até a data do ajuizamento
+                Total de parcelas devidas até a data do ajuizamento:
               </td>
               <td id="colunaAnaliseEsquerda">
                 ({{ this.info_calculo.dataAjuizamento }})
@@ -1226,63 +1214,47 @@
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(beforeDateAjuizamento * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
-              <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s)</td>
+              <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s):</td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(afterDateAjuizamento * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
-          </tbody>
-        </table>
-        <div id="linha-soma"></div>
-        <table id="tabelaResumo">
-          <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                Valor da causa na data do ajuizamento da ação
+                Valor da causa na data do ajuizamento da ação:
               </td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(alcadaValor * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
           </tbody>
         </table>
-        <div id="linha-horizontal-separacao"></div>
         <br />
         <table id="tabelaResumo">
           <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">Limite de 60 salários mínimos em:</td>
               <td id="colunaAnaliseEsquerda">
                 {{ this.info_calculo.dataAjuizamento }}
               </td>
               <td id="colunaAnaliseDireita">{{ salariominimosAlcada }}</td>
-              <td id="colunaVazia"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                Parcela referente à renúncia pela alçada do JEF no ajuizamento
+                Parcela referente à renúncia pela alçada do JEF no ajuizamento:
               </td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(alcadaTotal * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                (*) Valor atualizado da renúncia pela alçada do JEF
+                (*) Valor atualizado da renúncia pela alçada do JEF:
               </td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
@@ -1301,11 +1273,10 @@
                   ) / 100
                 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
           </tbody>
         </table>
-        <div id="linha-horizontal-separacao"></div>
+        
         <div id="observacoes-div">
           <br />
           Obs: A parcela vincenda ocorre a partir do dia primeiro de cada mês.
@@ -1318,7 +1289,7 @@
           <br />
           <br />
         </div>
-
+        
         <h4 class="center">PLANILHA DE CÁLCULO</h4>
         <div class="rowInputs">
           <div class="column">
@@ -1348,7 +1319,7 @@
                 : this.dibAnterior
               }} </label><label class="inputToPrint" id="dibAnteriorPlanilha" />
             <br />
-            <label class="camposInput">RMI Jud.: R${{ salarioInicial }} </label><label class="inputToPrint"
+            <label class="camposInput">RMI Jud.: R$ {{ salarioInicial }} </label><label class="inputToPrint"
               id="rmiJudPlanilha" />
             <br />
           </div>
@@ -1370,12 +1341,10 @@
             <br />
           </div>
         </div>
-        <br />
 
         <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()"
           :items="calc_total" :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
         </v-data-table>
-        <br />
         <br />
         <div id="tabelaImpostoRenda">
           <h4 class="center" id="impostoRendaTitulo">
@@ -1477,7 +1446,7 @@
         :items-per-page="alcadaArray.length" item-key="data" class="elevation-1" hide-default-footer>
       </v-data-table>
       <div v-if="add_taxa == false" v-show="mode === 'table'">
-        <b-button variant="primary" @click="printDiv()"> Imprimir <img src="../assets/impressora.png" width="20" height="20"></b-button>
+        <b-button style="background-color:rgb(159, 159, 159); border:gray; margin-left: 96.5%" @click="printDiv()"><img src="../assets/impressora.png" width="20" height="20"></b-button>
       </div>
     </v-container>
 
@@ -3874,7 +3843,7 @@ export default {
         ` 
         
         * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px;} label {font-weight: bold;}
+        div {margin-bottom: 3px; background-color: #e0e0e0} label {font-weight: bold;}
         .titulo, h1, h2 {text-align: center;}
         
         
@@ -3933,7 +3902,10 @@ export default {
 
         .center {
           text-align: center;
-          background-color: rgb(154, 186, 215);
+          margin-bottom: 15px;
+          background-color: rgb(216, 228, 238);
+          border-radius: 10px;
+          padding: 3px;
         }
 
         .centerAGU {
@@ -3942,9 +3914,22 @@ export default {
           padding-top: 10px;
         }
 
+        .rowInputsDados{
+          align-items: center;
+          margin-left: 20%;
+        }
+
         .column {
           float: left;
-          width: 48%;
+          width: 50%;
+        }
+
+        .camposInputMemoriaCalculo {
+          margin-right: 500;
+        }
+
+        .inputToPrint {
+          margin-left: 2px;
         }
 
         .columnRight {
@@ -4072,25 +4057,24 @@ export default {
         }
 
         #testeTotal {
-          width: 100%;
-          text-align: center;
+          width: 80%;
+          margin-left: 10%;
         }
 
         #textosResumo {
-          width: 42%;
-          text-align: right;
-          border: 1px solid white;
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
         }
         
         #thead-limpo {
-          border: 1px solid white;
-          width: 29%;
-          font-size: 14px;
+          text-align: center;
+          border: 1px solid black
         }
 
         #thead-limpo-menor {
-          border: 1px solid white;
-          width: 42%;
+          text-align: center;
+          border: 1px solid black;
         }
 
         #thead-centro {
@@ -4106,9 +4090,9 @@ export default {
 
 
         #valoresResumo {
-          width: 29%;
+          width: 33%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #valoresResumo2 {
@@ -4118,15 +4102,15 @@ export default {
         }
 
         #valoresResumoExecucao {
-          width: 29%;
+          width: 33%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #valor-percentual-execucao {
           width: 25%;
           text-align: center;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #tabelaResumo {
@@ -4277,7 +4261,7 @@ export default {
         ` 
         
         * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px;} label {font-weight: bold;}
+        div {margin-bottom: 3px;background-color: #e0e0e0} label {font-weight: bold;}
         .titulo, h1, h2 {text-align: center;}
         
         
@@ -4345,9 +4329,22 @@ export default {
           background-color: rgb(154, 186, 215);
         }
 
+        .rowInputsDados{
+          align-items: center;
+          margin-left: 20%;
+        }
+
         .column {
           float: left;
-          width: 48%;
+          width: 50%;
+        }
+
+        .camposInputMemoriaCalculo {
+          margin-right: 500;
+        }
+
+        .inputToPrint {
+          margin-left: 2px;
         }
 
         .columnRight {
@@ -4476,25 +4473,24 @@ export default {
         }
 
         #testeTotal {
-          width: 100%;
-          text-align: center;
+          width: 80%;
+          margin-left: 10%;
         }
 
         #textosResumo {
-          width: 42%;
-          text-align: right;
-          border: 1px solid white;
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
         }
         
         #thead-limpo {
-          border: 1px solid white;
-          width: 29%;
-          font-size: 14px;
+          text-align: center;
+          border: 1px solid black
         }
 
         #thead-limpo-menor {
-          border: 1px solid white;
-          width: 42%;
+          text-align: center;
+          border: 1px solid black;
         }
 
         #thead-centro {
@@ -4510,9 +4506,9 @@ export default {
 
 
         #valoresResumo {
-          width: 29%;
+          width: 33%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #valoresResumo2 {
@@ -4522,15 +4518,15 @@ export default {
         }
 
         #valoresResumoExecucao {
-          width: 29%;
+          width: 33%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #valor-percentual-execucao {
           width: 25%;
           text-align: center;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #tabelaResumo {
@@ -4872,8 +4868,9 @@ v-card {
 .camposInput {
   text-align: right;
   margin-left: 27%;
-  margin-right: 5px;
+  margin-right: 100px;
   height: 5px;
+  width: 500px;
   display: flex;
   align-items: center;
 }
@@ -4902,15 +4899,16 @@ tr:nth-child(odd) {
 
 .center-first{
   text-align: center;
+  margin-bottom: 15px;
   background-color: rgb(219, 228, 240);
   border-radius: 10px;
   padding: 4px;
-  margin: 10px
 }
 
 .center {
   text-align: center;
-  background-color: rgb(190, 212, 231);
+  margin-bottom: 15px;
+  background-color: rgb(216, 228, 238);
   border-radius: 10px;
   padding: 3px;
 }
@@ -4923,6 +4921,10 @@ tr:nth-child(odd) {
 .column {
   float: left;
   width: 50%;
+}
+
+.camposInputMemoriaCalculo {
+  margin-right: 500;
 }
 
 .columnResumo {
@@ -4958,6 +4960,11 @@ tr:nth-child(odd) {
   width: 50%;
 }
 
+.rowInputsDados{
+  align-items: center;
+  margin-left: 20%;
+}
+
 .rowInputs:after {
   content: "";
   display: table;
@@ -4973,13 +4980,13 @@ tr:nth-child(odd) {
 .columnResumoProcesso {
   float: left;
   width: 14%;
-  margin-left: 1%;
+  margin-left: 7%;
 }
 
 .columnResumoProcessoParte {
   float: left;
   width: 35%;
-  margin-left: 1%;
+  margin-left: 9%;
 }
 
 .columnResumoProcessoParte input {
@@ -4994,7 +5001,7 @@ tr:nth-child(odd) {
 }
 
 .inputToPrint {
-  margin-left: 10px;
+  margin-left: 2px;
 }
 
 .inputToPrintResumo {
@@ -5046,6 +5053,11 @@ tr:nth-child(odd) {
   max-width: 10%;
 }
 
+.thead-centro{
+  text-align: center;
+  margin: 10px;
+}
+
 .camposInputAlcada {
   margin-left: 10%;
   margin-right: 5px;
@@ -5091,37 +5103,47 @@ td {
 }
 
 #testeTotal {
-  width: 100%;
+  width: 80%;
+  margin-left: 10%;
+}
+
+#thead-limpo-menor {
   text-align: center;
+  border: 1px solid black;
+}
+
+#thead-limpo {
+  text-align: center;
+  border: 1px solid black
 }
 
 #textosResumo {
-  width: 50%;
-  text-align: right;
-  border: 1px solid white;
+  width: 33%;
+  text-align: left;
+  border: 1px solid black;
 }
 
 #valoresResumo {
-  width: 25%;
-  text-align: center;
-  border: 1px solid white;
+  width: 33%;
+  text-align: left;
+  border: 1px solid black;
 }
 
 #valoresResumoExecucao {
-  width: 25%;
-  text-align: center;
-  border: 1px solid white;
+  width: 33%;
+  text-align: left;
+  border: 1px solid black;
 }
 
 #valor-percentual-execucao {
   width: 25%;
   text-align: center;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #tabelaResumo {
-  width: 100%;
-  text-align: center;
+  width: 80%;
+  margin-left: 10%;
 }
 
 #colunaVazia {
@@ -5133,44 +5155,43 @@ td {
 #colunaVaziaDireita {
   width: 45%;
   text-align: left;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaResumoEsquerda {
-  width: 25%;
+  width: 35%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaResumoDireita {
-  width: 15%;
+  width: 30%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #linha-horizontal {
-  width: 50%;
-  border: 2px solid #000;
-  margin-left: 25%;
-  margin-top: -1%;
+  width: 135%;
+  border: 1px solid #000;
+  margin-left: -2%;
 }
 
 #colunaAnaliseTexto {
-  width: 20%;
+  width: 15%;
   text-align: left;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaAnaliseEsquerda {
-  width: 2%;
+  width: 5%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaAnaliseDireita {
-  width: 2%;
+  width: 5%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #linha-soma {
@@ -5190,7 +5211,7 @@ td {
 
 #observacoes-div {
   width: 50%;
-  margin-left: 25%;
+  margin-left: 10%;
   font-size: small;
 }
 
