@@ -65,7 +65,7 @@ export default {
         console.log(message);
         console.log("message");
         this.valid = false;
-        this.$alert(message, "Usuário Sapiens Incorreto", "error", {
+        this.$alert("", "Usuário Sapiens Incorreto", "error", {
           confirmButtonText: "Got it!",
         });
         /* this.$router.push({ name: "sapienslogin" }) */

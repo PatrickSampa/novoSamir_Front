@@ -14,7 +14,7 @@
       <h1 style="font-size: 40px; color: #3876BF; text-align: center">
       Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="40" height="40" style="margin-top: -13px"></h1>
     </div>
-    <v-card>
+    <v-card> 
       <v-tabs>
         <v-tabs-slider color="green"></v-tabs-slider>
         <v-tab @click="add_taxa = false">Cálculo</v-tab>
@@ -775,7 +775,7 @@
               <input type="number" v-model="item.salarioCorrigido" disabled />
             </td>
             <td>
-              <input type="number" v-model="item.juros" :disabled="disableLinhaTable(item.data)" />
+              <input type="number" :value="getJurosValue(item)" :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
               <input type="number" v-model="item.salarioJuros" disabled />
@@ -1476,7 +1476,7 @@ import Axios from "../config/configAxios";
 //import { pararJurosTeste } from "../features/pararJuros";
 import { baseApiUrl, apiSapiens } from "../global";
 import jsPDF from "jspdf";
-import axios from "axios";
+import axios from "axios"; 
 import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
 import { calculoTabelaPrincipal } from "../Calculo/CalculoTabela";
@@ -1662,6 +1662,9 @@ export default {
     },
   },
   methods: {
+    getJurosValue(item) {
+    return this.selic ? (item.juros * 100).toFixed(2) : 0;
+  },
   tratamentoDeNumeroDaCorrecao(numero){
     const numeros = numero.toString();
     return parseFloat(numeros.substring(0,6))
@@ -2127,6 +2130,7 @@ export default {
       }
     },
     disableLinhaTable(data) {
+
       let tamanhoDataVerificacao = data.toString().split("/");
       if (
         tamanhoDataVerificacao.length == 3 && 
@@ -2631,6 +2635,7 @@ export default {
       });
     },
     atulizarInfosLote(dado) {
+      console.log("DADDDDDDDDDDDDDDDDDOOOOOOOOOOOOOOOOOOOOOOO " +dado)
       this.zeraDadosDocalculo();
       let beneficioAcumuladoLote = [];
       if (dado.recebeuBeneficio) {
@@ -2773,6 +2778,7 @@ export default {
       return benficioVerdadeiro;
     },
     calcularLote() {
+      //console.log("CHAMOUUUUUUUUUUUUUUUUUUU ")
       const body = {
         inicioCalculo: this.dtInicial,
         dip: this.dtFinal,
@@ -3748,7 +3754,10 @@ export default {
         (this.valorHonorarios * this.porcentagemHonorarios) / 100;
     },
     async atualizarTodosDados(info) {
-      this.alcadaArray = [];
+      if(info.citacao && this.ConverterToDate(info.citacao) < this.ConverterToDate("01/12/2021")){
+        this.selic = true;
+      }
+      this.alcadaArray = []; 
       this.info_calculo = info;
       this.info_calculo.beneficio = this.refatoreNameBeneficio(
         this.info_calculo.beneficio
