@@ -939,11 +939,6 @@
         </div>
 
         <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
         <h4 class="center">RESUMO DO PROCESSO</h4>
         <br />
         <table id="testeTotal">
@@ -1352,9 +1347,11 @@
         </div>
 
         <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()"
-          :items="calc_total" :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
+          :items="calc_total" :items-per-page="calc_total.length" item-key="name" class="elevation-1 tabelaPDF" hide-default-footer>
         </v-data-table>
+
         <br />
+        
         <div id="tabelaImpostoRenda">
           <h4 class="center" id="impostoRendaTitulo">
             RENDIMENTOS RECEBIDOS ACUMULADAMENTE PARA IMPOSTO DE RENDA
@@ -1367,9 +1364,9 @@
               <th id="impostoRendaCompetencias">COMPETÊNCIAS</th>
             </tr>
             <tr>
-              <td>ANO-CALENDÁRIO PAGAMENTO ({{ dataAtual.getFullYear() }})</td>
-              <td>{{ Math.floor(iPvalorAnoAtual * 100) / 100 }}</td>
-              <td>
+              <td id="tabelaPDF2">ANO-CALENDÁRIO PAGAMENTO ({{ dataAtual.getFullYear() }})</td>
+              <td id="tabelaPDF2">{{ Math.floor(iPvalorAnoAtual * 100) / 100 }}</td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1379,12 +1376,12 @@
                   : 0
                 }}
               </td>
-              <td>{{ competenciaAnoAtual }}</td>
+              <td id="tabelaPDF2">{{ competenciaAnoAtual }}</td>
             </tr>
             <tr>
-              <td>ANOS-CALENDÁRIO ANTERIORES</td>
-              <td>{{ Math.floor(iPvalorAnoAnterior * 100) / 100 }}</td>
-              <td>
+              <td id="tabelaPDF2">ANOS-CALENDÁRIO ANTERIORES</td>
+              <td id="tabelaPDF2">{{ Math.floor(iPvalorAnoAnterior * 100) / 100 }}</td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1394,14 +1391,14 @@
                   : 0
                 }}
               </td>
-              <td>{{ competenciaAnoAnterior }}</td>
+              <td id="tabelaPDF2">{{ competenciaAnoAnterior }}</td>
             </tr>
             <tr v-if="alcadaBoolean == true">
               <td>RENÚNCIA R$</td>
               <td>
                 {{ Math.floor(pacelasVencidas * 100) / 100 }}
               </td>
-              <td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1411,11 +1408,11 @@
                   : 0
                 }}
               </td>
-              <td></td>
+              <td id="tabelaPDF2"></td>
             </tr>
             <tr>
-              <td>TOTAL EM R$</td>
-              <td>
+              <td id="tabelaPDF2">TOTAL EM R$</td>
+              <td id="tabelaPDF2">
                 {{
                   Math.floor(
                     (parseFloat(iPvalorAnoAnterior) +
@@ -1425,7 +1422,7 @@
                   ) / 100
                 }}
               </td>
-              <td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1438,7 +1435,7 @@
                   : 0
                 }}
               </td>
-              <td>
+              <td id="tabelaPDF2">
                 {{
                   parseInt(competenciaAnoAnterior) + parseInt(competenciaAnoAtual)
                 }}
@@ -3959,70 +3956,10 @@ export default {
         ` 
         
         * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px; background-color: #e0e0e0} label {font-weight: bold;}
+        div {margin-bottom: 3px; background-color: rgb(154, 186, 215)} label {font-weight: bold;}
         .titulo, h1, h2 {text-align: center;}
-        
-        
 
-        body {height: auto; width: 100vw;padding: 15px; font-size: 1.3rem;}
-        .content{ padding: 15px;}
-        .center {
-          margin: auto;
-          width: 60%;
-          background-color: rgb(154, 186, 215);
-          padding: 10px;
-          text-align: center
-
-          background-image: url(../assets/logo.png);
-          background-position: top left;
-          background-repeat: no-repeat;
-          /* background-size: cover; */
-          position: relative;
-        }
-
-        table th{
-          border: 20px solid #FFFFFF;
-          text-align: center;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-        table tr > td {
-          border: 4px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-
-        table tr < td {
-          border-up: 5px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-       
-        table td{
-          text-align: center;
-        }
-
-        .agu {text-align: center; font-size: 1.3rem; font-weight: bold;}
-        h1, h2, h3 {font-size: 1.2rem; font-weight: bold;}
-
-         .titulo {
-          text-align: center;
-        }
-
-        .camposInput {
-          text-align: left;
-          margin-left: -1%;
-          font-size: 1.0em;
-          font-weight: normal;
-        }
-
-        .center {
-          text-align: center;
-          margin-bottom: 15px;
-          background-color: rgb(216, 228, 238);
-          border-radius: 10px;
-          padding: 3px;
-        }
+        body {height: auto; width: 100vw;padding: 15px; font-size: 1rem; background-color: rgb(154, 186, 215);}
 
         .centerAGU {
           text-align: center;
@@ -4030,146 +3967,34 @@ export default {
           padding-top: 10px;
         }
 
-        .rowInputsDados{
-          align-items: center;
-          margin-left: 20%;
+        .center {
+          text-align: center;
+          margin-bottom: 10px;
+          background-color: rgb(216, 228, 238);
+          border-radius: 10px;
+          padding: 3px;
         }
 
-        .column {
-          float: left;
-          width: 50%;
+        .rowInputsDados{
+          padding-top: 10px;
+          display:flex;
+          margin-left: 15%;
+        }
+
+        .column2 {
+          width: auto;
+        }
+
+        .column2 + .column2 {
+          margin-left: 50px;
         }
 
         .camposInputMemoriaCalculo {
-          margin-right: 500;
+          margin-right: 5px;
         }
 
         .inputToPrint {
           margin-left: 2px;
-        }
-
-        .columnRight {
-          float: left;
-          text-align: right;
-          width: 52%;
-        }
-
-        .rowInputs:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .resumoProcesso:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .columnResumoProcesso {
-          float: left;
-          width: 14%;
-          margin-left: 1%;
-        }
-
-        .columnResumoProcessoParte {
-          float: left;
-          width: 39%;
-          margin-left: 1%;
-        }
-
-        .centerMargin {
-          text-align: center;
-          padding-left: 15px;
-          padding-right: 15px;
-        }
-
-        .inputToPrint {
-          margin-left: 10px;
-        }
-
-        .inputToPrintResumo {
-          margin-left: 0px;
-        }
-
-        .inputToPrintResumoParte {
-          float: left;
-          width: 500px;
-        }
-
-        .inputCalculo {
-          text-align: left;
-          margin-left: 1%;
-        }
-
-        .rowCalculo:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .page {
-          padding-top: 3px;
-        }
-
-        
-        .columnResumoPagamentosAdministrativos {
-          float: left;
-          width: 11%;
-          margin-left: 1%;
-        }
-
-        .columnRightAlcada {
-          float: left;
-          margin-left: 0%;
-          text-align: left;
-          width: 50%;
-        }
-
-        .columnAlcadaPrint {
-          float: center;
-          text-align: left;
-          width: 60%;
-          margin-left: 20%;
-          margin-right: 20%;
-        }
-
-        .inputPagamentosAdministrativos {
-          max-width: 100%;
-        }
-
-        .inputTetoAlcada {
-          max-width: 15%;
-          font-size: 12px;
-        }
-
-        .camposInputAlcada {
-          text-align: left;
-          margin-left: 3%;
-          font-size: 16px;
-          width: 100%;
-        }
-        
-
-        .inputToPrintAlcada {
-          text-align: left;
-          margin-left: 3%;
-          font-size: 16px;
-          width: 30%;
-        }
-
-        table,
-        th,
-        td {
-          text-align: left;
-          margin-left: 0px;
-          padding-left: 5px;
-          width: 120%;
-        }
-
-        #impostoRendaTitulo {
-          font-size: 18px;
-          width: 120%;
         }
 
         #testeTotal {
@@ -4177,47 +4002,23 @@ export default {
           margin-left: 10%;
         }
 
-        #textosResumo {
-          width: 33%;
-          text-align: left;
-          border: 1px solid black;
-        }
-        
-        #thead-limpo {
-          text-align: center;
-          border: 1px solid black
-        }
-
         #thead-limpo-menor {
           text-align: center;
           border: 1px solid black;
         }
 
-        #thead-centro {
-          border: 1px solid white;
-          width: 100%;
+        #thead-limpo {
           text-align: center;
+          border: 1px solid black
         }
 
-        #thead-invisivel {
-          border: 1px solid white;
-          width: 1%;
-        }
-
-
-        #valoresResumo {
+        #textosResumo {
           width: 33%;
           text-align: left;
           border: 1px solid black;
         }
 
-        #valoresResumo2 {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valoresResumoExecucao {
+        #valoresResumo {
           width: 33%;
           text-align: left;
           border: 1px solid black;
@@ -4229,115 +4030,159 @@ export default {
           border: 1px solid black;
         }
 
-        #tabelaResumo {
-          width: 100%;
-          text-align: center;
+        #valoresResumoExecucao {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
         }
 
-        #colunaVazia {
-          width: 15%;
+        #testeTotal {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #colunaResumoEsquerda {
+          width: 35%;
           text-align: right;
-          border: 1px solid white;
+          border: 1px solid black;
+        }
+
+        #colunaResumoDireita {
+          width: 30%;
+          text-align: right;
+          border: 1px solid black;
         }
 
         #colunaVaziaDireita {
           width: 45%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
-        #colunaResumoEsquerda {
-          width: 25%;
-          text-align: right;
-          border: 1px solid white;
+        .thead-centro{
+          text-align: center;
+          margin: 10px;
         }
 
-        #colunaResumoDireita {
-          width: 15%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-horizontal {
-          width: 57%;
-          border: 1px solid #000;
-          margin-left: 20%;
-          margin-top: 0%;
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
         }
 
         #colunaAnaliseTexto {
-          width: 35%;
+          width: 15%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #colunaAnaliseEsquerda {
-          width: 2%;
+          width: 5%;
           text-align: right;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #colunaAnaliseDireita {
-          width: 2%;
+          width: 5%;
           text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-soma {
-          width: 13%;
-          border: 1px solid #000;
-          margin-left: 69%;
-          margin-top: -4px;
-        }
-
-        #linha-horizontal-separacao {
-          width: 60%;
           border: 1px solid black;
-          margin-left: 21%;
-          margin-top: -1px;
-          margin-bottom: -10px;
         }
 
         #observacoes-div {
-          width: 50%;
-          margin-left: 25%;
-          font-size: small;
-        }
-        
-        .describes{
-          text-overflow: clip ellipsis;
-          margin-right: 10px;
-        }
-
-        #observacoes-div-texto {
-          width:100%;
+          width: 100%;
           margin-left: 10%;
           font-size: small;
-          height: auto;
-          text-overflow: clip ellipsis;
         }
-        
-        #info-inicial {
+
+        .center-first{
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
+        }
+
+        .rowInputs:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .column {
+          float: left;
           width: 50%;
-          margin-left: 5%;
-          text-align: left;
-          border: 2px solid white;
         }
 
-        #info-inicial-coluna {
-          width: 15%;
-          text-align: left;
-          border: 2px solid white;
+        .camposInput {
+          text-align: right;
+          margin-left: 27%;
+          margin-right: 100px;
+          height: 5px;
+          width: 500px;
+          display: flex;
+          align-items: center;
         }
 
-
-        #info-inicial-linha {
-          width: 100%;
-          text-align: left;
-          border: 2px solid green;
+        .camposInput input{
+          flex-grow: 1;
+          box-sizing: border-box;
+          white-space:nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          border: none;
+          padding: 0;
         }
 
+        .camposInput span {
+          margin-right: 5px;
+        }
 
+        .13salarioPDF{
+          margin-left: 20px;
+        }
+
+        .tabelaPDF td,
+        .tabelaPDF th {
+          align-items:center;
+          text-align: center;
+          border: 1px solid #000000;
+        }
+
+        .center-first{
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
+        }
+
+        #tabelaPDF2 {
+          border: 1px solid black;
+        }
+
+        #impostoRenda {
+          justify-items: center;
+        }
+
+        #impostoRendaDiscriminacao {
+          width: 40%;
+        }
+
+        #impostoRendaValores {
+          width: 30%;
+        }
+
+        #impostoRendaAcordo {
+          width: 30%;
+        }
+
+        #impostoRendaCompetencias {
+          width: 20%;
+        }
         `;
       style = style + "</style>";
 
@@ -4377,215 +4222,45 @@ export default {
         ` 
         
         * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px;background-color: #e0e0e0} label {font-weight: bold;}
+        div {margin-bottom: 3px; background-color: rgb(154, 186, 215)} label {font-weight: bold;}
         .titulo, h1, h2 {text-align: center;}
-        
-        
 
-        body {height: auto; width: 100vw;padding: 15px; font-size: 1.3rem;}
-        .content{ padding: 15px;}
-        .center {
-          margin: auto;
-          width: 60%;
-          background-color: rgb(154, 186, 215);
-          padding: 10px;
-          text-align: center
-
-          background-image: url(../assets/logo.png);
-          background-position: top left;
-          background-repeat: no-repeat;
-          /* background-size: cover; */
-          position: relative;
-        }
-
-        table th{
-          border: 20px solid #FFFFFF;
-          text-align: center;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-        table tr > td {
-          border: 4px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-
-        table tr < td {
-          border-up: 5px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-       
-        table td{
-          text-align: center;
-        }
-
-        .agu {text-align: center; font-size: 1.3rem; font-weight: bold;}
-        h1, h2, h3 {font-size: 1.2rem; font-weight: bold;}
-
-         .titulo {
-          text-align: center;
-        }
-
-        .camposInput {
-          text-align: left;
-          margin-left: -1%;
-          font-size: 1.0em;
-          font-weight: normal;
-        }
-
-        .center {
-          text-align: center;
-          background-color: rgb(154, 186, 215);
-        }
+        body {height: auto; width: 100vw;padding: 15px; font-size: 1rem; background-color: rgb(154, 186, 215);}
 
         .centerAGU {
           text-align: center;
-          padding-top: 10px;
           background-color: rgb(154, 186, 215);
+          padding-top: 10px;
+        }
+
+        .center {
+          text-align: center;
+          margin-bottom: 10px;
+          background-color: rgb(216, 228, 238);
+          border-radius: 10px;
+          padding: 3px;
         }
 
         .rowInputsDados{
-          align-items: center;
-          margin-left: 20%;
+          padding-top: 10px;
+          display:flex;
+          margin-left: 15%;
         }
 
-        .column {
-          float: left;
-          width: 50%;
+        .column2 {
+          width: auto;
+        }
+
+        .column2 + .column2 {
+          margin-left: 50px;
         }
 
         .camposInputMemoriaCalculo {
-          margin-right: 500;
+          margin-right: 5px;
         }
 
         .inputToPrint {
           margin-left: 2px;
-        }
-
-        .columnRight {
-          float: left;
-          text-align: right;
-          width: 52%;
-        }
-
-        .rowInputs:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .resumoProcesso:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .columnResumoProcesso {
-          float: left;
-          width: 14%;
-          margin-left: 1%;
-        }
-
-        .columnResumoProcessoParte {
-          float: left;
-          width: 39%;
-          margin-left: 1%;
-        }
-
-        .centerMargin {
-          text-align: center;
-          padding-left: 15px;
-          padding-right: 15px;
-        }
-
-        .inputToPrint {
-          margin-left: 10px;
-        }
-
-        .inputToPrintResumo {
-          margin-left: 0px;
-        }
-
-        .inputToPrintResumoParte {
-          float: left;
-          width: 500px;
-        }
-
-        .inputCalculo {
-          text-align: left;
-          margin-left: 1%;
-        }
-
-        .rowCalculo:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .page {
-          padding-top: 3px;
-        }
-
-        
-        .columnResumoPagamentosAdministrativos {
-          float: left;
-          width: 11%;
-          margin-left: 1%;
-        }
-
-        .columnRightAlcada {
-          float: left;
-          margin-left: 0%;
-          text-align: left;
-          width: 50%;
-        }
-
-        .columnAlcadaPrint {
-          float: center;
-          text-align: left;
-          width: 60%;
-          margin-left: 20%;
-          margin-right: 20%;
-        }
-
-        .inputPagamentosAdministrativos {
-          max-width: 100%;
-        }
-
-        .inputTetoAlcada {
-          max-width: 15%;
-          font-size: 12px;
-        }
-
-        .camposInputAlcada {
-          text-align: left;
-          margin-left: 30%;
-          font-size: 16px;
-          width: 100%;
-          margin-right: 5px;
-        }
-        
-
-        .inputToPrintAlcada {
-          text-align: left;
-          margin-left: 3%;
-          font-size: 16px;
-          width: 30%;
-        }
-
-        table,
-        th,
-        td {
-          text-align: left;
-          margin-left: 0px;
-          padding-left: 5px;
-          width: 120%;
-        }
-
-        #impostoRendaTitulo {
-          font-size: 18px;
-          width: 120%;
         }
 
         #testeTotal {
@@ -4593,47 +4268,23 @@ export default {
           margin-left: 10%;
         }
 
-        #textosResumo {
-          width: 33%;
-          text-align: left;
-          border: 1px solid black;
-        }
-        
-        #thead-limpo {
-          text-align: center;
-          border: 1px solid black
-        }
-
         #thead-limpo-menor {
           text-align: center;
           border: 1px solid black;
         }
 
-        #thead-centro {
-          border: 1px solid white;
-          width: 100%;
+        #thead-limpo {
           text-align: center;
+          border: 1px solid black
         }
 
-        #thead-invisivel {
-          border: 1px solid white;
-          width: 1%;
-        }
-
-
-        #valoresResumo {
+        #textosResumo {
           width: 33%;
           text-align: left;
           border: 1px solid black;
         }
 
-        #valoresResumo2 {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valoresResumoExecucao {
+        #valoresResumo {
           width: 33%;
           text-align: left;
           border: 1px solid black;
@@ -4645,115 +4296,154 @@ export default {
           border: 1px solid black;
         }
 
-        #tabelaResumo {
-          width: 100%;
-          text-align: center;
+        #valoresResumoExecucao {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
         }
 
-        #colunaVazia {
-          width: 15%;
+        #testeTotal {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #colunaResumoEsquerda {
+          width: 35%;
           text-align: right;
-          border: 1px solid white;
+          border: 1px solid black;
+        }
+
+        #colunaResumoDireita {
+          width: 30%;
+          text-align: right;
+          border: 1px solid black;
         }
 
         #colunaVaziaDireita {
           width: 45%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
-        #colunaResumoEsquerda {
-          width: 25%;
-          text-align: right;
-          border: 1px solid white;
+        .thead-centro{
+          text-align: center;
+          margin: 10px;
         }
 
-        #colunaResumoDireita {
-          width: 15%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-horizontal {
-          width: 57%;
-          border: 1px solid #000;
-          margin-left: 20%;
-          margin-top: 0%;
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
         }
 
         #colunaAnaliseTexto {
-          width: 35%;
+          width: 15%;
           text-align: left;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #colunaAnaliseEsquerda {
-          width: 2%;
+          width: 5%;
           text-align: right;
-          border: 1px solid white;
+          border: 1px solid black;
         }
 
         #colunaAnaliseDireita {
-          width: 2%;
+          width: 5%;
           text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-soma {
-          width: 13%;
-          border: 1px solid #000;
-          margin-left: 69%;
-          margin-top: -4px;
-        }
-
-        #linha-horizontal-separacao {
-          width: 60%;
           border: 1px solid black;
-          margin-left: 21%;
-          margin-top: -1px;
-          margin-bottom: -10px;
         }
 
         #observacoes-div {
-          width: 50%;
-          margin-left: 25%;
-          font-size: small;
-        }
-        
-        .describes{
-          text-overflow: clip ellipsis;
-          margin-right: 10px;
-        }
-
-        #observacoes-div-texto {
-          width:100%;
+          width: 100%;
           margin-left: 10%;
           font-size: small;
-          height: auto;
-          text-overflow: clip ellipsis;
         }
-        
-        #info-inicial {
+
+        .center-first{
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
+        }
+
+        .rowInputs:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .column {
+          float: left;
           width: 50%;
-          margin-left: 5%;
-          text-align: left;
-          border: 2px solid white;
         }
 
-        #info-inicial-coluna {
-          width: 15%;
-          text-align: left;
-          border: 2px solid white;
+        .camposInput {
+          text-align: right;
+          margin-left: 27%;
+          margin-right: 100px;
+          height: 5px;
+          width: 500px;
+          display: flex;
+          align-items: center;
         }
 
-
-        #info-inicial-linha {
-          width: 100%;
-          text-align: left;
-          border: 2px solid green;
+        .camposInput input{
+          flex-grow: 1;
+          box-sizing: border-box;
+          white-space:nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          border: none;
+          padding: 0;
         }
 
+        .camposInput span {
+          margin-right: 5px;
+        }
 
+        .13salarioPDF{
+          margin-left: 20px;
+        }
+
+        .tabelaPDF td,
+        .tabelaPDF th {
+          text-align: center;
+          border: 1px solid #000000;
+        }
+
+        .center-first{
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
+        }
+
+        #impostoRenda {
+          justify-items: center;
+        }
+
+        #impostoRendaDiscriminacao {
+          width: 40%;
+        }
+
+        #impostoRendaValores {
+          width: 30%;
+        }
+
+        #impostoRendaAcordo {
+          width: 30%;
+        }
+
+        #impostoRendaCompetencias {
+          width: 20%;
+        }
         `;
       style = style + "</style>";
 
