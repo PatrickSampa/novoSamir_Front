@@ -55,7 +55,7 @@
           </v-col>
           <v-col cols="12" sm="6" md="3">
             <label for="valor-devido R$" class="labels pb-3">RMI <b class="item-obrigatorio">*</b></label>
-            <v-text-field type="number" v-model="salarioInicial" id="valor-devido" dense placeholder="nada"
+            <v-text-field type="number" v-model="salarioInicial" id="valor-devido" dense placeholder
               @input="salarioInicial = formataçao(salarioInicial)" outlined required></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
@@ -112,7 +112,7 @@
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salarioMinimo"
-              :value="salarioMinimo" />
+              :value="salarioMinimo" @change="teste"/>
             <label for="salarioMinimo" class="labels pb-2">Salário Mínimo</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
@@ -1484,6 +1484,7 @@ import { getDataMaisAtualParaCampoAtualizarAte } from "../api/calculadora/getJur
 import { EventBus } from "../eventBus/eventBus"
 //import Popup from '../components/Popup.vue'
 import Swal from 'sweetalert2';
+import { getSalarioMinimoDib } from '../api/calculadora/getSalarioMinimo/getSalarioMinimoAnoDib'
 
 export default {
   name: "Home",
@@ -1659,6 +1660,23 @@ export default {
     },
   },
   methods: {
+    async teste(){
+      if(Object.keys(this.info_calculo).length <= 0){
+        console.log("entrou")
+        this.salarioMinimo = false
+      }
+      if(this.info_calculo.dibInicial){
+        const data = await getSalarioMinimoDib(this.info_calculo.dibInicial.split("/")[2])
+        console.log(data[0].valor)
+
+        if((this.salarioInicial).toString() == "NaN"){
+          this.salarioInicial = data[0].valor
+        }
+      }
+      console.log("asdadadds")
+      console.log(typeof(this.salarioInicial))
+      console.log((this.salarioInicial).toString())
+  },
     getJurosValue(item) {
     return this.selic ? (item.juros * 100).toFixed(2) : 0;
   },
