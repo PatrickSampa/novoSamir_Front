@@ -13,11 +13,7 @@ export async function ValidationTokenSapiens(){
         
         const res = await axios_visao.post("/login",body);
             
-        if (res.status == 401) {
-            return Promise.reject(new Error("usuario nao logado"));
-        } else {
-            return Promise.resolve();
-        }
+        return res.data.trim() == "Acesso negado, verifique se o CPF e a senha estão corretos!" ? Promise.reject(new Error()) : Promise.resolve();
  
     } catch (err) { 
         return Promise.reject(err);

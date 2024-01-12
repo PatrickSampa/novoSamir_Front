@@ -22,7 +22,7 @@
 
 <script>
 import { VerificarUserSapiens } from '../api/verificar_login_sapiens_visao/users';
-import { ValidationTokenSapiens } from '../api/verificar_login_sapiens_visao/validationTokenSapiens'
+//import { ValidationTokenSapiens } from '../api/verificar_login_sapiens_visao/validationTokenSapiens'
 export default {
   name: "SapiensLogin",
   data: () => {
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     async getUsuarioSapiens() {
-        await ValidationTokenSapiens().then(() => this.$router.push({ name: "home" }))
+        //await ValidationTokenSapiens().then(() => this.$router.push({ name: "home" }))
       
     },
     async loginUsuarioSapiens() {
@@ -57,9 +57,11 @@ export default {
         localStorage.setItem("sapiensSenha", body.senha);
         this.loading = false;
         this.valid = true;
+        console.log("LOGIN PASSOU")
         this.$router.push({ name: "home" })
  /*        window.open("http://10.191.8.198:8080/home"); */
       } catch (error) {
+        console.log("NAO PASSOU")
         this.loading = false;
         let message = await error.message;
         console.log(message);
