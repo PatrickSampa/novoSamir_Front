@@ -275,6 +275,7 @@ export default {
               senha: this.senhaSapaiens,
             },
             etiqueta,
+            usuario_id: localStorage.getItem("authToken")
           };
           this.loading = true;
           try {
