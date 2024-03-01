@@ -28,8 +28,8 @@ export default {
     methods: {
         validadorDossiePrevidenciario() {
             this.$prompt(
-                "Qual é o nome das etiquetas? as etiquetas não pode conter a palvra ATUALIZAÇAO e FALHA",
-                "LEGOLAS"
+                "Qual é o nome das etiquetas? as etiquetas não podem conter a palavra ATUALIZAÇÃO e FALHA",
+                
             ).then((etiqueta) => {
                 if (etiqueta) {
                     const body = {
@@ -53,7 +53,7 @@ export default {
                         .catch((error) => {
                             this.loading = false;
                             this.$confirm(
-                                "Falha ao  Verifacar as validades dos processos ",
+                                "Falha ao  Verificar as validades dos processos ",
                                 "Error",
                                 "error"
                             )

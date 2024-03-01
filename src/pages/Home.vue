@@ -11,14 +11,15 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1 style="font-size: 40px; color: #3876BF; text-align: center">
-      Samir  <img src="../assets/iconejud3.png" alt="ícone jurídico azul" width="40" height="40" style="margin-top: -13px"></h1>
+      <h1 style="text-align: center">
+       <img src="../assets/logoSamir.png" alt="logo Samir azul" width="90" height="125" style="margin-top: -1%"></h1>
     </div>
-    <v-card>
+    <v-card style="margin-top: -3%">
       <v-tabs>
         <v-tabs-slider color="green"></v-tabs-slider>
         <v-tab @click="add_taxa = false">Cálculo</v-tab>
         <v-tab @click="acessoPortalADM()">Portal ADM</v-tab>
+        <v-tab @click="acessoManual()">Manual</v-tab>
       </v-tabs>
     </v-card>
     <PortalADM v-if="add_taxa" />
@@ -292,8 +293,13 @@
                 Consultar Processo
               </v-btn>
                 
-              <v-btn :loading="loading" depressed color="blue white--text" class="mt-2 mt-md-0" @click="atualizarItemParaBanco()">
+              <v-btn :loading="loading" depressed color="blue white--text" class="mt-2 mt-md-0 mr-md-2" @click="atualizarItemParaBanco()">
                 Atualizar
+              </v-btn>
+
+              
+              <v-btn :loading="loading" depressed color="blue white--text" class="mt-2 mt-md-0" @click="verificadorDeProcessoDuplicado()">
+                Verificador de processo duplicado
               </v-btn>
             </div>
           </v-col>
@@ -353,51 +359,45 @@
       <br/>
       <h1 v-if="add_taxa == false" class="titulo" style="background-color: rgb(254, 254, 225)">PREENCHA OS DADOS</h1>
       <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
-      <div v-if="add_taxa == false" class="rowInputs">
-        <div v-if="add_taxa == false" class="column">
-          <label class="camposInput">
-            <span>Processo:</span>
+      <div v-if="add_taxa == false" class="rowInputsCentral">
+        <div v-if="add_taxa == false" class="columnInputs">
+          <label class="camposInputMemoriaCalculo"> Processo:
             <input v-model="info_calculo.numeroDoProcesso" @input="atulizarvalor()"
               placeholder="XXXX-XX.XXXX.XXX.XXXX" /></label>
           <label class="inputToPrint" id="processoForm" />
-          <br />
-          <label class="camposInput">
-          <span>Autor:</span>
+          
+          <label class="camposInputMemoriaCalculo">Autor:
             <input v-model="info_calculo.nome" @input="atulizarvalor()" placeholder="Jennifer Walters" /></label>
           <label class="inputToPrint" id="autorForm" />
-          <br />
-          <label class="camposInput"><span>Objeto:</span>
+          
+          <label class="camposInputMemoriaCalculo">Objeto:
             <input v-model="objetoDoCalculo" placeholder="Ex.: CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO" /></label><label
             class="inputToPrint" id="objetoForm" />
-          <br />
-          <label class="camposInput"><span>Vara:</span>
+          
+          <label class="camposInputMemoriaCalculo">Vara:
             <input v-model="varaPrevidenciaria" placeholder="Ex.: Previdenciária" /></label><label class="inputToPrint"
             id="varaForm" />
-          <br />
-          <label class="camposInput"><span>Juros:</span><input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label><label
+          <label class="camposInputMemoriaCalculo">Juros:<input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label><label
             class="inputToPrint" id="jurosForm" />
-          <br />
+          
         </div>
-        <div class="column">
-          <label class="camposInput"><span>Ajuizamento:</span>
+        <div class="columnInputs">
+          <label class="camposInputMemoriaCalculo"><span>Ajuizamento:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dataAjuizamento" @input="atulizarvalor()"
               placeholder="XX/XX/XXXX" /></label><label class="inputToPrint" id="ajuizamentoForm" />
-          <br />
-          <label class="camposInput"><span>Início do Juros:</span>
+          
+          <label class="camposInputMemoriaCalculo"><span>Início do Juros:</span>
             <input v-mask="'##/##/####'" v-model="inicio_juros" placeholder="XX/XXXX" /></label><label
             class="inputToPrint" id="inicioJurosForm" />
-          <br />
+        
           <!-- Criar Função -->
-          <label class="camposInput"><span>Valido até:</span>
-            <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label class="inputToPrint"
-            id="calculadoEmForm" />
-          <br />
-          <label class="camposInput">
-            <span>Honorário:</span>
+          <label class="camposInputMemoriaCalculo">Valido até:
+            <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label id="calculadoEmForm" />
+          
+          <label class="camposInputMemoriaCalculo">Honorário:
             <input placeholder="Ex.:" v-model="textoHonorarios" />
           </label>
           <label class="inputToPrint" id="honorarioForm"></label>
-          <br />
         </div>
       </div>
       <h4 class="center-first" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
@@ -680,50 +680,47 @@
       </div>
 
       <h4 class="center-first">PLANILHA DE CÁLCULO</h4>
-      <div class="rowInputs">
-        <div class="column">
-          <label class="camposInput">
-            <span>Parte:</span>
+      <div class="rowInputsCentral">
+        <div class="columnInputs">
+          <label class="camposInputMemoriaCalculo">
+            Parte:
             <input v-model="info_calculo.nome" @input="atulizarvalor()"
               placeholder="Nome + (CPF 000.000.000-00)" /></label>
-          <label class="inputToPrint" id="partePlanilha" />
-          <br />
-          <label class="camposInput">
+          <label class="camposInputMemoriaCalculo" id="partePlanilha" />
+          <label class="camposInputMemoriaCalculo">
             <span>Espécie:</span>
             <input v-model="info_calculo.beneficio" @input="atulizarvalor()" placeholder="XX(XXXXXXXXXX)" /></label>
-          <label class="inputToPrintAlcada" id="autorPlanilha" />
-          <br />
-          <label class="camposInput"><span>DIB Jud:</span>
+          <label class="camposInputMemoriaCalculo" id="autorPlanilha" />
+          
+          <label class="camposInputMemoriaCalculo"><span>DIB Jud:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dib" placeholder="00/00/0000" /></label><label
             class="inputToPrint" id="dibJudPlanilha" />
-          <br />
-          <label class="camposInput"><span>DIB Anterior:</span>
+          
+          <label class="camposInputMemoriaCalculo"><span>DIB Anterior:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dibAnterior" @input="atulizarvalor()"
               placeholder="00/00/0000" /></label><label class="inputToPrint" id="dibAnteriorPlanilha" />
-          <br />
-          <label class="camposInput"><span>RMI Jud.:</span>
+          
+          <label class="camposInputMemoriaCalculo"><span>RMI Jud.:</span>
             <input type="number" v-model="salarioInicial" placeholder="00/00" /></label><label class="inputToPrint"
             id="rmiJudPlanilha" />
-          <br />
         </div>
-        <div class="column">
-          <label class="camposInput"><span>%RMI:</span>
+        <div class="columnInputs">
+          <label class="camposInputMemoriaCalculo"><span>%RMI:</span>
             <input type="number" placeholder="000,00" v-model="porcentagemRMI" /></label><label class="inputToPrint"
             id="porCententagemRmiPlanilha" />
-          <br />
-          <label class="camposInput"><span>Período (Data de Início):</span>
+          
+          <label class="camposInputMemoriaCalculo"><span>Período (Data de Início):</span>
             <input v-mask="'##/##/####'" v-model="dtInicial" placeholder="XX/XX/XXXX" /></label><label
             class="inputToPrint" id="dataInicialPlanilha" />
-          <br />
+          
           <!-- Criar Função -->
-          <label class="camposInput"><span>Período (Data de Fim):</span>
-            <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="inputToPrint"
+          <label class="camposInputMemoriaCalculo"><span>Período (Data de Fim):</span>
+            <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="camposInputMemoriaCalculo"
             id="dataFinalPlanilha" />
-          <br />
-          <label for="13salario" class="labels pb-2" style="margin-left: 170px">13º Salário
-          </label>
+          
+          <label for="13salario" class="labels pb-2">13º Salário
           <input class="form-check-input" type="checkbox" style="margin-left: 5px" v-model="salario13"
-            :value="salario13" />
+            :value="salario13" /></label>
           <br />
         </div>
       </div>
@@ -884,60 +881,48 @@
         <div>
           <h3 class="centerAGU"><img src="../assets/agu.png" width="150" height="90" alt="Simbolo da Advocacia-Geral da União"></h3>
           <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
-          <h4 style="text-align: center">EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES</h4>
-
           
-            <div class="rowInputsDados">
-              <div class="column">
-                <label class="camposInputMemoriaCalculo">Processo n°:</label>
+            <div class="rowInputsCentral">
+              <div class="columnInputs">
+                <label class="camposInputMemoriaCalculo">Processo n°:
                 <label class="inputToPrint"/>
-                {{  info_calculo.numeroDoProcesso }}
-                <br />
-                <label class="camposInputMemoriaCalculo">Parte Autora:</label>
-                {{ info_calculo.nome }}
-                <br />
-                <label class="camposInputMemoriaCalculo">Objeto:</label>
-                <label class="inputToPrint" id="objetoForm" />
-                {{ objetoDoCalculo }}
-                <br />
-                <label class="camposInputMemoriaCalculo">Vara:</label>
-                <label class="inputToPrint" id="varaForm" />
-                {{ varaPrevidenciaria }}
-                <br >
+                {{  info_calculo.numeroDoProcesso }}</label>
+
+                <label class="camposInputMemoriaCalculo">Parte Autora:
+                {{ info_calculo.nome }}</label>
+                
+                <label class="camposInputMemoriaCalculo">Objeto:
+                <label id="objetoForm" />
+                {{ objetoDoCalculo }}</label>
+
+                <label class="camposInputMemoriaCalculo">Vara:
+                <label id="varaForm" />
+                {{ varaPrevidenciaria }}</label>
+
                 <label class="camposInputMemoriaCalculo">N.B: {{ info_calculo.nb }}</label>
-                <label class="inputToPrint" id="jurosForm" />
-                <br />
               </div>
               
-              <div class="column">
+              <div class="columnInputs">
                 <label class="camposInputMemoriaCalculo">Ajuizamento:</label>
-                <label class="inputToPrint" id="ajuizamentoForm" />
+                <label id="ajuizamentoForm" />
                 {{ info_calculo.dataAjuizamento }}
-                <br />
+
                 <label class="camposInputMemoriaCalculo">Início do Juros:</label>
-                <label class="inputToPrint" id="inicioJurosForm" />
+                <label id="inicioJurosForm" />
                 {{ inicio_juros }}
-                <br />
+
                 <label class="camposInputMemoriaCalculo">Atualizar Até: {{ atulizacao }}</label>
-                <label class="inputToPrint"
-                  id="calculadoEmForm" />
                 <!--Função-->
-                <br />
-                <label class="camposInputMemoriaCalculo">Honorários Sucumbenciais:</label><label class="inputToPrint" id="honorarioForm" />
+                <label class="camposInputMemoriaCalculo">Honorários Sucumbenciais:</label>
+                <label class="inputToPrint" id="honorarioForm" />
                 {{ textoHonorarios }}
                 <br />
               </div>
             </div>
         </div>
-      
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+
         <h4 class="center">RESUMO DO PROCESSO</h4>
-        <br />
+        
         <table id="testeTotal">
           <thead>
             <tr>
@@ -1291,51 +1276,50 @@
         </div>
         
         <h4 class="center">PLANILHA DE CÁLCULO</h4>
-        <div class="rowInputs">
-          <div class="column">
-            <label class="camposInput">
+        <div class="rowInputsCentral">
+          <div class="columnInputs">
+            <label class="camposInputMemoriaCalculo">
               Parte:
               {{ info_calculo.nome }} (CPF {{ info_calculo.cpf }})</label>
             <label class="inputToPrint" id="partePlanilha" />
-            <br />
-            <label class="camposInput">
+            
+            <label class="camposInputMemoriaCalculo">
               Espécie:
               {{ info_calculo.beneficio }}
             </label>
-            <label class="inputToPrint" id="autorPlanilha" />
-            <br />
-            <label class="camposInput">DIB Jud:
+            <label class="camposInputMemoriaCalculo" id="autorPlanilha" />
+            
+            <label class="camposInputMemoriaCalculo">DIB Jud:
               {{
                 this.info_calculo.dib == null || this.info_calculo.dib == ""
                 ? this.dtInicial
                 : this.info_calculo.dib
               }} </label>
-              <label class="inputToPrint" id="dibJudPlanilha" />
-            <br />
-            <label class="camposInput">DIB Anterior:
+              <label class="camposInputMemoriaCalculo" id="dibJudPlanilha" />
+            
+            <label class="camposInputMemoriaCalculo">DIB Anterior:
               {{
                 this.dibAnterior == null || this.dibAnterior == ""
                 ? "Não consta"
                 : this.dibAnterior
               }} </label><label class="inputToPrint" id="dibAnteriorPlanilha" />
-            <br />
-            <label class="camposInput">RMI Jud.: R$ {{ salarioInicial }} </label><label class="inputToPrint"
-              id="rmiJudPlanilha" />
-            <br />
+            
+            <label class="camposInputMemoriaCalculo">RMI Jud.: R$ {{ salarioInicial }} </label>
+            <label class="camposInputMemoriaCalculo" id="rmiJudPlanilha" />
           </div>
-          <div class="column">
-            <label class="camposInput" id="porCententagemRmiPlanilha">%RMI: {{ porcentagemRMI == 0 ? 100 :
+          <div class="columnInputs">
+            <label class="camposInputMemoriaCalculo" id="porCententagemRmiPlanilha">%RMI: {{ porcentagemRMI == 0 ? 100 :
               porcentagemRMI }}
             </label>
-            <br />
-            <label class="camposInput">Período (Data de Início): {{ dtInicial }} </label><label
-              class="inputToPrint" id="dataInicialPlanilha" />
-            <br />
+            
+            <label class="camposInputMemoriaCalculo">Período (Data de Início): {{ dtInicial }} </label>
+            <label class="camposInputMemoriaCalculo" id="dataInicialPlanilha" />
+            
             <!-- Criar Função -->
-            <label class="camposInput">Período (Data de Fim): {{ dtFinal }} </label><label
-              class="inputToPrint" id="dataFinalPlanilha" />
-            <br />
-            <label for="13salario" class="labels pb-2" style="margin-left: 168px">13º Salário: {{ exibirBoolean(salario13)
+            <label class="camposInputMemoriaCalculo">Período (Data de Fim): {{ dtFinal }} </label><label
+              class="camposInputMemoriaCalculo" id="dataFinalPlanilha" />
+            
+            <label for="13salario" class="labels pb-2">13º Salário: {{ exibirBoolean(salario13)
             }}
             </label>
             <br />
@@ -1478,6 +1462,7 @@ import { triagemBeneficiosValidos } from "../Calculo/CalculoTabela/BeneficioAcum
 import { EventBus } from "../eventBus/eventBus"
 //import Popup from '../components/Popup.vue'
 import Swal from 'sweetalert2';
+import { VerificadorDeProcessoDuplicado } from "@/api/visao/triagem/VerificadorDeProcessoDuplicado"
 
 export default {
   name: "Home",
@@ -4737,7 +4722,53 @@ export default {
           content: 'estilo-content-sweet'
         }
       });
-    }
+    },
+
+    verificadorDeProcessoDuplicado() {
+            this.$prompt(
+                "Qual é o nome das etiquetas? as etiquetas não podem conter a palavra ATUALIZAÇÃO e FALHA",
+                
+            ).then((etiqueta) => {
+                if (etiqueta) {
+                    const body = {
+                        login: {
+                            cpf: this.cpfSapiens,
+                            senha: this.senhaSapaiens,
+                        },
+                        etiqueta,
+                    };
+                    this.loading = true;
+
+                    VerificadorDeProcessoDuplicado(body)
+                        .then(async (response) => {
+                            this.$alert(
+                                response.length,
+                                "Processos duplicados: ",
+                                "success"
+                            );
+                            this.loading = false;
+                        })
+                        .catch((error) => {
+                            this.loading = false;
+                            this.$confirm(
+                                "Falha ao  Verificar os processos duplicados ",
+                                "Error",
+                                "error"
+                            )
+                                .then((r) => {
+                                    console.log(r);
+                                    this.loading = false;
+                                })
+                                .catch(() => {
+                                    console.log("OK not selected.");
+                                    this.loading = false;
+                                });
+                            console.log(error.message);
+                            console.log("error.message");
+                        });
+                }
+            });
+        },
   },
   mounted() {
     this.cpfSapiens = localStorage.getItem("sapiensCPF");
@@ -4913,6 +4944,20 @@ tr:nth-child(odd) {
   padding: 3px;
 }
 
+.rowInputsCentral {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.columnInputs{
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
 .centerAGU {
   text-align: center;
   padding-top: 10px;
@@ -4924,7 +4969,13 @@ tr:nth-child(odd) {
 }
 
 .camposInputMemoriaCalculo {
-  margin-right: 500;
+  display: flex;
+}
+
+.camposInputMemoriaCalculo input{
+  flex: 1;
+  margin-left: 2px;
+  box-sizing: border-box;
 }
 
 .columnResumo {
