@@ -17,13 +17,13 @@
     <v-card style="margin-top: -3%">
       <v-tabs>
         <v-tabs-slider color="green"></v-tabs-slider>
-        <v-tab @click="add_taxa = false">Cálculo</v-tab>
+        <v-tab @click="exibirCalculoCard()">Cálculo</v-tab>
         <v-tab @click="acessoPortalADM()">Portal ADM</v-tab>
         <v-tab @click="acessoManual()">Manual</v-tab>
       </v-tabs>
     </v-card>
     <PortalADM v-if="add_taxa" />
-    <v-container fluid id="calculadora" v-if="!add_taxa">
+    <v-container fluid id="calculadora" v-if="exibirCalculo">
       <v-card>
         <bloco-informacoes v-if="!add_taxa" @calculo="atualizarTodosDados($event)" :exibir="{
             tudo: BlocoDeInformacoes_tudo,
@@ -307,55 +307,10 @@
       </v-card>
    
       <br/>
-  
-      <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
-        Benefícios para Cálculo em Lote
-      </h3>
-      
-      <template v-if="exibirCalculoEmLote">
-        <v-data-table :headers="headersCalculoLote" :items="calculoLote" class="elevation-1">
-          <template v-slot:item="{ item }">
-            <tr>
-
-              <td  class="py-3" :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}" @click="atulizarInfosLote(item)">
-                <span style="color:#1976d2">{{ item.numeroDoProcesso }}</span>
-              </td>
-
-              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.nome }}</td>
-              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.tipo }}</td>
-              <td>
-                <v-icon v-if="item.nomeBeneficioBeneficioAcumulado[0]" color="red">
-                  mdi-check-outline
-                </v-icon>
-              </td>
-              <td>
-                <v-btn icon @click="atulizarInfosLote(item)">
-                  <v-icon color="sucesso!">mdi-file-eye-outline</v-icon>
-                </v-btn>
-                <v-btn :loading="loading" icon @click="removerItemLote(item)">
-                  <v-icon color="red">mdi-delete</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </template>
-        </v-data-table>
-      </template>
-
-      <v-col cols="2">
-        <div style="display: flex; justify-content: space-between;">
-            <v-btn depressed color="blue" style="color: whitesmoke" @click="verificarAdicaoNoLote()"
-              target="_blank">Adicionar ao Lote</v-btn>
-            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
-              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
-            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
-              @click="deletarLote()">Deletar lote</v-btn>
-          </div>
-      </v-col>
 
       <portal-a-d-m v-if="add_taxa == true" />
       
       <!-- TABELA PRNCIPAL -->
-      <br />
       <br/>
       <h1 v-if="add_taxa == false" class="titulo" style="background-color: rgb(254, 254, 225)">PREENCHA OS DADOS</h1>
       <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
@@ -1432,6 +1387,54 @@
       <div v-if="add_taxa == false" v-show="mode === 'table'">
         <b-button style="background-color:rgb(159, 159, 159); border:gray; margin-left: 96.5%" @click="printDiv()"><img src="../assets/impressora.png" width="20" height="20"></b-button>
       </div>
+
+      <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
+        Benefícios para Cálculo em Lote
+      </h3>
+      
+      <template v-if="exibirCalculoEmLote">
+        <v-data-table :headers="headersCalculoLote" :items="calculoLote" class="elevation-1">
+          <template v-slot:item="{ item }">
+            <tr>
+
+              <td  class="py-3" :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}" @click="atulizarInfosLote(item)">
+                <span style="color:#1976d2">{{ item.numeroDoProcesso }}</span>
+              </td>
+
+              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.nome }}</td>
+              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.tipo }}</td>
+              <td>
+                <v-icon v-if="item.nomeBeneficioBeneficioAcumulado[0]" color="red">
+                  mdi-check-outline
+                </v-icon>
+              </td>
+              <td>
+                <v-btn icon @click="atulizarInfosLote(item)">
+                  <v-icon color="sucesso!">mdi-file-eye-outline</v-icon>
+                </v-btn>
+                <v-btn :loading="loading" icon @click="removerItemLote(item)">
+                  <v-icon color="red">mdi-delete</v-icon>
+                </v-btn>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </template>
+
+      <v-col cols="2">
+        <div style="display: flex; justify-content: space-between;">
+            <v-btn depressed color="blue" style="color: whitesmoke" @click="verificarAdicaoNoLote()"
+              target="_blank">Adicionar ao Lote</v-btn>
+            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
+              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
+            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
+              @click="deletarLote()">Deletar lote</v-btn>
+          </div>
+      </v-col>
+    </v-container>
+
+    <v-container fluid id="manual" v-if="exibirManual">
+      <v-card>oi</v-card>
     </v-container>
 
     <template>
@@ -1441,9 +1444,6 @@
         </div>
       </div>
     </template>
-
-
-    
   </v-container>
 </template>
 
@@ -1478,6 +1478,8 @@ export default {
       popupMessage: 'Termo inicial do desconto ajustado para a DIV do benefício devido',
       mode: "",
       add_taxa: false,
+      exibirCalculo: true,
+      exibirManual: false,
       beneficio: false,
       pesquisa: {},
       infos: [],
@@ -1637,6 +1639,13 @@ export default {
     },
   },
   methods: {
+    
+    acessoManual() {
+      this.exibirCalculo = false;
+      this.exibirManual = true;
+      this.add_taxa = false;
+    },
+
     atualizarItemParaBanco(){
       const novoObjetoParaAtualizar = {...this.info_calculo}
       delete novoObjetoParaAtualizar.aps;
@@ -1846,12 +1855,20 @@ export default {
       this.$prompt("Digite a senha de acesso").then((text) => {
         if (text == "Beremiz Samir") {
           this.add_taxa = true;
+          this.exibirCalculo = false;
+          this.exibirManual = false;
         } else {
-          this.add_taxa = false;
           this.$alert("SENHA ERRADA");
         }
       })
     },
+
+    exibirCalculoCard() {
+      this.exibirCalculo = true;
+      this.exibirManual = false;
+      this.add_taxa = false
+    },
+
     async novoCalculo() {
       if (this.verificadoInformacoes()) {
         try {
@@ -1913,7 +1930,7 @@ export default {
           { value: "data", text: "Data" },
           { value: "reajusteAcumulado", text: "Reajuste" },
           { value: "devido", text: "Devido R$" },
-          { value: "reajusteRecebido", text: "Reajute" },
+          { value: "reajusteRecebido", text: "Reajuste" },
           { value: "recebido", text: "Recebido R$" },
           { value: "salario", text: "Salário R$" },
           { value: "correcao", text: "Correção Salarial" },
