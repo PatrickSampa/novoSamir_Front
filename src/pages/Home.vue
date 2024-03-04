@@ -330,7 +330,7 @@
               </td>
               <td>
                 <v-btn icon @click="atulizarInfosLote(item)">
-                  <v-icon color="success">mdi-file-eye-outline</v-icon>
+                  <v-icon color="sucesso!">mdi-file-eye-outline</v-icon>
                 </v-btn>
                 <v-btn :loading="loading" icon @click="removerItemLote(item)">
                   <v-icon color="red">mdi-delete</v-icon>
