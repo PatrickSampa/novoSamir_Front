@@ -28,8 +28,8 @@ export default {
   methods: {
     atualizarDosPrev() {
       this.$prompt(
-        "Qual é o nome das etiquetas? as etiquetas não pode conter a palvra ATUALIZAÇAO e FALHA",
-        "LEGOLAS"
+        "Qual é o nome das etiquetas? as etiquetas não podem conter a palavra ATUALIZAÇÃO e FALHA",
+        ""
       ).then((etiqueta) => {
         if (etiqueta) {
           const body = {

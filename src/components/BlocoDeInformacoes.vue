@@ -289,7 +289,7 @@ export default {
             }else{
               await salvarInformationForCalculoList(informationCalculo);
               this.infos.push(informationCalculo);
-              this.$alert(informationCalculo.length, "Processo adicionado: ", "success");
+              this.$alert(informationCalculo.length, "Processo adicionado: ", "sucesso!");
               this.saveInfos();
               this.redirectToCalculo();
               this.getInfos();
@@ -344,7 +344,7 @@ export default {
 
       this.loading = true;
       salvarInformationForCalculo(body).then(() => {
-        this.$alert(1, "Processo adicionado: ", "success");
+        this.$alert(1, "Processo adicionado: ", "sucesso!");
         this.$emit("processos", true);
         this.loading = false;
         this.getInfos();
@@ -538,11 +538,11 @@ export default {
 <style >
 
 .active-item {
-  color: red; /* Adicione a sombra desejada */
+  color: red;
 }
 
 .shadowed-text {
-  color: red; /* Adicione a sombra no texto quando estiver ativo */
+  color: red;
 }
 
 

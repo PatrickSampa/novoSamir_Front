@@ -28,8 +28,8 @@ export default {
     methods: {
         validadorDossiePrevidenciario() {
             this.$prompt(
-                "Qual é o nome das etiquetas? as etiquetas não pode conter a palvra ATUALIZAÇAO e FALHA",
-                "LEGOLAS"
+                "Qual é o nome das etiquetas? as etiquetas não podem conter a palavra ATUALIZAÇÃO ou FALHA",
+                ""
             ).then((etiqueta) => {
                 if (etiqueta) {
                     const body = {
@@ -46,7 +46,7 @@ export default {
                             this.$alert(
                                 response.length,
                                 "Processos verificados: ",
-                                "success"
+                                "sucesso"
                             );
                             this.loading = false;
                         })
