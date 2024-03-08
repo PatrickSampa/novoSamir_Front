@@ -4767,7 +4767,6 @@ v-card {
   width: 100%;
   height: auto;
   align-items: center;
-  border: solid 1px royalblue;
 }
 
 label{
@@ -4821,7 +4820,6 @@ tr:nth-child(odd) {
 .column {
   float: left;
   width: 50%;
-  border: solid 1px sienna
 }
 
 .cifrao-valor {
