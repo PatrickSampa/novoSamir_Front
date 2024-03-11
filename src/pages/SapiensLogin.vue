@@ -22,7 +22,7 @@
 
 <script>
 import { VerificarUserSapiens } from '../api/verificar_login_sapiens_visao/users';
-//import { ValidationTokenSapiens } from '../api/verificar_login_sapiens_visao/validationTokenSapiens'
+import { ValidationTokenSapiens } from '../api/verificar_login_sapiens_visao/validationTokenSapiens'
 export default {
   name: "SapiensLogin",
   data: () => {
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     async getUsuarioSapiens() {
-        //await ValidationTokenSapiens().then(() => this.$router.push({ name: "home" }))
+        await ValidationTokenSapiens().then(() => this.$router.push({ name: "home" }))
       
     },
     async loginUsuarioSapiens() {

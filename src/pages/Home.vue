@@ -1506,6 +1506,7 @@ export default {
       dtFinal: "",
       nome: "",
       nb: "",
+      dataParaVerificarPeriodoDoAtualizarAte: "",
       nbAnterior: "",
       dibInicialAcumulados: "", 
       nmprocesso: "",
@@ -1951,8 +1952,30 @@ export default {
       this.add_taxa = false
     },
 
+    verificarDataDoAtualizarAte(){
+      const [diaAtua, mesAtua, anoAtua] = (`01/${this.atulizacao}`).split('/');
+      const [diaDataBase, mesDataBase, anoDataBase] = (`01/${this.dataParaVerificarPeriodoDoAtualizarAte}`).split('/');
+      const dataAtualiza = new Date((`${anoAtua}/${mesAtua}/${diaAtua}`))
+      const dataDataBase = new Date((`${anoDataBase}/${mesDataBase}/${diaDataBase}`))
+      console.log(this.atulizacao +" atualixaxao1")
+      console.log(this.dataParaVerificarPeriodoDoAtualizarAte +" atualixaxao1")
+      console.log(dataDataBase > dataAtualiza)
+      if(dataAtualiza > dataDataBase){
+        Swal.fire({
+          icon: "error",
+          text: "NÃO HÁ ATUALIZAÇÃO DISPONÍVEL PARA A COMPETÊNCIA INDICADA - ACIONAR ADMINISTRADOR",
+          /* footer: '<a href="google.com.br">clique para puxar a data mais atual</a>' */
+        }); 
+        return false
+      }
+      return true
+
+    },
+
+
+
     async novoCalculo() {
-      if (this.verificadoInformacoes()) {
+      if (this.verificadoInformacoes() && this.verificarDataDoAtualizarAte()) { 
         try {
           this.loading = true;
           console.log("TESTEEEEEE AQUI A DIB " + this.info_calculo.dibInicial)
@@ -3852,7 +3875,7 @@ export default {
       const data = new Date(String(maiorData))
       const dataMaiorTratada = (`${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')}-${data.getFullYear()}`).split("-")
       this.atulizacao = `${dataMaiorTratada[1]}/${dataMaiorTratada[2]}`
-
+      this.dataParaVerificarPeriodoDoAtualizarAte = `${dataMaiorTratada[1]}/${dataMaiorTratada[2]}`
 
       this.pacelasVencidas = 0;
       this.pensaoPorMorte = "";
