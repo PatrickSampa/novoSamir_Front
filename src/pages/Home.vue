@@ -852,7 +852,7 @@
       <v-card v-if="!add_taxa" id="areaToPrint">
         <!-- <Popup v-if="showPopup" :showPopup="showPopup" :popupTitle="popupTitle" :popupMessage="popupMessage" @close="closePopup" /> -->
         <div>
-          <h3 class="centerAGU"><img src="../assets/agu.png" width="150" height="90" alt="Simbolo da Advocacia-Geral da União"></h3>
+          <h3 class="centerAGU"><img src="../assets/agu.png" alt="Símbolo da Advocacia-Geral da União" width="150" height="90" id="aguLogo"></h3>
           <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
           
             <div class="rowInputsCentral">
@@ -889,9 +889,8 @@
             </div>
         </div>
 
-        <br/>
         <h4 class="center">RESUMO DO PROCESSO</h4>
-        <br />
+        
         <table id="testeTotal">
           <thead>
             <tr>
@@ -1294,10 +1293,10 @@
             
           </div>
         </div>
-
+        <br>
         <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()"
           :items="calc_total" :items-per-page="calc_total.length" item-key="name" class="elevation-1 tabelaPDF" hide-default-footer>
-        </v-data-table>
+        </v-data-table>mexendo aqui
 
         <br />
         
@@ -1401,11 +1400,11 @@
         :items-per-page="alcadaArray.length" item-key="data" class="elevation-1" hide-default-footer>
       </v-data-table>
       <div v-if="add_taxa == false" v-show="mode === 'table'">
-        <b-button style="background-color:rgb(159, 159, 159); border:gray; margin-left: 96.5%" @click="printDiv()"><img src="../assets/impressora.png" width="20" height="20"></b-button>
+        <b-button style="background-color:rgb(159, 159, 159); border:gray; margin-left: 96.5%" @click="printDiv()"><img src="../assets/downloadIcon.png" width="20" height="20"></b-button>
       </div>
-      <br />
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
         Benefícios para Cálculo em Lote
+        
       </h3>
       
       <template v-if="exibirCalculoEmLote">
@@ -2979,11 +2978,11 @@ export default {
         //await this.calcularLote();
       });
     },
-    imprimirPdf(dado) {
+    
+    imprimirPdf() {
       // eslint-disable-next-line no-undef
       var doc = new jsPDF("portrait", "pt", "a4"),
-        data = new Date();
-      let margins = {
+       margins = {
         top: 40,
         bottom: 60,
         left: 40,
@@ -2995,20 +2994,8 @@ export default {
         margins.left, // x coord
         margins.top,
         { pagesplit: true },
-        function () {
-          doc.save(
-            "Relatorio - " +
-            dado.nome +
-            " " +
-            data.getDate() +
-            "/" +
-            data.getMonth() +
-            "/" +
-            data.getFullYear() +
-            ".pdf"
-          );
-        }
       );
+      doc.save(`${this.numeroDoProcesso}.pdf`);
     },
     calculoDeOssada() {
       this.pacelasVencidas = 0;
@@ -4021,6 +4008,11 @@ export default {
           padding-top: 10px;
         }
 
+        .titulo {
+          text-align: center;
+          background-color: rgb(154, 186, 215);
+        }
+
         .center {
           text-align: center;
           margin-bottom: 10px;
@@ -4059,6 +4051,7 @@ export default {
         #thead-limpo-menor {
           text-align: center;
           border: 1px solid black;
+          padding: 2px 2px 2px 2px
         }
 
         #thead-limpo {
@@ -4152,6 +4145,30 @@ export default {
           font-size: small;
         }
 
+        .rowInputsCentral {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          width: 75%;
+          margin: 0 auto;
+        }
+
+        .columnInputs {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+
+        .camposInputMemoriaCalculo {
+          display: flex;
+        }
+
+        .camposInputMemoriaCalculo label {
+          flex: 1;
+          margin-left: 2px;
+          box-sizing: border-box;
+        }
+
         .center-first{
           text-align: center;
           margin-bottom: 15px;
@@ -4160,24 +4177,24 @@ export default {
           padding: 4px;
         }
 
-        .rowInputs:after {
-          content: "";
-          display: table;
-          clear: both;
+        .rowInputs {
+          display: flex;
+          flex-direction: row;
+          margin-left: 20%;
+          width: 60%;
+          justify-content: center;
         }
 
         .column {
           float: left;
           width: 50%;
         }
+        
 
         .camposInput {
-          text-align: right;
-          margin-left: 27%;
-          margin-right: 100px;
-          height: 5px;
-          width: 500px;
-          display: flex;
+          text-align: left;
+          width: 100%;
+          height: auto;
           align-items: center;
         }
 
@@ -4204,6 +4221,7 @@ export default {
           align-items:center;
           text-align: center;
           border: 1px solid #000000;
+          padding: 4px 4px 4px 4px  
         }
 
         .center-first{
@@ -4265,302 +4283,6 @@ export default {
       newWin.print();
 
       newWin.close();
-    },
-
-    conteudoHTML() {
-      var divToPrint = document.getElementById("areaToPrint");
-
-      var style = "<style>";
-      style =
-        style +
-        ` 
-        
-        * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px; background-color: rgb(154, 186, 215)} label {font-weight: bold;}
-        .titulo, h1, h2 {text-align: center;}
-
-        body {height: auto; width: 100vw;padding: 15px; font-size: 1rem; background-color: rgb(154, 186, 215);}
-
-        .centerAGU {
-          text-align: center;
-          background-color: rgb(154, 186, 215);
-          padding-top: 10px;
-        }
-
-        .center {
-          text-align: center;
-          margin-bottom: 10px;
-          background-color: rgb(216, 228, 238);
-          border-radius: 10px;
-          padding: 3px;
-        }
-
-        .rowInputsDados{
-          padding-top: 10px;
-          display:flex;
-          margin-left: 15%;
-        }
-
-        .column2 {
-          width: auto;
-        }
-
-        .column2 + .column2 {
-          margin-left: 50px;
-        }
-
-        .camposInputMemoriaCalculo {
-          margin-right: 5px;
-        }
-
-        .inputToPrint {
-          margin-left: 2px;
-        }
-
-        #testeTotal {
-          width: 80%;
-          margin-left: 10%;
-        }
-
-        #thead-limpo-menor {
-          text-align: center;
-          border: 1px solid black;
-        }
-
-        #thead-limpo {
-          text-align: center;
-          border: 1px solid black
-        }
-
-        #textosResumo {
-          width: 33%;
-          text-align: left;
-          border: 1px solid black;
-        }
-
-        #valoresResumo {
-          width: 33%;
-          text-align: left;
-          border: 1px solid black;
-        }
-
-        #valor-percentual-execucao {
-          width: 25%;
-          text-align: center;
-          border: 1px solid black;
-        }
-
-        #valoresResumoExecucao {
-          width: 33%;
-          text-align: left;
-          border: 1px solid black;
-        }
-
-        #testeTotal {
-          width: 80%;
-          margin-left: 10%;
-        }
-
-        #tabelaResumo {
-          width: 80%;
-          margin-left: 10%;
-        }
-
-        #colunaResumoEsquerda {
-          width: 35%;
-          text-align: right;
-          border: 1px solid black;
-        }
-
-        #colunaResumoDireita {
-          width: 30%;
-          text-align: right;
-          border: 1px solid black;
-        }
-
-        #colunaVaziaDireita {
-          width: 45%;
-          text-align: left;
-          border: 1px solid black;
-        }
-
-        .thead-centro{
-          text-align: center;
-          margin: 10px;
-        }
-
-        #tabelaResumo {
-          width: 80%;
-          margin-left: 10%;
-        }
-
-        #colunaAnaliseTexto {
-          width: 15%;
-          text-align: left;
-          border: 1px solid black;
-        }
-
-        #colunaAnaliseEsquerda {
-          width: 5%;
-          text-align: right;
-          border: 1px solid black;
-        }
-
-        #colunaAnaliseDireita {
-          width: 5%;
-          text-align: right;
-          border: 1px solid black;
-        }
-
-        #observacoes-div {
-          width: 100%;
-          margin-left: 10%;
-          font-size: small;
-        }
-
-        .center-first{
-          text-align: center;
-          margin-bottom: 15px;
-          background-color: rgb(219, 228, 240);
-          border-radius: 10px;
-          padding: 4px;
-        }
-
-        .rowInputs:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .column {
-          float: left;
-          width: 50%;
-        }
-
-        .camposInput {
-          text-align: right;
-          margin-left: 27%;
-          margin-right: 100px;
-          height: 5px;
-          width: 500px;
-          display: flex;
-          align-items: center;
-        }
-
-        .camposInput input{
-          flex-grow: 1;
-          box-sizing: border-box;
-          white-space:nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          border: none;
-          padding: 0;
-        }
-
-        .camposInput span {
-          margin-right: 5px;
-        }
-
-        .13salarioPDF{
-          margin-left: 20px;
-        }
-
-        .tabelaPDF td,
-        .tabelaPDF th {
-          text-align: center;
-          border: 1px solid #000000;
-        }
-
-        .center-first{
-          text-align: center;
-          margin-bottom: 15px;
-          background-color: rgb(219, 228, 240);
-          border-radius: 10px;
-          padding: 4px;
-        }
-
-        #impostoRenda {
-          justify-items: center;
-        }
-
-        #impostoRendaDiscriminacao {
-          width: 40%;
-        }
-
-        #impostoRendaValores {
-          width: 30%;
-        }
-
-        #impostoRendaAcordo {
-          width: 30%;
-        }
-
-        #impostoRendaCompetencias {
-          width: 20%;
-        }
-        `;
-      style = style + "</style>";
-
-      // var id = new Date().getTime();
-      // var newWin = window.open(
-      //   window.location.href + "?printerFriendly=true",
-      //   id,
-      //   "toolbar=1,scrollbars=1,location=0,statusbar=0,menubar=1,resizable=1,width=800,height=600,left = 240,top = 212"
-      // );
-
-      let memoriaDeCalculo = `<html><head> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`;
-      memoriaDeCalculo += style;
-      memoriaDeCalculo += "</head>";
-      memoriaDeCalculo += "<body>";
-      memoriaDeCalculo += '<div class="center"></div>';
-      memoriaDeCalculo += "<body>";
-      memoriaDeCalculo += divToPrint.outerHTML;
-      memoriaDeCalculo += "</body></html>";
-
-      this.memoriaCalculoHTM = memoriaDeCalculo;
-      //console.log(memoriaDeCalculo);
-
-      // const body = {
-      //   login: {
-      //     cpf: "02127337298",
-      //     senha: "Senhasenh4",
-      //   },
-      //   etiqueta: "LIDO BOOT",
-      //   minutas: [
-      //     {
-      //       numeroprocesso: "10033030920204013502",
-      //       conteudo: memoriaDeCalculo,
-      //     }
-      //   ]
-      // };
-
-      // axios
-      // .post(`http://localhost:3000/teste`, body)
-      // .then((response) => {
-      //   console.log(response);
-      // })
-      // .catch((error) => {
-      //   console.log(error);
-      // });
-
-      // newWin.document.write("<html><head>");
-      // newWin.document.write(
-      //   `<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`
-      // ); // <title> CABEÇALHO DO PDF.
-      // newWin.document.write(style); // INCLUI UM ESTILO NA TAB HEAD
-      // newWin.document.write("</head>");
-      // newWin.document.write("<body>");
-      // // newWin.document.write(`<img class="logo" src="${this.logo}">`);
-      // newWin.document.write(`
-      // <div class="center">
-      // </div>`);
-
-      // newWin.document.write(divToPrint.outerHTML);
-      // newWin.document.write("</body></html>");
-
-      // newWin.print();
-
-      // newWin.close();
     },
     AnexarMinutas() {
      /*  this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
