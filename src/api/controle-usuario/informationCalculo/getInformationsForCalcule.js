@@ -7,7 +7,7 @@ export async function getInformationsForCalcule(){
         localStorage.getItem('sapiensSenha')
         console.log("res: ", res)
         if (!res.data) {
-            return Promise.reject(new Error("erro ao salvar as informações para calculo"));
+            return Promise.reject(new Error("Erro ao salvar as informações para cálculo"));
         } else {
             return Promise.resolve(res.data);
         }

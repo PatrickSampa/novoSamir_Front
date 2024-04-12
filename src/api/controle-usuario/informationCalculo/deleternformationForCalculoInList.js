@@ -4,7 +4,7 @@ export async function deleternformationForCalculoInList(body){
     try {
         const res = await axios_controleUsuario.delete("informationsForCalcule", body);
         if (!res.data) {
-            return Promise.reject(new Error("erro ao deletar calculo"));
+            return Promise.reject(new Error("Erro ao deletar cálculo"));
         } else {
             return Promise.resolve();
         }

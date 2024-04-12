@@ -5,7 +5,7 @@ export async function salvarInformationForCalculoList(body){
         const res = await axios_controleUsuario.post("informationsForCalcule/list", body);
         console.log("body1:", body)
         if (!res.data) {
-            return Promise.reject(new Error("erro ao salvar as informações para calculo"));
+            return Promise.reject(new Error("Erro ao salvar as informações para cálculo"));
         } else {
             return Promise.resolve();
         }

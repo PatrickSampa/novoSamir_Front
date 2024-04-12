@@ -13,7 +13,7 @@ export async function updateInformationForCalculoList(body){
           })
         console.log("update:", res)
         if (!res.data) {
-            return Promise.reject(new Error("erro ao fazer o update das informações para calculo"));
+            return Promise.reject(new Error("Erro ao fazer o update das informações para cálculo"));
         } else {
             return Promise.resolve();
         }

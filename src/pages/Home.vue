@@ -607,7 +607,7 @@
       <br/>
       <v-row class="mx-3" v-for="beneficio of arrayBeneficioAcumuladosContaveis" :key="beneficio.dib">
         <v-col cols="12" sm="6" md="3">
-          <p>Beneficio recebido: {{ beneficio.beneficio }}</p>
+          <p>Benefício recebido: {{ beneficio.beneficio }}</p>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <p>DIB: {{ beneficio.dib }}</p>
@@ -616,7 +616,7 @@
           <p>DCB: {{ beneficio.dcb }}</p>
         </v-col>
         <v-col cols="12" sm="6" md="2">
-          <p>RMI: R${{ beneficio.rmi }}</p>
+          <p>RMI: {{ formatarReal(beneficio.rmi) }}</p>
         </v-col>
         <v-col cols="12" sm="6" md="2">
           <p>RMI%: {{ beneficio.porcentagemRmi }}</p>
@@ -771,9 +771,9 @@
             </td>
 
             <td v-if="beneficioInacumulavel[0]">
-              <input type="number" v-model="item.devido"
+              <input type="number"
                 @input="item = totaisSalarioTablePrincipal(item), totaisSalario()"
-                :disabled="disableLinhaTable(item.data)" />
+                :disabled="disableLinhaTable(item.data)" /> {{ formatarReal(item.devido)}}
             </td>
             
             <td v-if="beneficioInacumulavel[0]">
@@ -782,16 +782,16 @@
                 :disabled="disableLinhaTable(item.data)" />
             </td>
             <td v-if="beneficioInacumulavel[0]">
-              <input type="number" v-model="item.recebido"
+              <input type="number"
                 @input="item = totaisSalarioTablePrincipal(item), totaisSalario()"
-                :disabled="disableLinhaTable(item.data)" />
+                :disabled="disableLinhaTable(item.data)" /> {{ formatarReal(item.recebido)}}
             </td>
             <td>
               <input type="number" @input="item = totaisSalarioTablePrincipal(item), totaisSalario()"
                 :disabled="disableLinhaTable(item.data)" /> {{ formatarReal(item.salario)}}
             </td>
             <td>
-                <input type="number" v-model="item.correcao" :disabled="disableLinhaTable(item.data)" />
+              <input type="number" :disabled="disableLinhaTable(item.data)" /> {{ formatarReal(item.correcao)}}
             </td>
             <td>
               <input type="number" disabled />{{ formatarReal(item.salarioCorrigido) }}
@@ -1029,7 +1029,7 @@
         </table>
 
         <v-row v-for="beneficio of beneficioInacumulavel" :key="beneficio">
-          <v-col cols="12" sm="6" md="3">
+          <v-col cols="62" sm="16" md="3">
             <p>Beneficio recebido: {{ beneficio.beneficio }}</p>
           </v-col>
           <v-col cols="12" sm="6" md="3">
@@ -1039,7 +1039,7 @@
             <p>DCB: {{ beneficio.dcb }}</p>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <p>RMI: {{ beneficio.rmi }}</p>
+            <p>RMI: {{ formatarReal(beneficio.rmi) }}</p>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <p>RMI%: {{ beneficio.porcentagemRmi }}</p>
@@ -1408,7 +1408,7 @@
         :items-per-page="alcadaArray.length" item-key="data" class="elevation-1" hide-default-footer>
       </v-data-table>
       <div v-if="add_taxa == false" v-show="mode === 'table'">
-        <b-button style="background-color:rgb(159, 159, 159); border:gray; margin-left: 96.5%" @click="downloadPdf()"><img src="../assets/downloadIcon.png" width="20" height="20"></b-button>
+        <b-button style="background-color:rgb(159, 159, 159); border:gray; margin-left: 96.5%" @click="printDiv()"><img src="../assets/downloadIcon.png" width="20" height="20"></b-button>
       </div>
       <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
         Benefícios para Cálculo em Lote
@@ -1486,6 +1486,7 @@ import { getDataMaisAtualParaCampoAtualizarAte } from "../api/calculadora/getJur
 import { EventBus } from "../eventBus/eventBus"
 //import Popup from '../components/Popup.vue'
 import Swal from 'sweetalert2';
+import { VerificadorDeProcessoDuplicado } from "@/api/visao/triagem/VerificadorDeProcessoDuplicado"
 import { getSalarioMinimoDib } from '../api/calculadora/getSalarioMinimo/getSalarioMinimoAnoDib'
 
 export default {
@@ -2435,12 +2436,15 @@ export default {
         : 100;
     },
     async verificarAdicaoNoLote() {
+      console.log("Entrou verificarAdicaoNoLote")
       EventBus.$emit('deletarPeloHome', this.info_calculo.id);
       //this.loading = true;
       //await deleteInformationForCalculoToID(JSON.stringify(this.info_calculo.id))
       this.adicionarLote();
+      console.log("Chamou adicionarLote")
     },
     adicionarLote() {
+      console.log("Entrou em adicionar Lote")
       this.conteudoHTML();
       //this.loading = false;
       if (this.verificadoInformacoes() && this.verificarCalculo()) {
@@ -2479,7 +2483,6 @@ export default {
         const calculo_salarioTotal = [];
 
         this.calc_total.forEach((value) => {
-        console.log("PASSA POR AQIO")
           calculoData.push(value.data);
           calculo_reajusteAcumulado.push(value.reajusteAcumulado);
           calculo_devido.push(value.devido);
@@ -2580,9 +2583,9 @@ export default {
                 console.log("Calculo")
                 console.log(this.calculoLote);
                 this.$alert(
-                  "Calculo adicionado ao Lote.",
-                  "Sucesso",
-                  "sucesso"
+                  "Cálculo adicionado ao Lote.",
+                  "Success",
+                  "success"
                 ).then(() => console.log("Closed"));
               })
               .catch((error) => {
@@ -2595,6 +2598,7 @@ export default {
             console.log("error 1");
           });
       }
+      console.log("Saiu do if")
 
       // this.calculoLote.push({
       //   numeroDoProcesso: this.info_calculo.numeroDoProcesso,
@@ -2630,6 +2634,7 @@ export default {
       //   usuario: 1
       // })
       console.log(this.calculoLote[this.calculoLote.length - 1]);
+      console.log("Terminou func")
     },
     removerItemLote(dado) {
       console.log(dado)
@@ -2985,8 +2990,36 @@ export default {
       });
     },
 
-    downloadPdf() {
-      window.print("areaToPrint")
+    imprimirPdf(dado) {
+      // eslint-disable-next-line no-undef
+      var doc = new jsPDF("portrait", "pt", "a4"),
+        data = new Date();
+      let margins = {
+        top: 40,
+        bottom: 60,
+        left: 40,
+        width: 1000,
+      };
+      var divToPrint = document.getElementById("areaToPrint");
+      doc.fromHTML(
+        divToPrint,
+        margins.left, // x coord
+        margins.top,
+        { pagesplit: true },
+        function () {
+          doc.save(
+            "Relatorio - " +
+            dado.nome +
+            " " +
+            data.getDate() +
+            "/" +
+            data.getMonth() +
+            "/" +
+            data.getFullYear() +
+            ".pdf"
+          );
+        }
+      );
     },
 
 
@@ -3980,7 +4013,8 @@ export default {
       };
       this.arrayBenficios.push(obj_beneficioAcumulado);
     },
-    atualizarCalculadora() { },
+    // 
+
     printDiv() {
       var divToPrint = document.getElementById("areaToPrint");
 
@@ -3990,10 +4024,70 @@ export default {
         ` 
         
         * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px; background-color: rgb(154, 186, 215)} label {font-weight: bold;}
+        div {margin-bottom: 3px; background-color: #e0e0e0} label {font-weight: bold;}
         .titulo, h1, h2 {text-align: center;}
+        
+        
 
-        body {height: auto; width: 100vw;padding: 15px; font-size: 1rem; background-color: rgb(154, 186, 215);}
+        body {height: auto; width: 100vw;padding: 15px; font-size: 1.3rem;}
+        .content{ padding: 15px;}
+        .center {
+          margin: auto;
+          width: 60%;
+          background-color: rgb(154, 186, 215);
+          padding: 10px;
+          text-align: center
+
+          background-image: url(../assets/logo.png);
+          background-position: top left;
+          background-repeat: no-repeat;
+          /* background-size: cover; */
+          position: relative;
+        }
+
+        table th{
+          border: 20px solid #FFFFFF;
+          text-align: center;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+        table tr > td {
+          border: 4px solid #FFFFFF;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+
+        table tr < td {
+          border-up: 5px solid #FFFFFF;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+       
+        table td{
+          text-align: center;
+        }
+
+        .agu {text-align: center; font-size: 1.3rem; font-weight: bold;}
+        h1, h2, h3 {font-size: 1.2rem; font-weight: bold;}
+
+         .titulo {
+          text-align: center;
+        }
+
+        .camposInput {
+          text-align: left;
+          margin-left: -1%;
+          font-size: 1.0em;
+          font-weight: normal;
+        }
+
+        .center {
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(216, 228, 238);
+          border-radius: 10px;
+          padding: 3px;
+        }
 
         .centerAGU {
           text-align: center;
@@ -4001,39 +4095,146 @@ export default {
           padding-top: 10px;
         }
 
-        .titulo {
-          text-align: center;
-          background-color: rgb(154, 186, 215);
-        }
-
-        .center {
-          text-align: center;
-          margin-bottom: 10px;
-          background-color: rgb(216, 228, 238);
-          border-radius: 10px;
-          padding: 3px;
-        }
-
         .rowInputsDados{
-          padding-top: 10px;
-          display:flex;
-          margin-left: 15%;
+          align-items: center;
+          margin-left: 20%;
         }
 
-        .column2 {
-          width: auto;
-        }
-
-        .column2 + .column2 {
-          margin-left: 50px;
+        .column {
+          float: left;
+          width: 50%;
         }
 
         .camposInputMemoriaCalculo {
-          margin-right: 5px;
+          margin-right: 500;
         }
 
         .inputToPrint {
           margin-left: 2px;
+        }
+
+        .columnRight {
+          float: left;
+          text-align: right;
+          width: 52%;
+        }
+
+        .rowInputs:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .resumoProcesso:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .columnResumoProcesso {
+          float: left;
+          width: 14%;
+          margin-left: 1%;
+        }
+
+        .columnResumoProcessoParte {
+          float: left;
+          width: 39%;
+          margin-left: 1%;
+        }
+
+        .centerMargin {
+          text-align: center;
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+
+        .inputToPrint {
+          margin-left: 10px;
+        }
+
+        .inputToPrintResumo {
+          margin-left: 0px;
+        }
+
+        .inputToPrintResumoParte {
+          float: left;
+          width: 500px;
+        }
+
+        .inputCalculo {
+          text-align: left;
+          margin-left: 1%;
+        }
+
+        .rowCalculo:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .page {
+          padding-top: 3px;
+        }
+
+        
+        .columnResumoPagamentosAdministrativos {
+          float: left;
+          width: 11%;
+          margin-left: 1%;
+        }
+
+        .columnRightAlcada {
+          float: left;
+          margin-left: 0%;
+          text-align: left;
+          width: 50%;
+        }
+
+        .columnAlcadaPrint {
+          float: center;
+          text-align: left;
+          width: 60%;
+          margin-left: 20%;
+          margin-right: 20%;
+        }
+
+        .inputPagamentosAdministrativos {
+          max-width: 100%;
+        }
+
+        .inputTetoAlcada {
+          max-width: 15%;
+          font-size: 12px;
+        }
+
+        .camposInputAlcada {
+          text-align: left;
+          margin-left: 3%;
+          font-size: 16px;
+          width: 100%;
+        }
+        
+
+        .inputToPrintAlcada {
+          text-align: left;
+          margin-left: 3%;
+          font-size: 16px;
+          width: 30%;
+        }
+
+        table,
+        th,
+        td {
+          text-align: left;
+          margin-left: 0px;
+          padding-left: 5px;
+          width: 120%;
+        }
+
+        #impostoRendaTitulo {
+          font-size: 18px;
+          width: 120%;
         }
 
         #testeTotal {
@@ -4041,24 +4242,47 @@ export default {
           margin-left: 10%;
         }
 
-        #thead-limpo-menor {
-          text-align: center;
-          border: 1px solid black;
-          padding: 2px 2px 2px 2px
-        }
-
-        #thead-limpo {
-          text-align: center;
-          border: 1px solid black
-        }
-
         #textosResumo {
           width: 33%;
           text-align: left;
           border: 1px solid black;
         }
+        
+        #thead-limpo {
+          text-align: center;
+          border: 1px solid black
+        }
+
+        #thead-limpo-menor {
+          text-align: center;
+          border: 1px solid black;
+        }
+
+        #thead-centro {
+          border: 1px solid white;
+          width: 100%;
+          text-align: center;
+        }
+
+        #thead-invisivel {
+          border: 1px solid white;
+          width: 1%;
+        }
+
 
         #valoresResumo {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #valoresResumo2 {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumoExecucao {
           width: 33%;
           text-align: left;
           border: 1px solid black;
@@ -4070,184 +4294,115 @@ export default {
           border: 1px solid black;
         }
 
-        #valoresResumoExecucao {
-          width: 33%;
-          text-align: left;
-          border: 1px solid black;
-        }
-
-        #testeTotal {
-          width: 80%;
-          margin-left: 10%;
-        }
-
         #tabelaResumo {
-          width: 80%;
-          margin-left: 10%;
+          width: 100%;
+          text-align: center;
         }
 
-        #colunaResumoEsquerda {
-          width: 35%;
+        #colunaVazia {
+          width: 15%;
           text-align: right;
-          border: 1px solid black;
-        }
-
-        #colunaResumoDireita {
-          width: 30%;
-          text-align: right;
-          border: 1px solid black;
+          border: 1px solid white;
         }
 
         #colunaVaziaDireita {
           width: 45%;
           text-align: left;
-          border: 1px solid black;
+          border: 1px solid white;
         }
 
-        .thead-centro{
-          text-align: center;
-          margin: 10px;
+        #colunaResumoEsquerda {
+          width: 25%;
+          text-align: right;
+          border: 1px solid white;
         }
 
-        #tabelaResumo {
-          width: 80%;
-          margin-left: 10%;
+        #colunaResumoDireita {
+          width: 15%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-horizontal {
+          width: 57%;
+          border: 1px solid #000;
+          margin-left: 20%;
+          margin-top: 0%;
         }
 
         #colunaAnaliseTexto {
-          width: 15%;
+          width: 35%;
           text-align: left;
-          border: 1px solid black;
+          border: 1px solid white;
         }
 
         #colunaAnaliseEsquerda {
-          width: 5%;
+          width: 2%;
           text-align: right;
-          border: 1px solid black;
+          border: 1px solid white;
         }
 
         #colunaAnaliseDireita {
-          width: 5%;
+          width: 2%;
           text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-soma {
+          width: 13%;
+          border: 1px solid #000;
+          margin-left: 69%;
+          margin-top: -4px;
+        }
+
+        #linha-horizontal-separacao {
+          width: 60%;
           border: 1px solid black;
+          margin-left: 21%;
+          margin-top: -1px;
+          margin-bottom: -10px;
         }
 
         #observacoes-div {
-          width: 100%;
-          margin-left: 10%;
+          width: 50%;
+          margin-left: 25%;
           font-size: small;
         }
-
-        .rowInputsCentral {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          width: 75%;
-          margin: 0 auto;
+        
+        .describes{
+          text-overflow: clip ellipsis;
+          margin-right: 10px;
         }
 
-        .columnInputs {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-        }
-
-        .camposInputMemoriaCalculo {
-          display: flex;
-        }
-
-        .camposInputMemoriaCalculo label {
-          flex: 1;
-          margin-left: 2px;
-          box-sizing: border-box;
-        }
-
-        .center-first{
-          text-align: center;
-          margin-bottom: 15px;
-          background-color: rgb(219, 228, 240);
-          border-radius: 10px;
-          padding: 4px;
-        }
-
-        .rowInputs {
-          display: flex;
-          flex-direction: row;
-          margin-left: 20%;
-          width: 60%;
-          justify-content: center;
-        }
-
-        .column {
-          float: left;
-          width: 50%;
+        #observacoes-div-texto {
+          width:100%;
+          margin-left: 10%;
+          font-size: small;
+          height: auto;
+          text-overflow: clip ellipsis;
         }
         
-
-        .camposInput {
+        #info-inicial {
+          width: 50%;
+          margin-left: 5%;
           text-align: left;
+          border: 2px solid white;
+        }
+
+        #info-inicial-coluna {
+          width: 15%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+
+        #info-inicial-linha {
           width: 100%;
-          height: auto;
-          align-items: center;
+          text-align: left;
+          border: 2px solid green;
         }
 
-        .camposInput input{
-          flex-grow: 1;
-          box-sizing: border-box;
-          white-space:nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          border: none;
-          padding: 0;
-        }
 
-        .camposInput span {
-          margin-right: 5px;
-        }
-
-        .13salarioPDF{
-          margin-left: 20px;
-        }
-
-        .tabelaPDF td,
-        .tabelaPDF th {
-          align-items:center;
-          text-align: center;
-          border: 1px solid #000000;
-          padding: 4px 4px 4px 4px  
-        }
-
-        .center-first{
-          text-align: center;
-          margin-bottom: 15px;
-          background-color: rgb(219, 228, 240);
-          border-radius: 10px;
-          padding: 4px;
-        }
-
-        #tabelaPDF2 {
-          border: 1px solid black;
-        }
-
-        #impostoRenda {
-          justify-items: center;
-        }
-
-        #impostoRendaDiscriminacao {
-          width: 40%;
-        }
-
-        #impostoRendaValores {
-          width: 30%;
-        }
-
-        #impostoRendaAcordo {
-          width: 30%;
-        }
-
-        #impostoRendaCompetencias {
-          width: 20%;
-        }
         `;
       style = style + "</style>";
 
@@ -4277,6 +4432,417 @@ export default {
 
       newWin.close();
     },
+
+    conteudoHTML() {
+      var divToPrint = document.getElementById("areaToPrint");
+
+      var style = "<style>";
+      style =
+        style +
+        ` 
+        
+        * {box-sizing: border-box; margin: 0; padding: 0}
+        div {margin-bottom: 3px;background-color: #e0e0e0} label {font-weight: bold;}
+        .titulo, h1, h2 {text-align: center;}
+        
+        
+
+        body {height: auto; width: 100vw;padding: 15px; font-size: 1.3rem;}
+        .content{ padding: 15px;}
+        .center {
+          margin: auto;
+          width: 60%;
+          background-color: rgb(154, 186, 215);
+          padding: 10px;
+          text-align: center
+
+          background-image: url(../assets/logo.png);
+          background-position: top left;
+          background-repeat: no-repeat;
+          /* background-size: cover; */
+          position: relative;
+        }
+
+        table th{
+          border: 20px solid #FFFFFF;
+          text-align: center;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+        table tr > td {
+          border: 4px solid #FFFFFF;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+
+        table tr < td {
+          border-up: 5px solid #FFFFFF;
+          border: 1px solid #000000;
+          border-collapse: collapse;
+        }
+       
+        table td{
+          text-align: center;
+        }
+
+        .agu {text-align: center; font-size: 1.3rem; font-weight: bold;}
+        h1, h2, h3 {font-size: 1.2rem; font-weight: bold;}
+
+         .titulo {
+          text-align: center;
+        }
+
+        .camposInput {
+          text-align: left;
+          margin-left: -1%;
+          font-size: 1.0em;
+          font-weight: normal;
+        }
+
+        .center {
+          text-align: center;
+          background-color: rgb(154, 186, 215);
+        }
+
+        .centerAGU {
+          text-align: center;
+          padding-top: 10px;
+          background-color: rgb(154, 186, 215);
+        }
+
+        .rowInputsDados{
+          align-items: center;
+          margin-left: 20%;
+        }
+
+        .column {
+          float: left;
+          width: 50%;
+        }
+
+        .camposInputMemoriaCalculo {
+          margin-right: 500;
+        }
+
+        .inputToPrint {
+          margin-left: 2px;
+        }
+
+        .columnRight {
+          float: left;
+          text-align: right;
+          width: 52%;
+        }
+
+        .rowInputs:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .resumoProcesso:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .columnResumoProcesso {
+          float: left;
+          width: 14%;
+          margin-left: 1%;
+        }
+
+        .columnResumoProcessoParte {
+          float: left;
+          width: 39%;
+          margin-left: 1%;
+        }
+
+        .centerMargin {
+          text-align: center;
+          padding-left: 15px;
+          padding-right: 15px;
+        }
+
+        .inputToPrint {
+          margin-left: 10px;
+        }
+
+        .inputToPrintResumo {
+          margin-left: 0px;
+        }
+
+        .inputToPrintResumoParte {
+          float: left;
+          width: 500px;
+        }
+
+        .inputCalculo {
+          text-align: left;
+          margin-left: 1%;
+        }
+
+        .rowCalculo:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        .page {
+          padding-top: 3px;
+        }
+
+        
+        .columnResumoPagamentosAdministrativos {
+          float: left;
+          width: 11%;
+          margin-left: 1%;
+        }
+
+        .columnRightAlcada {
+          float: left;
+          margin-left: 0%;
+          text-align: left;
+          width: 50%;
+        }
+
+        .columnAlcadaPrint {
+          float: center;
+          text-align: left;
+          width: 60%;
+          margin-left: 20%;
+          margin-right: 20%;
+        }
+
+        .inputPagamentosAdministrativos {
+          max-width: 100%;
+        }
+
+        .inputTetoAlcada {
+          max-width: 15%;
+          font-size: 12px;
+        }
+
+        .camposInputAlcada {
+          text-align: left;
+          margin-left: 30%;
+          font-size: 16px;
+          width: 100%;
+          margin-right: 5px;
+        }
+        
+
+        .inputToPrintAlcada {
+          text-align: left;
+          margin-left: 3%;
+          font-size: 16px;
+          width: 30%;
+        }
+
+        table,
+        th,
+        td {
+          text-align: left;
+          margin-left: 0px;
+          padding-left: 5px;
+          width: 120%;
+        }
+
+        #impostoRendaTitulo {
+          font-size: 18px;
+          width: 120%;
+        }
+
+        #testeTotal {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #textosResumo {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+        
+        #thead-limpo {
+          text-align: center;
+          border: 1px solid black
+        }
+
+        #thead-limpo-menor {
+          text-align: center;
+          border: 1px solid black;
+        }
+
+        #thead-centro {
+          border: 1px solid white;
+          width: 100%;
+          text-align: center;
+        }
+
+        #thead-invisivel {
+          border: 1px solid white;
+          width: 1%;
+        }
+
+
+        #valoresResumo {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #valoresResumo2 {
+          width: 29%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #valoresResumoExecucao {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #valor-percentual-execucao {
+          width: 25%;
+          text-align: center;
+          border: 1px solid black;
+        }
+
+        #tabelaResumo {
+          width: 100%;
+          text-align: center;
+        }
+
+        #colunaVazia {
+          width: 15%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaVaziaDireita {
+          width: 45%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #colunaResumoEsquerda {
+          width: 25%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaResumoDireita {
+          width: 15%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-horizontal {
+          width: 57%;
+          border: 1px solid #000;
+          margin-left: 20%;
+          margin-top: 0%;
+        }
+
+        #colunaAnaliseTexto {
+          width: 35%;
+          text-align: left;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseEsquerda {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #colunaAnaliseDireita {
+          width: 2%;
+          text-align: right;
+          border: 1px solid white;
+        }
+
+        #linha-soma {
+          width: 13%;
+          border: 1px solid #000;
+          margin-left: 69%;
+          margin-top: -4px;
+        }
+
+        #linha-horizontal-separacao {
+          width: 60%;
+          border: 1px solid black;
+          margin-left: 21%;
+          margin-top: -1px;
+          margin-bottom: -10px;
+        }
+
+        #observacoes-div {
+          width: 50%;
+          margin-left: 25%;
+          font-size: small;
+        }
+        
+        .describes{
+          text-overflow: clip ellipsis;
+          margin-right: 10px;
+        }
+
+        #observacoes-div-texto {
+          width:100%;
+          margin-left: 10%;
+          font-size: small;
+          height: auto;
+          text-overflow: clip ellipsis;
+        }
+        
+        #info-inicial {
+          width: 50%;
+          margin-left: 5%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+        #info-inicial-coluna {
+          width: 15%;
+          text-align: left;
+          border: 2px solid white;
+        }
+
+
+        #info-inicial-linha {
+          width: 100%;
+          text-align: left;
+          border: 2px solid green;
+        }
+
+
+        `;
+      style = style + "</style>";
+
+      // var id = new Date().getTime();
+      // var newWin = window.open(
+      //   window.location.href + "?printerFriendly=true",
+      //   id,
+      //   "toolbar=1,scrollbars=1,location=0,statusbar=0,menubar=1,resizable=1,width=800,height=600,left = 240,top = 212"
+      // );
+
+      let memoriaDeCalculo = `<html><head> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">`;
+      memoriaDeCalculo += style;
+      memoriaDeCalculo += "</head>";
+      memoriaDeCalculo += "<body>";
+      memoriaDeCalculo += '<div class="center"></div>';
+      memoriaDeCalculo += "<body>";
+      memoriaDeCalculo += divToPrint.outerHTML;
+      memoriaDeCalculo += "</body></html>";
+
+      this.memoriaCalculoHTM = memoriaDeCalculo;
+
+    },
+
     AnexarMinutas() {
      /*  this.$prompt("Qual é o nome das etiquetas?", "LIDO BOOT").then(
         (etiqueta) => {
@@ -4372,7 +4938,53 @@ export default {
           content: 'estilo-content-sweet'
         }
       });
-    }
+    },
+
+    verificadorDeProcessoDuplicado() {
+            this.$prompt(
+                "Qual é o nome das etiquetas? as etiquetas não podem conter a palavra ATUALIZAÇÃO e FALHA",
+                
+            ).then((etiqueta) => {
+                if (etiqueta) {
+                    const body = {
+                        login: {
+                            cpf: this.cpfSapiens,
+                            senha: this.senhaSapaiens,
+                        },
+                        etiqueta,
+                    };
+                    this.loading = true;
+
+                    VerificadorDeProcessoDuplicado(body)
+                        .then(async (response) => {
+                            this.$alert(
+                                response.length,
+                                "Processos duplicados: ",
+                                "success"
+                            );
+                            this.loading = false;
+                        })
+                        .catch((error) => {
+                            this.loading = false;
+                            this.$confirm(
+                                "Falha ao  Verificar os processos duplicados ",
+                                "Error",
+                                "error"
+                            )
+                                .then((r) => {
+                                    console.log(r);
+                                    this.loading = false;
+                                })
+                                .catch(() => {
+                                    console.log("OK not selected.");
+                                    this.loading = false;
+                                });
+                            console.log(error.message);
+                            console.log("error.message");
+                        });
+                }
+            });
+        },
   },
 
   mounted() {
