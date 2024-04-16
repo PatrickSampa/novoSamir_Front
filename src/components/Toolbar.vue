@@ -16,7 +16,6 @@
 
 <script>
 import axios from "axios";
-import { samirControle } from "../global";
 export default {
   name: "Toolbar",
   data() {
@@ -40,7 +39,7 @@ export default {
   },
   methods: {
     getUsuario() {
-      let baseURL = `${samirControle}users`;
+      let baseURL = `${process.env.VUE_APP_CONTROLE_USUARIOS_API_URL}/users`;
        axios.get(baseURL, {
         headers: {
           'authorization': `bearer ${localStorage.getItem("authToken")}`

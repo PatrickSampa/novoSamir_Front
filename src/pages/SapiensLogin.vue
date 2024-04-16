@@ -44,9 +44,13 @@ export default {
         await ValidationTokenSapiens().then(() => this.$router.push({ name: "home" }))
       
     },
+    /* eslint-disable */
+    filtrarCpf(cpf){
+      return cpf.replace(/[\.-]/g, '');
+    },
     async loginUsuarioSapiens() {
       let body = {
-        cpf: this.cpf,
+        cpf: this.filtrarCpf(this.cpf),
         senha: this.senha,
       };
       try {
@@ -57,15 +61,17 @@ export default {
         localStorage.setItem("sapiensSenha", body.senha);
         this.loading = false;
         this.valid = true;
+        console.log("LOGIN PASSOU")
         this.$router.push({ name: "home" })
  /*        window.open("http://10.191.8.198:8080/home"); */
       } catch (error) {
+        console.log("NAO PASSOU")
         this.loading = false;
         let message = await error.message;
         console.log(message);
         console.log("message");
         this.valid = false;
-        this.$alert(message, "Usuário Sapiens Incorreto", "error", {
+        this.$alert("", "Usuário Sapiens Incorreto", "error", {
           confirmButtonText: "Got it!",
         });
         /* this.$router.push({ name: "sapienslogin" }) */

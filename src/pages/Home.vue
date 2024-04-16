@@ -11,18 +11,19 @@
       </v-row>
     </v-alert>
     <div class="title pl-5 py-3">
-      <h1>Samir</h1>
+      <h1 style="font-size: 40px; color: #3876BF; text-align: center">
+        <img src="../assets/logoSamir.png" alt="logo Samir azul" width="120" height="163" style="margin-top: -1%"></h1>
     </div>
-    <v-card>
+    <v-card style="margin-top: -3%"> 
       <v-tabs>
         <v-tabs-slider color="green"></v-tabs-slider>
-        <v-tab @click="add_taxa = false">Cálculo</v-tab>
+        <v-tab @click="exibirCalculoCard()">Cálculo</v-tab>
         <v-tab @click="acessoPortalADM()">Portal ADM</v-tab>
-        <v-tab @click="acessoPortalADM()">Ajuda</v-tab>
+        <v-tab @click="acessoManual()">Manual</v-tab>
       </v-tabs>
     </v-card>
     <PortalADM v-if="add_taxa" />
-    <v-container fluid id="calculadora" v-if="!add_taxa">
+    <v-container fluid id="calculadora" v-if="exibirCalculo">
       <v-card>
         <bloco-informacoes v-if="!add_taxa" @calculo="atualizarTodosDados($event)" :exibir="{
             tudo: BlocoDeInformacoes_tudo,
@@ -55,7 +56,7 @@
           </v-col>
           <v-col cols="12" sm="6" md="3">
             <label for="valor-devido R$" class="labels pb-3">RMI <b class="item-obrigatorio">*</b></label>
-            <v-text-field type="number" v-model="salarioInicial" id="valor-devido" dense placeholder="nada"
+            <v-text-field type="number" v-model="salarioInicial" id="valor-devido" dense placeholder
               @input="salarioInicial = formataçao(salarioInicial)" outlined required></v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
@@ -108,11 +109,11 @@
           <v-col cols="12" sm="6" md="3">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="limiteMinimoMaximo"
               :value="limiteMinimoMaximo" />
-            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Minimo e Máximo</label>
+            <label for="limiteMinimoMaximo" class="labels pb-2">Limite Mínimo e Máximo</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salarioMinimo"
-              :value="salarioMinimo" />
+              :value="salarioMinimo" @change="teste"/>
             <label for="salarioMinimo" class="labels pb-2">Salário Mínimo</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
@@ -133,20 +134,20 @@
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" md="3">
-            <label for="beneficio" class="labels">Qual Benefício?</label>
+            <label for="beneficio" class="labels pb-3">Qual Benefício?</label>
             <v-autocomplete @input="atulizarvalor()" dense outlined id="beneficio" value="info_calculo.beneficio"
               :items="beneficiosInacumulveisBancoName" v-model="info_calculo.beneficio" type="text" size="sm"
               placeholder="57 - APOSENTADORIA POR  TEMPO DE CONTRIBUIÇÃO DE PROFESSOR">
             </v-autocomplete>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="info_calculo.nb" class="labels">N.B</label>
+            <label for="info_calculo.nb" class="labels pb-3">N.B</label>
             <v-text-field @input="atulizarvalor()" dense outlined id="info_calculo.nb" v-model="info_calculo.nb"
               type="number" size="sm" placeholder="Ex: 01100110 01110101 01100011 01101011">
             </v-text-field>
           </v-col>
           <v-col cols="12" sm="6" md="3">
-            <label for="info_calculo.dib" class="labels">DIB</label>
+            <label for="info_calculo.dib" class="labels pb-3">DIB</label>
             <v-text-field v-mask="'##/##/####'" @input="atulizarvalor()" dense outlined id="info_calculo.dib"
               v-model="info_calculo.dibInicial" type="text" size="sm" placeholder="Ex: 22/10/2020">
             </v-text-field>
@@ -154,7 +155,7 @@
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="salario13Obrigatorio"
               :value="salario13Obrigatorio" />
-            <label for="salario13" class="labels pb-2">13° Salário Obrigatorio</label>
+            <label for="salario13" class="labels pb-2">13° Salário Obrigatório</label>
           </v-col>
           <v-col cols="12" sm="6" md="2">
             <input class="form-check-input" type="checkbox" style="margin-right: 5px" v-model="selic" :value="selic" />
@@ -266,11 +267,19 @@
             </b-col>
 
             <b-col sm="2" v-if="beneficio === true">
+              <label for="beneficio" class="labels">DIB</label>
+              <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.dibInicial" id="beneficio" size="sm">
+              </b-form-input>
+            </b-col>
+
+
+            <b-col sm="2" v-if="beneficio === true">
               <label for="beneficio" class="labels">Data N.B Anterior</label>
               <b-form-input v-mask="'##/##/####'" v-model="obj_beneficioAcumulado.nbAnterior" id="beneficio" size="sm">
               </b-form-input>
             </b-col>
-
+            
+            
           </b-row>
         </b-card>
 
@@ -284,77 +293,38 @@
             </label>
           </v-col>
         </v-row>
+        
         <v-row class="my-3">
-          <v-col cols="1" class="mr-6">
-            <v-btn depressed color="primary" style="margin-left: 5px; color: whitesmoke" :loading="loading"
-              @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">Calcular</v-btn>
-          </v-col>
+          <v-col cols="12" md="6" lg="4">
+            <div class="d-flex flex-column flex-md-row align-center justify-between">
+              <v-btn depressed color="blue white--text" class="mr-md-2 mb-2 mb-md-0" :loading="loading" @click="zeraDadosDocalculo(), (mode = 'table'), novoCalculo()">
+                Calcular
+              </v-btn>
 
-          <v-col cols="1">
-            <v-btn depressed color="primary" style="margin-left: -5px; color: whitesmoke" :href="info_calculo.urlProcesso" target="_blank">
-              Consultar Processo</v-btn>
-          </v-col>
+              <v-btn depressed color="blue white--text" class="mr-md-2" :href="info_calculo.urlProcesso" target="_blank">
+                Consultar Processo
+              </v-btn>
 
-          <v-col cols="2">
-            <v-btn :loading="loading" depressed color="primary" style="margin-left: 105px; color: whitesmoke" @click="atualizarItemParaBanco()"
-              target="_blank">Atualizar</v-btn>
+              <v-btn :loading="loading" depressed color="blue white--text" class="mt-2 mt-md-0 mr-md-2" @click="atualizarItemParaBanco()">
+                Atualizar
+              </v-btn>
+
+              <v-btn :loading="loading" depressed color="blue white--text" class="mt-2 mt-md-0" @click="verificadorDeProcessoDuplicado()">
+                Verificador de processo duplicado
+              </v-btn>
+            </div>
           </v-col>
         </v-row>
       </v-card>
-
-
-      <br>
-      <br>
-      <br>
-
-      <v-col cols="2">
-        <div style="display: flex; justify-content: space-between;">
-            <v-btn depressed color="blue" style="color: whitesmoke;" @click="verificarAdicaoNoLote()"
-              target="_blank">Adicionar ao Lote</v-btn>
-            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
-              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
-            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
-              @click="deletarLote()">Deletar lote</v-btn>
-          </div>
-      </v-col>
-
-      <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
-        Beneficios para calculo em lote
-      </h3>
-      
-      <template v-if="exibirCalculoEmLote">
-        <v-data-table :headers="headersCalculoLote" :items="calculoLote" class="elevation-1">
-          <template v-slot:item="{ item }">
-            <tr>
-              <td class="py-3" style="color: rgb(107, 107, 218); cursor: pointer" @click="atulizarInfosLote(item)">
-                {{ item.numeroDoProcesso }}
-              </td>
-              <td>{{ item.nome }}</td>
-              <td>{{ item.tipo }}</td>
-              <td>
-                <v-icon v-if="item.nomeBeneficioBeneficioAcumulado[0]" color="red">
-                  mdi-check-outline
-                </v-icon>
-              </td>
-              <td>
-                <v-btn icon @click="atulizarInfosLote(item)">
-                  <v-icon color="success">mdi-file-eye-outline</v-icon>
-                </v-btn>
-                <v-btn :loading="loading" icon @click="removerItemLote(item)">
-                  <v-icon color="red">mdi-delete</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </template>
-        </v-data-table>
-      </template>
+          
+      <br/>
 
       <portal-a-d-m v-if="add_taxa == true" />
       
       <!-- TABELA PRNCIPAL -->
       <br />
-      <h1 v-if="add_taxa == false" class="titulo">PREENCHA OS DADOS</h1>
-      <h4 v-if="add_taxa == false" class="center">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
+      <h1 v-if="add_taxa == false" class="titulo" style="background-color: rgb(254, 254, 225)">PREENCHA OS DADOS</h1>
+      <h4 v-if="add_taxa == false" class="center-first">CONFERÊNCIA DE BENEFÍCIOS CALCULADOS</h4>
       <div v-if="add_taxa == false" class="rowInputs">
         <div v-if="add_taxa == false" class="column">
           <label class="camposInput">
@@ -362,45 +332,47 @@
             <input v-model="info_calculo.numeroDoProcesso" @input="atulizarvalor()"
               placeholder="XXXX-XX.XXXX.XXX.XXXX" /></label>
           <label class="inputToPrint" id="processoForm" />
-          <br />
+          
           <label class="camposInput">
-            Autor:
+          <span>Autor:</span>
             <input v-model="info_calculo.nome" @input="atulizarvalor()" placeholder="Jennifer Walters" /></label>
           <label class="inputToPrint" id="autorForm" />
-          <br />
-          <label class="camposInput">Objeto:
+          
+          <label class="camposInput"><span>Objeto:</span>
             <input v-model="objetoDoCalculo" placeholder="Ex.: CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO" /></label><label
             class="inputToPrint" id="objetoForm" />
-          <br />
-          <label class="camposInput">Vara:
+          
+          <label class="camposInput"><span>Vara:</span>
             <input v-model="varaPrevidenciaria" placeholder="Ex.: Previdenciária" /></label><label class="inputToPrint"
             id="varaForm" />
-          <br />
-          <label class="camposInput">Juros: <input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label><label
+          
+          <label class="camposInput"><span>Juros:</span><input placeholder="Ex.: 12% a.a. até 06/09 + ..." /></label><label
             class="inputToPrint" id="jurosForm" />
-          <br />
+          
         </div>
         <div class="column">
-          <label class="camposInput">Ajuizamento:
+          <label class="camposInput"><span>Ajuizamento:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dataAjuizamento" @input="atulizarvalor()"
               placeholder="XX/XX/XXXX" /></label><label class="inputToPrint" id="ajuizamentoForm" />
-          <br />
-          <label class="camposInput">Início do Juros:
+          
+          <label class="camposInput"><span>Início do Juros:</span>
             <input v-mask="'##/##/####'" v-model="inicio_juros" placeholder="XX/XXXX" /></label><label
             class="inputToPrint" id="inicioJurosForm" />
-          <br />
+          
           <!-- Criar Função -->
-          <label class="camposInput">Valido até:
+          <label class="camposInput"><span>Valido até:</span>
             <input v-mask="'##/####'" placeholder="XX/XXXX" v-model="atulizacao" /></label><label class="inputToPrint"
             id="calculadoEmForm" />
-          <br />
-          <label class="camposInput">Honorário:
-            <input placeholder="Ex.:" v-model="textoHonorarios" /></label><label class="inputToPrint"
-            id="honorarioForm" />
-          <br />
+          
+          <label class="camposInput">
+            <span>Honorário:</span>
+            <input placeholder="Ex.:" v-model="textoHonorarios" />
+          </label>
+          <label class="inputToPrint" id="honorarioForm"></label>
+          
         </div>
       </div>
-      <h4 class="center" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
+      <h4 class="center-first" v-if="add_taxa == false">RESUMO DO PROCESSO</h4>
       <div v-if="add_taxa == false">
         <div class="resumoProcesso">
           <div class="columnResumoProcesso">
@@ -408,7 +380,7 @@
             <input type="number" v-model="info_calculo.nb" @input="atulizarvalor()" placeholder="XXX.XXX.XXX-X" />
             <label class="inputToPrintResumo" id="resumoNB" />
           </div>
-          <div class="columnResumoProcessoParte">
+          <div class="columnResumoProcesso" style="margin-left: 2%">
             <h6>Parte</h6>
             <input v-model="info_calculo.nome" @input="atulizarvalor()" placeholder="Ex.: Matthew M. Murdock" />
             <label class="inputToPrintResumoParte" id="resumoParte" />
@@ -437,121 +409,142 @@
       </div>
       <br />
       <div class="rowCalculo" v-if="add_taxa == false">
-        <div class="columnRight">
-          <label class="camposInput">Soma do Principal: R$</label>
-          <br />
-          <label class="camposInput">Juros de mora: R$</label>
-          <br />
-          <label class="camposInput">12 Parcelas Vincendas: R$</label>
-          <br />
-          <br />
-          <label class="camposInput">Devido ao(s) Reclamante(s): R$</label>
-          <br />
-          <label class="camposInput">Honorários Advocatícios: R$</label>
-          <br />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Acordo: %</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label class="camposInput" v-if="procntagem_acordo != 0 && procntagem_acordo != null">Devido ao(s) Reclamante(s)
-            (Acordo): R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <label v-if="procntagem_acordo != 0 && procntagem_acordo != null" class="camposInput">Honorários Advocatícios
-            (Acordo): R$</label>
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br />
-          <label class="camposInput">Total do Processo: R$</label>
-          <br />
-          <br />
-        </div>
+        <div class="centerResumProcesso">
+          <div class="columnResumo">
+            <div class="align-text" style="background-color: #f2f2f2">
+              <label>Soma do Principal:</label>
+            </div>
+            <div class="align-text">
+              <label>Juros de mora:</label>
+            </div>
+            <div class="align-text" style="background-color: #f2f2f2">
+              <label>12 Parcelas Vincendas:</label>
+            </div>
+    
+            <div class="align-text">
+              <label>Devido ao(s) Reclamante(s):</label>
+            </div>
+            <div class="align-text" style="background-color: #f2f2f2">
+              <label>Honorários Advocatícios:</label>
+            </div>
+            <br/>
+            <div class="align-text" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+              <label>Acordo: %</label>
+            </div>
+            <div class="align-text" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+              <label>Devido ao(s) Reclamante(s) (Acordo):</label>
+            </div>
+            <div class="align-text" v-if="procntagem_acordo != 0 && procntagem_acordo != null">
+              <label>Honorários Advocatícios (Acordo):</label>
+            </div>
 
-        <div class="column">
-          <input type="number" v-model="valor_corrigido" placeholder="XX.XXX,XX" />
-          <label class="inputCalculo" id="somaPrincipal" />
-          <br />
-          <input type="number" v-model="valor_juros" placeholder="XX.XXX,XX" />
-          <label class="inputCalculo" id="somaJuros" />
-          <br />
-          <input type="number" placeholder="XX.XXX,XX" v-model="pacelasVencidas" />
-          <label class="inputCalculo" id="parcelasVincendas" />
-          <br />
-          <br />
+            <div class="align-text">
+              <label>Total do Processo:</label>
+            </div>
+          </div>
 
-          {{
-            Math.floor(
-              (parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) *
-              100
-            ) / 100
-          }}
-          <br />
-          <input type="number" v-model="valorHonorarios" placeholder="XX.XXX,XX" id="honorariosAdvocativos" />
-          <label class="inputCalculo" />
-          <br />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <input type="number" v-if="procntagem_acordo != 0 && procntagem_acordo != null" v-model="procntagem_acordo"
-            placeholder="XX.XXX,XX" />
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+            <div class="columnResumo">
+              <div class="align-text" style="background-color: #f2f2f2">
+                <label class="inputCifrao">R$</label>
+                <input type="number" v-model="valor_corrigido" placeholder="XX.XXX,XX" />
+                <label id="somaPrincipal" />
+              </div>
 
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
-            procntagem_acordo != 0 && procntagem_acordo != null
-            ? Math.floor(
-              (((parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) *
-                parseFloat(procntagem_acordo)) /
-                100) *
-              100
-            ) / 100
-            : Math.floor(
-              (parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas)) *
-              100
-            ) / 100
-          }}
-          </b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+              <div class="align-text">
+                <label class="inputCifrao">R$</label>
+                <input type="number" v-model="valor_juros" placeholder="XX.XXX,XX" />
+                <label id="somaJuros" />
+              </div>
 
-          <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
-            procntagem_acordo != 0 && procntagem_acordo != null
-            ? Math.floor(
-              ((parseFloat(valorHonorarios) * parseFloat(procntagem_acordo)) /
-                100) *
-              100
-            ) / 100
-            : Math.floor(parseFloat(valorHonorarios) * 100) / 100
-          }}</b>
-          <label class="inputCalculo" id="honorariosAdvocativos" />
-          <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
-          <br />
+              <div class="align-text" style="background-color: #f2f2f2">
+                <label class="inputCifrao">R$</label>
+                <input type="number" placeholder="XX.XXX,XX" v-model="pacelasVencidas" />
+                <label id="parcelasVincendas" />
+              </div>
 
-          {{
-            procntagem_acordo != 0 && procntagem_acordo != null
-            ? Math.floor(
-              (((parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas) +
-                parseFloat(valorHonorarios)) *
-                parseFloat(procntagem_acordo)) /
-                100) *
-              100
-            ) / 100
-            : Math.floor(
-              (parseFloat(valor_corrigido) +
-                parseFloat(valor_juros) -
-                parseFloat(pacelasVencidas) +
-                parseFloat(valorHonorarios)) *
-              100
-            ) / 100
-          }}
+              <div class="align-text">
+                <label class="inputCifrao">R$</label>
+                {{
+                Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                  100
+                ) / 100
+                }}
+              </div>
+              
+              <div class="align-text" style="background-color: #f2f2f2">
+                <label class="inputCifrao" >R$</label>
+                <input type="number" v-model="valorHonorarios" placeholder="XX.XXX,XX" id="honorariosAdvocativos" />
+              </div>
+              
+              
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+              <input type="number" v-if="procntagem_acordo != 0 && procntagem_acordo != null" v-model="procntagem_acordo"
+                placeholder="XX.XXX,XX" />
+              <!-- <label class="inputCalculo" id="honorariosAdvocativos" /> -->
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
 
-          <label class="inputCalculo" id="totalProcesso" />
-          <br />
-        </div>
+              <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
+                  (((parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                    parseFloat(procntagem_acordo)) /
+                    100) *
+                  100
+                ) / 100
+                : Math.floor(
+                  (parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas)) *
+                  100
+                ) / 100
+              }}
+              </b>
+              <!-- <label class="inputCalculo" id="honorariosAdvocativos" /> -->
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+
+              <b v-if="procntagem_acordo != 0 && procntagem_acordo != null">{{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
+                  ((parseFloat(valorHonorarios) * parseFloat(procntagem_acordo)) /
+                    100) *
+                  100
+                ) / 100
+                : Math.floor(parseFloat(valorHonorarios) * 100) / 100
+              }}</b>
+              <!-- <label class="inputCalculo" id="honorariosAdvocativos" /> -->
+              <br v-if="procntagem_acordo != 0 && procntagem_acordo != null" />
+              <br />
+              <div class="cifrao-valor">
+                {{
+                procntagem_acordo != 0 && procntagem_acordo != null
+                ? Math.floor(
+                  (((parseFloat(valor_corrigido) +
+                    parseFloat(valor_juros) -
+                    parseFloat(pacelasVencidas) +
+                    parseFloat(valorHonorarios)) *
+                    parseFloat(procntagem_acordo)) /
+                    100) *
+                  100
+                ) / 100
+                : Math.floor(
+                (parseFloat(valor_corrigido) +
+                  parseFloat(valor_juros) -
+                  parseFloat(pacelasVencidas) +
+                  parseFloat(valorHonorarios)) *
+                100
+              ) / 100
+              }}
+              </div>
+              <!-- <label class="inputCalculo" id="totalProcesso" /> -->
+            </div>
+          </div>
       </div>
+      <br/>
       <v-row class="mx-3" v-for="beneficio of arrayBeneficioAcumuladosContaveis" :key="beneficio.dib">
         <v-col cols="12" sm="6" md="3">
           <p>Beneficio recebido: {{ beneficio.beneficio }}</p>
@@ -655,56 +648,55 @@
         </div>
       </div>
 
-      <h4 class="center">PLANILHA DE CÁLCULO</h4>
+      <h4 class="center-first">PLANILHA DE CÁLCULO</h4>
       <div class="rowInputs">
         <div class="column">
-          <label class="camposInputAlcada">
+          <label class="camposInput">
             Parte:
             <input v-model="info_calculo.nome" @input="atulizarvalor()"
               placeholder="Nome + (CPF 000.000.000-00)" /></label>
           <label class="inputToPrint" id="partePlanilha" />
-          <br />
-          <label class="camposInputAlcada">
+        
+          <label class="camposInput">
             Espécie:
             <input v-model="info_calculo.beneficio" @input="atulizarvalor()" placeholder="XX(XXXXXXXXXX)" /></label>
           <label class="inputToPrintAlcada" id="autorPlanilha" />
-          <br />
-          <label class="camposInputAlcada">DIB Jud:
+          
+          <label class="camposInput">DIB Jud:
             <input v-mask="'##/##/####'" v-model="info_calculo.dib" placeholder="00/00/0000" /></label><label
             class="inputToPrint" id="dibJudPlanilha" />
-          <br />
-          <label class="camposInputAlcada">DIB Anterior:
+          
+          <label class="camposInput"><span>DIB Anterior:</span>
             <input v-mask="'##/##/####'" v-model="info_calculo.dibAnterior" @input="atulizarvalor()"
               placeholder="00/00/0000" /></label><label class="inputToPrint" id="dibAnteriorPlanilha" />
-          <br />
-          <label class="camposInputAlcada">RMI Jud.:
+          
+          <label class="camposInput"><span>RMI Jud.:</span>
             <input type="number" v-model="salarioInicial" placeholder="00/00" /></label><label class="inputToPrint"
             id="rmiJudPlanilha" />
-          <br />
+          
         </div>
         <div class="column">
-          <label class="camposInputAlcada">%RMI:
+          <label class="camposInput"><span>%RMI:</span>
             <input type="number" placeholder="000,00" v-model="porcentagemRMI" /></label><label class="inputToPrint"
             id="porCententagemRmiPlanilha" />
-          <br />
-          <label class="camposInputAlcada">Período (Data de Início):
+          
+          <label class="camposInput"><span>Período (Data de Início):</span>
             <input v-mask="'##/##/####'" v-model="dtInicial" placeholder="XX/XX/XXXX" /></label><label
             class="inputToPrint" id="dataInicialPlanilha" />
-          <br />
+        
           <!-- Criar Função -->
-          <label class="camposInputAlcada">Período (Data de Fim):
+          <label class="camposInput"><span>Período (Data de Fim):</span>
             <input v-mask="'##/##/####'" placeholder="XX/XX/XXXX" v-model="dtFinal" /></label><label class="inputToPrint"
             id="dataFinalPlanilha" />
-          <br />
-          <label for="13salario" class="labels pb-2" style="margin-left: 18px">13º Salário
-          </label>
-          <input class="form-check-input" type="checkbox" style="margin-left: 5px" v-model="salario13"
+        
+          <label for="13salario" class="labels pb-2" style="margin-left: 1%">13º Salário
+            <input class="form-check-input" type="checkbox" style="margin-left: 1%" v-model="salario13"
             :value="salario13" />
-          <br />
+          </label>
+          
+          
         </div>
       </div>
-      <br />
-      <br />
       <br />
       <v-data-table dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()" :items="calc_total"
         :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
@@ -739,13 +731,13 @@
                 v-model="item.salario" :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
-              <input v-model="item.correcao" :disabled="disableLinhaTable(item.data)" />
+                <input type="number" v-model="item.correcao" :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
               <input type="number" v-model="item.salarioCorrigido" disabled />
             </td>
             <td>
-              <input type="number" v-model="item.juros" :disabled="disableLinhaTable(item.data)" />
+              <input type="number" :value="getJurosValue(item)" :disabled="disableLinhaTable(item.data)" />
             </td>
             <td>
               <input type="number" v-model="item.salarioJuros" disabled />
@@ -759,9 +751,10 @@
           </tr>
         </template>
       </v-data-table>
-      <v-btn color="primary" v-if="mode === 'table'" @click="adicionarLinha()" primary>
+      <v-btn color="primary" v-if="mode === 'table'" @click="adicionarLinha()" primary style="margin-left:87%">
         Adicionar Linha</v-btn>
-
+        <br />
+        <br/>
       <div id="tabelaImpostoRenda">
         <h4 class="center">
           RENDIMENTOS RECEBIDOS ACUMULADAMENTE PARA IMPOSTO DE RENDA
@@ -852,78 +845,65 @@
       </div>
 
       <!-- Gerar pdf -->
-
-      <h1 v-if="add_taxa == false" class="titulo">GERADOR DE PDF</h1>
+      <br />
+      <br>
+      <h1 v-if="add_taxa == false" class="titulo" style="background-color: rgb(254, 254, 225)">MEMÓRIA DE CÁLCULO</h1>
       
       <v-card v-if="!add_taxa" id="areaToPrint">
         <!-- <Popup v-if="showPopup" :showPopup="showPopup" :popupTitle="popupTitle" :popupMessage="popupMessage" @close="closePopup" /> -->
         <div>
-          <h3 class="centerAGU">AGU</h3>
+          <h3 class="centerAGU"><img src="../assets/agu.png" width="150" height="90" alt="Simbolo da Advocacia-Geral da União"></h3>
           <h4 class="center">PROCURADORIA GERAL FEDERAL</h4>
-          <h4 class="center">
-            EQUIPE INTER REGIONAL DE CÁLCULOS PREVIDENCIÁRIOS DA 1ª E 6ª REGIÕES
-          </h4>
-
-          <table id="info-inicial">
-            <tbody>
-              <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Processo n°</td>
-                <td id="info-inicial-coluna">
-                  {{ info_calculo.numeroDoProcesso }}
-                </td>
-              </tr>
-              <tr id="info-inicial-linha">
-                <td id="info-inicial-coluna">Parte Autora</td>
-                <td id="info-inicial-coluna">{{ info_calculo.nome }}</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <h4 class="center">REVISE OS DADOS</h4>
-          <div class="rowInputs">
-            <div class="column">
-              <label class="camposInput">Objeto:</label><label class="inputToPrint" id="objetoForm" />
-              {{ objetoDoCalculo }}
-              <br />
-              <label class="camposInput">Vara:</label><label class="inputToPrint" id="varaForm" />
-              {{ varaPrevidenciaria }}
-              <br />
-              <label class="camposInput">N.B: {{ info_calculo.nb }}</label><label class="inputToPrint" id="jurosForm" />
-              <br />
+          
+            <div class="rowInputsCentral">
+              <div class="columnInputs">
+                <label class="camposInputMemoriaCalculo">Processo n°:
+                 {{  info_calculo.numeroDoProcesso }}</label>
+                
+                <label class="camposInputMemoriaCalculo">Parte Autora:
+                {{ info_calculo.nome }}</label>
+                
+                <label class="camposInputMemoriaCalculo">Objeto:
+                {{ objetoDoCalculo }}</label>
+                
+                <label class="camposInputMemoriaCalculo">Vara:
+                {{ varaPrevidenciaria }}</label>
+                
+                <label class="camposInputMemoriaCalculo">N.B: {{ info_calculo.nb }}</label>
+              </div>
+              
+              <div class="columnInputs">
+                <label class="camposInputMemoriaCalculo">Ajuizamento:
+                {{ info_calculo.dataAjuizamento }}</label>
+                
+                <label class="camposInputMemoriaCalculo">Início do Juros:
+                {{ inicio_juros }}</label>
+                
+                <label class="camposInputMemoriaCalculo">Atualizar Até: {{ atulizacao }}</label>
+                <!--Função-->
+                
+                <label class="camposInputMemoriaCalculo">Honorários Sucumbenciais:
+                {{ textoHonorarios }}</label>
+                
+              </div>
             </div>
-            <div class="column">
-              <label class="camposInput">Ajuizamento:</label><label class="inputToPrint" id="ajuizamentoForm" />
-              {{ info_calculo.dataAjuizamento }}
-              <br />
-              <label class="camposInput">Início do Juros:</label><label class="inputToPrint" id="inicioJurosForm" />
-              {{ inicio_juros }}
-              <br />
-              <label class="camposInput">Atualizar Até: {{ atulizacao }}</label><label class="inputToPrint"
-                id="calculadoEmForm" />
-              <!--Função-->
-              <br />
-              <label class="camposInput">Honorários Sucumbenciais:</label><label class="inputToPrint" id="honorarioForm" />
-              {{ textoHonorarios }}
-              <br />
-            </div>
-          </div>
         </div>
+
+        <br/>
         <h4 class="center">RESUMO DO PROCESSO</h4>
-
         <br />
-
         <table id="testeTotal">
           <thead>
             <tr>
-              <th scope="col" id="thead-limpo-menor"></th>
+              <th scope="col" id="thead-limpo-menor">Descrição dos Valores</th>
               <th scope="col" id="thead-limpo">Total no Período de Cálculo</th>
               <th scope="col" id="thead-limpo">Cálculo para Execução</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td id="textosResumo"></td>
-              <td id="valoresResumo"></td>
+              <td id="textosResumo">Porcentagem:</td>
+              <td id="valoresResumo" style="text-align:center">_</td>
               <td id="valor-percentual-execucao">
                 ({{ formatarPorcentagemAcordo() }}%)
               </td>
@@ -931,10 +911,10 @@
             <tr>
               <td id="textosResumo">Soma do Principal:</td>
               <td id="valoresResumo">
-                R${{ Math.floor(valor_corrigido * 100) / 100 }}
+                R$ {{ Math.floor(valor_corrigido * 100) / 100 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(valor_corrigido * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
@@ -942,10 +922,10 @@
             <tr>
               <td id="textosResumo">Juros de mora:</td>
               <td id="valoresResumo">
-                R${{ Math.floor(valor_juros * 100) / 100 }}
+                R$ {{ Math.floor(valor_juros * 100) / 100 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(valor_juros * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
@@ -953,23 +933,22 @@
             <tr v-if="alcadaBoolean == true">
               <td id="textosResumo">12 Parcelas Vincendas:</td>
               <td id="valoresResumo">
-                R${{ Math.floor(pacelasVencidas * 100) / 100 }}
+                R$ {{ Math.floor(pacelasVencidas * 100) / 100 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(pacelasVencidas * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
             </tr>
           </tbody>
         </table>
-        <br />
         <table id="testeTotal">
           <tbody>
             <tr>
               <td id="textosResumo">Devido ao(s) Reclamante(s):</td>
               <td id="valoresResumo">
-                R${{
+                R$ {{
                   Math.floor(
                     (parseFloat(valor_corrigido) +
                       parseFloat(valor_juros) -
@@ -979,7 +958,7 @@
                 }}
               </td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(
                     (parseFloat(valor_corrigido) +
                       parseFloat(valor_juros) -
@@ -991,22 +970,21 @@
             </tr>
             <tr>
               <td id="textosResumo">Honorários Advocatícios:</td>
-              <td id="valoresResumo">R${{ valorHonorarios }}</td>
+              <td id="valoresResumo">R$ {{ valorHonorarios }}</td>
               <td id="valoresResumoExecucao">
-                R${{
+                R$ {{
                   Math.floor(valorHonorarios * formatarPorcentagemAcordo()) / 100
                 }}
               </td>
             </tr>
           </tbody>
         </table>
-        <br />
 
         <table id="testeTotal">
           <tr>
             <td id="textosResumo">Total do Processo:</td>
             <td id="valoresResumo">
-              R${{
+              R$ {{
                 Math.floor(
                   (parseFloat(valor_corrigido) +
                     parseFloat(valor_juros) -
@@ -1017,7 +995,7 @@
               }}
             </td>
             <td id="valoresResumoExecucao">
-              R${{
+              R$ {{
                 Math.floor(
                   (parseFloat(valor_corrigido) +
                     parseFloat(valor_juros) -
@@ -1050,80 +1028,78 @@
         <img src="" alt="" />
 
         <!-- Adições ao gerador de PDF (09/2022) -->
-        <br />
         <div id="observacoes-div-texto">
-          Cálculo efetuado pelo vencimento do débito.
+          - Cálculo efetuado pelo vencimento do débito.
           {{
             textoHonorarios == null || textoHonorarios == ""
             ? "Sem honorários"
             : "Com honorários(" + textoHonorarios + ")"
           }}.<br />
-          Total para cada competência = Principal + atualização monetária + juros
-          de mora (se for o caso).<br />
-          <b>Juros de mora:</b>
-          <br />
-          <p class="describes">
-            {{
-              tipoJuros != 0
-              ? quebraLinhaDescribe(
-                optionsJuros
-                  .find((element) => element.value == tipoJuros)
-                  .text.split("Descrição:")[1]
-                  .split("")
-              )
-              : ""
-            }}.
-          </p>
-          <b>Correção:</b>
-          <br />
-          <p class="describes">
-            {{
-              tipoCorrecao != 0
-              ? quebraLinhaDescribe(
-                optionsCorrecao
-                  .find((element) => element.value == tipoCorrecao)
-                  .text.split("Descrição:")[1]
-                  .split("")
-              )
-              : ""
-            }}.
-          </p>
+          - Total para cada competência = Principal + Atualização Monetária + Juros
+          de Mora (se for o caso).<br />
 
+          <br />
+          <div>
+            <b>Juros de mora:</b>
+            <br />
+            <p class="describes">
+              {{
+                tipoJuros != 0
+                ? quebraLinhaDescribe(
+                  optionsJuros
+                    .find((element) => element.value == tipoJuros)
+                    .text.split("Descrição:")[1]
+                    .split("")
+                )
+                : ""
+              }}.
+            </p>
+            <b>Correção:</b>
+            <br />
+            <p class="describes">
+              {{
+                tipoCorrecao != 0
+                ? quebraLinhaDescribe(
+                  optionsCorrecao
+                    .find((element) => element.value == tipoCorrecao)
+                    .text.split("Descrição:")[1]
+                    .split("")
+                )
+                : ""
+              }}.
+            </p>
+          </div>
           <b v-if="selic">Observação:</b>
           <br v-if="selic" />
           <p v-if="selic" class="describes">
-            CACULO UTILIZA SELIC PREV. EC/113 Até 2025.
+            CÁlCULO UTILIZA SELIC PREV. EC/113 Até 2025.
           </p>
         </div>
-        <table id="tabelaResumo">
+        <!-- <table id="tabelaResumo">
           <thead>
-            <tr>
-              <th scope="col" id="thead-centro">
+            <tr scope="col" id="thead-centro"> -->
+              <div scope="col" class="thead-centro">
                 <h4>Resumo</h4>
-              </th>
-              <th scope="col" id="thead-invisivel"></th>
+              </div>
+             <!--  <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
             </tr>
           </thead>
-        </table>
-        <div id="linha-horizontal"></div>
+        </table> -->
         <table id="tabelaResumo">
           <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">Benefício:</td>
               <td id="colunaResumoDireita">{{ info_calculo.beneficio }}</td>
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">DER:</td>
               <td id="colunaResumoDireita">-</td>
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">DIB:</td>
               <td id="colunaResumoDireita">
                 {{
@@ -1135,13 +1111,11 @@
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">DIP:</td>
               <td id="colunaResumoDireita">{{ dtFinal }}</td>
               <td id="colunaVaziaDireita"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">Valor Principal (R$):</td>
               <td id="colunaResumoDireita">
                 {{
@@ -1156,7 +1130,6 @@
               <td id="colunaVaziaDireita">({{ rpvOuPrecatorio }})</td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaResumoEsquerda">Valor Honorários (R$):</td>
               <td id="colunaResumoDireita">
                 {{
@@ -1167,35 +1140,26 @@
             </tr>
           </tbody>
         </table>
-
-
         <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-
-        <table id="tabelaResumo">
+        <!-- <table id="tabelaResumo">
           <thead>
-            <tr>
-              <th scope="col" id="thead-centro">
+            <tr> -->
+              <div scope="col" class="thead-centro">
                 <h4>Análise de Competência do Juizado Especial Federal</h4>
-              </th>
-              <th scope="col" id="thead-invisivel"></th>
+              </div>
+              <!-- <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
               <th scope="col" id="thead-invisivel"></th>
             </tr>
           </thead>
-        </table>
-        <div id="linha-horizontal"></div>
+        </table> -->
+
         <table id="tabelaResumo">
           <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                Total de parcelas devidas até a data do ajuizamento
+                Total de parcelas devidas até a data do ajuizamento:
               </td>
               <td id="colunaAnaliseEsquerda">
                 ({{ this.info_calculo.dataAjuizamento }})
@@ -1203,63 +1167,47 @@
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(beforeDateAjuizamento * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
-              <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s)</td>
+              <td id="colunaAnaliseTexto">12 parcela(s) vincenda(s):</td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(afterDateAjuizamento * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
-          </tbody>
-        </table>
-        <div id="linha-soma"></div>
-        <table id="tabelaResumo">
-          <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                Valor da causa na data do ajuizamento da ação
+                Valor da causa na data do ajuizamento da ação:
               </td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(alcadaValor * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
           </tbody>
         </table>
-        <div id="linha-horizontal-separacao"></div>
         <br />
         <table id="tabelaResumo">
           <tbody>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">Limite de 60 salários mínimos em:</td>
               <td id="colunaAnaliseEsquerda">
                 {{ this.info_calculo.dataAjuizamento }}
               </td>
               <td id="colunaAnaliseDireita">{{ salariominimosAlcada }}</td>
-              <td id="colunaVazia"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                Parcela referente à renúncia pela alçada do JEF no ajuizamento
+                Parcela referente à renúncia pela alçada do JEF no ajuizamento:
               </td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
                 {{ Math.floor(alcadaTotal * 100) / 100 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
             <tr>
-              <td id="colunaVazia"></td>
               <td id="colunaAnaliseTexto">
-                (*) Valor atualizado da renúncia pela alçada do JEF
+                (*) Valor atualizado da renúncia pela alçada do JEF:
               </td>
               <td id="colunaAnaliseEsquerda"></td>
               <td id="colunaAnaliseDireita">
@@ -1278,11 +1226,10 @@
                   ) / 100
                 }}
               </td>
-              <td id="colunaVazia"></td>
             </tr>
           </tbody>
         </table>
-        <div id="linha-horizontal-separacao"></div>
+
         <div id="observacoes-div">
           <br />
           Obs: A parcela vincenda ocorre a partir do dia primeiro de cada mês.
@@ -1299,60 +1246,61 @@
         <h4 class="center">PLANILHA DE CÁLCULO</h4>
         <div class="rowInputs">
           <div class="column">
-            <label class="camposInputAlcada">
+            <label class="camposInput">
               Parte:
               {{ info_calculo.nome }} (CPF {{ info_calculo.cpf }})</label>
-            <label class="inputToPrintAlcada" id="partePlanilha" />
-            <br />
-            <label class="camposInputAlcada">
+            <label class="inputToPrint" id="partePlanilha" />
+            
+            <label class="camposInput">
               Espécie:
               {{ info_calculo.beneficio }}
             </label>
-            <label class="inputToPrintAlcada" id="autorPlanilha" />
-            <br />
-            <label class="camposInputAlcada">DIB Jud:
+            <label class="inputToPrint" id="autorPlanilha" />
+            
+            <label class="camposInput">DIB Jud:
               {{
                 this.info_calculo.dib == null || this.info_calculo.dib == ""
                 ? this.dtInicial
                 : this.info_calculo.dib
-              }} </label><label class="inputToPrintAlcada" id="dibJudPlanilha" />
-            <br />
-            <label class="camposInputAlcada">DIB Anterior:
+              }} </label>
+              <label class="inputToPrint" id="dibJudPlanilha" />
+            
+            <label class="camposInput">DIB Anterior:
               {{
                 this.dibAnterior == null || this.dibAnterior == ""
                 ? "Não consta"
                 : this.dibAnterior
-              }} </label><label class="inputToPrintAlcada" id="dibAnteriorPlanilha" />
-            <br />
-            <label class="camposInputAlcada">RMI Jud.: R${{ salarioInicial }} </label><label class="inputToPrintAlcada"
+              }} </label><label class="inputToPrint" id="dibAnteriorPlanilha" />
+            
+            <label class="camposInput">RMI Jud.: R$ {{ salarioInicial }} </label><label class="inputToPrint"
               id="rmiJudPlanilha" />
-            <br />
+            
           </div>
           <div class="column">
-            <label class="camposInputAlcada" id="porCententagemRmiPlanilha">%RMI: {{ porcentagemRMI == 0 ? 100 :
+            <label class="camposInput" id="porCententagemRmiPlanilha">%RMI: {{ porcentagemRMI == 0 ? 100 :
               porcentagemRMI }}
             </label>
-            <br />
-            <label class="camposInputAlcada">Período (Data de Início): {{ dtInicial }} </label><label
-              class="inputToPrintAlcada" id="dataInicialPlanilha" />
-            <br />
+            
+            <label class="camposInput">Período (Data de Início): {{ dtInicial }} </label><label
+              class="inputToPrint" id="dataInicialPlanilha" />
+            
             <!-- Criar Função -->
-            <label class="camposInputAlcada">Período (Data de Fim): {{ dtFinal }} </label><label
-              class="inputToPrintAlcada" id="dataFinalPlanilha" />
-            <br />
-            <label for="13salario" class="labels pb-2" style="margin-left: 18px">13º Salário: {{ exibirBoolean(salario13)
+            <label class="camposInput">Período (Data de Fim): {{ dtFinal }} </label><label
+              class="inputToPrint" id="dataFinalPlanilha" />
+            
+            <label for="13salario" class="labels pb-2" style="margin-left: 1%">13º Salário: {{ exibirBoolean(salario13)
             }}
             </label>
-            <br />
+            
           </div>
         </div>
-        <br />
 
         <v-data-table id="areaToPrint" dense v-if="calc_total.length > 0" :headers="headersTabelaPrincipal()"
-          :items="calc_total" :items-per-page="calc_total.length" item-key="name" class="elevation-1" hide-default-footer>
+          :items="calc_total" :items-per-page="calc_total.length" item-key="name" class="elevation-1 tabelaPDF" hide-default-footer>
         </v-data-table>
+
         <br />
-        <br />
+        
         <div id="tabelaImpostoRenda">
           <h4 class="center" id="impostoRendaTitulo">
             RENDIMENTOS RECEBIDOS ACUMULADAMENTE PARA IMPOSTO DE RENDA
@@ -1365,9 +1313,9 @@
               <th id="impostoRendaCompetencias">COMPETÊNCIAS</th>
             </tr>
             <tr>
-              <td>ANO-CALENDÁRIO PAGAMENTO ({{ dataAtual.getFullYear() }})</td>
-              <td>{{ Math.floor(iPvalorAnoAtual * 100) / 100 }}</td>
-              <td>
+              <td id="tabelaPDF2">ANO-CALENDÁRIO PAGAMENTO ({{ dataAtual.getFullYear() }})</td>
+              <td id="tabelaPDF2">{{ Math.floor(iPvalorAnoAtual * 100) / 100 }}</td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1377,12 +1325,12 @@
                   : 0
                 }}
               </td>
-              <td>{{ competenciaAnoAtual }}</td>
+              <td id="tabelaPDF2">{{ competenciaAnoAtual }}</td>
             </tr>
             <tr>
-              <td>ANOS-CALENDÁRIO ANTERIORES</td>
-              <td>{{ Math.floor(iPvalorAnoAnterior * 100) / 100 }}</td>
-              <td>
+              <td id="tabelaPDF2">ANOS-CALENDÁRIO ANTERIORES</td>
+              <td id="tabelaPDF2">{{ Math.floor(iPvalorAnoAnterior * 100) / 100 }}</td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1392,14 +1340,14 @@
                   : 0
                 }}
               </td>
-              <td>{{ competenciaAnoAnterior }}</td>
+              <td id="tabelaPDF2">{{ competenciaAnoAnterior }}</td>
             </tr>
             <tr v-if="alcadaBoolean == true">
               <td>RENÚNCIA R$</td>
               <td>
                 {{ Math.floor(pacelasVencidas * 100) / 100 }}
               </td>
-              <td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1409,11 +1357,11 @@
                   : 0
                 }}
               </td>
-              <td></td>
+              <td id="tabelaPDF2"></td>
             </tr>
             <tr>
-              <td>TOTAL EM R$</td>
-              <td>
+              <td id="tabelaPDF2">TOTAL EM R$</td>
+              <td id="tabelaPDF2">
                 {{
                   Math.floor(
                     (parseFloat(iPvalorAnoAnterior) +
@@ -1423,7 +1371,7 @@
                   ) / 100
                 }}
               </td>
-              <td>
+              <td id="tabelaPDF2">
                 {{
                   procntagem_acordo != 0 && procntagem_acordo != null
                   ? Math.floor(
@@ -1436,7 +1384,7 @@
                   : 0
                 }}
               </td>
-              <td>
+              <td id="tabelaPDF2">
                 {{
                   parseInt(competenciaAnoAnterior) + parseInt(competenciaAnoAtual)
                 }}
@@ -1453,9 +1401,65 @@
         :items-per-page="alcadaArray.length" item-key="data" class="elevation-1" hide-default-footer>
       </v-data-table>
       <div v-if="add_taxa == false" v-show="mode === 'table'">
-        <b-button variant="primary" @click="printDiv()"><i class="fa fa-file"></i></b-button>
+        <b-button style="background-color:rgb(159, 159, 159); border:gray; margin-left: 96.5%" @click="printDiv()"><img src="../assets/impressora.png" width="20" height="20"></b-button>
       </div>
+      <br />
+      <h3 class="mt-5" style="cursor: pointer" @click="exibirCalculoEmLote = !exibirCalculoEmLote">
+        Benefícios para Cálculo em Lote
+      </h3>
+      
+      <template v-if="exibirCalculoEmLote">
+        <v-data-table :headers="headersCalculoLote" :items="calculoLote" class="elevation-1">
+          <template v-slot:item="{ item }">
+            <tr>
+
+              <td  class="py-3" :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}" @click="atulizarInfosLote(item)">
+                <span style="color:#1976d2">{{ item.numeroDoProcesso }}</span>
+              </td>
+
+              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.nome }}</td>
+              <td :style="{color: itemClicked === item.id ? '#1976d2' : 'rgb(0, 0, 0)', cursor: 'pointer', backgroundColor: itemClicked === item.id ? 'rgba(208, 212, 202, 0.5)' : 'transparent'}">{{ item.tipo }}</td>
+              <td>
+                <v-icon v-if="item.nomeBeneficioBeneficioAcumulado[0]" color="red">
+                  mdi-check-outline
+                </v-icon>
+              </td>
+              <td>
+                <v-btn icon @click="atulizarInfosLote(item)">
+                  <v-icon color="sucesso">mdi-file-eye-outline</v-icon>
+                </v-btn>
+                <v-btn :loading="loading" icon @click="removerItemLote(item)">
+                  <v-icon color="red">mdi-delete</v-icon>
+                </v-btn>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </template>
+
+      <v-col cols="2">
+        <div style="display: flex; justify-content: space-between;">
+            <v-btn depressed color="blue" style="color: whitesmoke" @click="verificarAdicaoNoLote()"
+              target="_blank">Adicionar ao Lote</v-btn>
+            <v-btn :loading="loading" depressed color="blue" style="margin-left: 10px; color: whitesmoke;" 
+              @click="(mode = 'table'), AnexarMinutas()" target="_blank">Anexar Minutas</v-btn>
+            <v-btn :loading="loading" depressed color="red" style="margin-left: 10px; color: whitesmoke;" target="_blank"
+              @click="deletarLote()">Deletar lote</v-btn>
+          </div>
+      </v-col>
     </v-container>
+
+    <v-container fluid id="manual" v-if="exibirManual">
+      <v-card>oi</v-card>
+    </v-container>
+
+    <template>
+      <div>
+        <div class="sticky-icon" @click="ExibirAjuda">
+          <v-icon>mdi-help-circle</v-icon>
+        </div>
+      </div>
+    </template>
 
   </v-container>
 </template>
@@ -1464,9 +1468,8 @@
 import Axios from "../config/configAxios";
 // import TabelaDib from "../features/TabelaDib.vue";
 //import { pararJurosTeste } from "../features/pararJuros";
-import { baseApiUrl, apiSapiens } from "../global";
 import jsPDF from "jspdf";
-import axios from "axios";
+import axios from "axios"; 
 import PortalADM from "./PortalADM.vue";
 import BlocoDeInformacoes from "../components/BlocoDeInformacoes.vue";
 import { calculoTabelaPrincipal } from "../Calculo/CalculoTabela";
@@ -1477,6 +1480,7 @@ import { getDataMaisAtualParaCampoAtualizarAte } from "../api/calculadora/getJur
 import { EventBus } from "../eventBus/eventBus"
 //import Popup from '../components/Popup.vue'
 import Swal from 'sweetalert2';
+import { getSalarioMinimoDib } from '../api/calculadora/getSalarioMinimo/getSalarioMinimoAnoDib'
 
 export default {
   name: "Home",
@@ -1492,6 +1496,8 @@ export default {
       popupMessage: 'Termo inicial do desconto ajustado para a DIV do benefício devido',
       mode: "",
       add_taxa: false,
+      exibirCalculo: true,
+      exibirManual: false,
       beneficio: false,
       pesquisa: {},
       infos: [],
@@ -1499,7 +1505,9 @@ export default {
       dtFinal: "",
       nome: "",
       nb: "",
+      dataParaVerificarPeriodoDoAtualizarAte: "",
       nbAnterior: "",
+      dibInicialAcumulados: "", 
       nmprocesso: "",
       salarioInicial: "",
       objetoDoCalculo: "CÁLCULO DE BENEFÍCIO PREVIDENCIÁRIO",
@@ -1651,6 +1659,36 @@ export default {
     },
   },
   methods: {
+    acessoManual() {
+      this.exibirCalculo = false;
+      this.exibirManual = true;
+      this.add_taxa = false;
+    },
+
+    async teste(){
+      if(Object.keys(this.info_calculo).length <= 0){
+        console.log("entrou")
+        this.salarioMinimo = false
+      }
+      if(this.info_calculo.dibInicial){
+        const data = await getSalarioMinimoDib(this.info_calculo.dibInicial.split("/")[2])
+        console.log(data[0].valor)
+
+        if((this.salarioInicial).toString() == "NaN"){
+          this.salarioInicial = data[0].valor
+        }
+      }
+      console.log("asdadadds")
+      console.log(typeof(this.salarioInicial))
+      console.log((this.salarioInicial).toString())
+  },
+    getJurosValue(item) {
+    return this.selic ? (item.juros * 100).toFixed(2) : 0;
+  },
+  tratamentoDeNumeroDaCorrecao(numero){
+    const numeros = numero.toString();
+    return parseFloat(numeros.substring(0,6))
+  }, 
     async atualizarItemParaBanco(){ 
       const novoObjetoParaAtualizar = {...this.info_calculo}
       delete novoObjetoParaAtualizar.aps;
@@ -1769,7 +1807,7 @@ export default {
       if (result.isConfirmed) {
         console.log("PASSOU")
         await updateInformationForCalculoList(novoObjetoParaAtualizar)
-          Swal.fire('Salvo!', '', 'success')
+          Swal.fire('Salvo!', '', 'sucesso')
       } else if (result.isDenied) {
         Swal.fire('Mudanças não salvas', '', 'info')
       }
@@ -1784,7 +1822,7 @@ export default {
     }).then((result) => {
       if (result.value) {
         updateInformationForCalculoList(novoObjetoParaAtualizar).then((e) => {
-          Swal.fire('Salvo!', '', 'success')
+          Swal.fire('Salvo!', '', 'sucesso')
           console.log(e)
         }).catch(
           Swal.fire('Mudanças não salvas', '', 'info')
@@ -1825,7 +1863,7 @@ export default {
         Swal.fire(
           'Deletado!',
           'Seu Processo foi deletado',
-          'success'
+          'sucesso'
         )
       }else{
         Swal.fire(
@@ -1852,7 +1890,7 @@ export default {
         if(StringForDateDIB > StringForDateDCB){
           /* this.showPopup = true; */
           Swal.fire({
-                    icon: 'success',
+                    icon: 'sucesso',
                     text: 'Termo inicial do desconto ajustado para a DIB do benefício devido!',
                   });
           const valorParaAcicionarAoDia = String((this.ConverterDateToString(StringForDateDIB)).split("/")[0].split("").map(Number)[1] + 1)
@@ -1897,16 +1935,46 @@ export default {
     },
     acessoPortalADM() {
       this.$prompt("Digite a senha de acesso").then((text) => {
-        if (text == "1") {
+        if (text == "cadinho") {
           this.add_taxa = true;
+          this.exibirCalculo = false;
+          this.exibirManual = false;
         } else {
-          this.add_taxa = false;
           this.$alert("SENHA ERRADA");
         }
       })
     },
+
+    exibirCalculoCard() {
+      this.exibirCalculo = true;
+      this.exibirManual = false;
+      this.add_taxa = false
+    },
+
+    verificarDataDoAtualizarAte(){
+      const [diaAtua, mesAtua, anoAtua] = (`01/${this.atulizacao}`).split('/');
+      const [diaDataBase, mesDataBase, anoDataBase] = (`01/${this.dataParaVerificarPeriodoDoAtualizarAte}`).split('/');
+      const dataAtualiza = new Date((`${anoAtua}/${mesAtua}/${diaAtua}`))
+      const dataDataBase = new Date((`${anoDataBase}/${mesDataBase}/${diaDataBase}`))
+      console.log(this.atulizacao +" atualixaxao1")
+      console.log(this.dataParaVerificarPeriodoDoAtualizarAte +" atualixaxao1")
+      console.log(dataDataBase > dataAtualiza)
+      if(dataAtualiza > dataDataBase){
+        Swal.fire({
+          icon: "error",
+          text: "NÃO HÁ ATUALIZAÇÃO DISPONÍVEL PARA A COMPETÊNCIA INDICADA - ACIONAR ADMINISTRADOR",
+          /* footer: '<a href="google.com.br">clique para puxar a data mais atual</a>' */
+        }); 
+        return false
+      }
+      return true
+
+    },
+
+
+
     async novoCalculo() {
-      if (this.verificadoInformacoes()) {
+      if (this.verificadoInformacoes() && this.verificarDataDoAtualizarAte()) { 
         try {
           this.loading = true;
           console.log("TESTEEEEEE AQUI A DIB " + this.info_calculo.dibInicial)
@@ -1940,6 +2008,7 @@ export default {
           this.arrayBeneficioAcumuladosContaveis = this.beneficio === true ? await triagemBeneficiosValidos(body, this.arrayBenficios, this.beneficiosInacumulveisBanco) : []
           let [tabelaDeCalculo] = await Promise.all([calculoTabelaPrincipal(body, this.arrayBeneficioAcumuladosContaveis)])
           this.calc_total = tabelaDeCalculo;
+          console.log("SORTE = " + JSON.stringify(this.calc_total))
           this.totaisSalario()
         } catch (error) {
           let message = await error.message;
@@ -1968,7 +2037,7 @@ export default {
           { value: "data", text: "Data" },
           { value: "reajusteAcumulado", text: "Reajuste" },
           { value: "devido", text: "Devido R$" },
-          { value: "reajusteRecebido", text: "Reajute" },
+          { value: "reajusteRecebido", text: "Reajuste" },
           { value: "recebido", text: "Recebido R$" },
           { value: "salario", text: "Salário R$" },
           { value: "correcao", text: "Correção Salarial" },
@@ -2040,7 +2109,7 @@ export default {
               juros: this.boolJuros,
             };
             let taxas = await axios
-              .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
+              .post(`${process.env.VUE_APP_BASE_API_URL}/calculo/taxaUnica`, bodytaxaUnica)
               .then(async (taxaUnica) => {
                 let taxaUnicaData = await taxaUnica.data;
                 let correcao = await taxaUnicaData.correcao;
@@ -2111,9 +2180,10 @@ export default {
       }
     },
     disableLinhaTable(data) {
+
       let tamanhoDataVerificacao = data.toString().split("/");
       if (
-        tamanhoDataVerificacao.length == 3 &&
+        tamanhoDataVerificacao.length == 3 && 
         parseInt(tamanhoDataVerificacao[2]) >= 1995
       ) {
         return false;
@@ -2227,7 +2297,7 @@ export default {
         let timer = 0;
 
         axios
-          .post(`${baseApiUrl}calculo/calcular`, body)
+          .post(`${process.env.VUE_APP_BASE_API_URL}/calculo/calcular`, body)
           .then(async (response) => {
             this.calc_total = await response.data;
             console.log("salario13Obrigatorio: " + this.salario13Obrigatorio);
@@ -2270,7 +2340,7 @@ export default {
                 { value: "data", text: "Data" },
                 { value: "reajusteAcumulado", text: "Reajuste" },
                 { value: "devido", text: "Devido R$" },
-                { value: "reajusteRecebido", text: "Reajute" },
+                { value: "reajusteRecebido", text: "Reajuste" },
                 { value: "recebido", text: "Recebido R$" },
                 { value: "salario", text: "Salário R$" },
                 { value: "correcao", text: "Correção Salarial" },
@@ -2403,6 +2473,7 @@ export default {
         const calculo_salarioTotal = [];
 
         this.calc_total.forEach((value) => {
+        console.log("PASSA POR AQIO")
           calculoData.push(value.data);
           calculo_reajusteAcumulado.push(value.reajusteAcumulado);
           calculo_devido.push(value.devido);
@@ -2504,8 +2575,8 @@ export default {
                 console.log(this.calculoLote);
                 this.$alert(
                   "Calculo adicionado ao Lote.",
-                  "Success",
-                  "success"
+                  "Sucesso",
+                  "sucesso"
                 ).then(() => console.log("Closed"));
               })
               .catch((error) => {
@@ -2557,7 +2628,7 @@ export default {
     removerItemLote(dado) {
       console.log(dado)
       console.log(dado.id);
-      this.$prompt("Digite seu nome de usuario").then((text) => {
+      this.$prompt("Digite seu nome de usuário").then((text) => {
         if (text == this.username) {
           this.loading = true;
           let body = dado;
@@ -2614,6 +2685,7 @@ export default {
       });
     },
     atulizarInfosLote(dado) {
+      console.log("DADDDDDDDDDDDDDDDDDOOOOOOOOOOOOOOOOOOOOOOO " +dado)
       this.zeraDadosDocalculo();
       let beneficioAcumuladoLote = [];
       if (dado.recebeuBeneficio) {
@@ -2621,7 +2693,7 @@ export default {
           { value: "data", text: "Data" },
           { value: "reajusteAcumulado", text: "Reajuste" },
           { value: "devido", text: "Devido R$" },
-          { value: "reajusteRecebido", text: "Reajute" },
+          { value: "reajusteRecebido", text: "Reajuste" },
           { value: "recebido", text: "Recebido R$" },
           { value: "salario", text: "Salário R$" },
           { value: "correcao", text: "Correção Salarial" },
@@ -2756,6 +2828,7 @@ export default {
       return benficioVerdadeiro;
     },
     calcularLote() {
+      //console.log("CHAMOUUUUUUUUUUUUUUUUUUU ")
       const body = {
         inicioCalculo: this.dtInicial,
         dip: this.dtFinal,
@@ -2774,7 +2847,7 @@ export default {
       };
       let timer = 0;
       axios
-        .post(`${baseApiUrl}/calculo/calcular`, body)
+        .post(`${process.env.VUE_APP_BASE_API_URL}/calculo/calcular`, body)
         .then(async (response) => {
           this.calc_total = await response.data;
         })
@@ -2785,6 +2858,7 @@ export default {
           if (this.beneficio == true) {
             let beneficioProvisorio;
             this.beneficiosInacumulveisBanco.forEach((value) => {
+              
               if (
                 parseInt(value.name.split("-")[0]) ==
                 parseInt(this.info_calculo.beneficio.split("-")[0])
@@ -2809,7 +2883,7 @@ export default {
               { value: "data", text: "Data" },
               { value: "reajusteAcumulado", text: "Reajuste" },
               { value: "devido", text: "Devido R$" },
-              { value: "reajusteRecebido", text: "Reajute" },
+              { value: "reajusteRecebido", text: "Reajuste" },
               { value: "recebido", text: "Recebido R$" },
               { value: "salario", text: "Salário R$" },
               { value: "correcao", text: "Correção Salarial" },
@@ -2961,7 +3035,7 @@ export default {
         atulizacao: `${date[1]}/${date[2]}`,
         selic: this.selic,
       };
-      const ossadaUrl = `${baseApiUrl}/salarioMinimo/procuraPorAno/${this.info_calculo.dataAjuizamento.split("/")[2]}`;
+      const ossadaUrl = `${process.env.VUE_APP_BASE_API_URL}/salarioMinimo/procuraPorAno/${this.info_calculo.dataAjuizamento.split("/")[2]}`;
       axios(ossadaUrl).then(async (res) => {
         const obj = await res.data;
         const ajuizamento = this.info_calculo.dataAjuizamento.split("/");
@@ -2973,7 +3047,7 @@ export default {
           selic: this.selic,
         };
         axios
-          .post(`${baseApiUrl}/calculo/taxaUnica`, bodytaxaUnica)
+          .post(`${process.env.VUE_APP_BASE_API_URL}/calculo/taxaUnica`, bodytaxaUnica)
           .then((taxaUnica) => {
             console.log(taxaUnica.data);
             let taxaUnicaData = taxaUnica.data;
@@ -2996,7 +3070,7 @@ export default {
         });
 
         axios
-          .post(`${baseApiUrl}/calculo/alcada`, body)
+          .post(`${process.env.VUE_APP_BASE_API_URL}/calculo/alcada`, body)
           .then((response) => {
             console.log(response.data);
             let alcada = response.data;
@@ -3398,7 +3472,7 @@ export default {
               { value: "data", text: "Data" },
               { value: "reajusteAcumulado", text: "Reajuste" },
               { value: "devido", text: "Devido R$" },
-              { value: "reajusteRecebido", text: "Reajute" },
+              { value: "reajusteRecebido", text: "Reajuste" },
               { value: "recebido", text: "Recebido R$" },
               { value: "salario", text: "Salário R$" },
               { value: "correcao", text: "Correção Salarial" },
@@ -3422,7 +3496,7 @@ export default {
           };
 
           axios
-            .post(`${baseApiUrl}/calculo/beneficioAcumulado`, body)
+            .post(`${process.env.VUE_APP_BASE_API_URL}/calculo/beneficioAcumulado`, body)
             .then((response) => {
               let newArrayCalculo = [];
               let alteracaoConfimada = false;
@@ -3596,7 +3670,8 @@ export default {
           Math.floor(value.salarioJuros * 100) / 100;
         this.calc_total[index].juros = Math.floor(value.juros * 10000) / 10000;
         this.calc_total[index].correcao =
-          Math.floor(value.correcao * 10000) / 10000;
+          //Math.floor(value.correcao * 10000) / 10000;
+          this.tratamentoDeNumeroDaCorrecao(value.correcao)
         index++;
       }
     },
@@ -3645,6 +3720,7 @@ export default {
       this.formatacao();
     },
     totaisSalario() {
+      console.log("TOTALLLL + " + JSON.stringify(this.calc_total))
       if (!this.porcentagemHonorarios && !this.DataHonorarios) {
         this.textoHonorarios = null;
       } else {
@@ -3728,7 +3804,10 @@ export default {
         (this.valorHonorarios * this.porcentagemHonorarios) / 100;
     },
     async atualizarTodosDados(info) {
-      this.alcadaArray = [];
+      if(info.citacao && this.ConverterToDate(info.citacao) < this.ConverterToDate("01/12/2021")){
+        this.selic = true;
+      }
+      this.alcadaArray = []; 
       this.info_calculo = info;
       this.info_calculo.beneficio = this.refatoreNameBeneficio(
         this.info_calculo.beneficio
@@ -3795,7 +3874,7 @@ export default {
       const data = new Date(String(maiorData))
       const dataMaiorTratada = (`${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')}-${data.getFullYear()}`).split("-")
       this.atulizacao = `${dataMaiorTratada[1]}/${dataMaiorTratada[2]}`
-
+      this.dataParaVerificarPeriodoDoAtualizarAte = `${dataMaiorTratada[1]}/${dataMaiorTratada[2]}`
 
       this.pacelasVencidas = 0;
       this.pensaoPorMorte = "";
@@ -3831,6 +3910,8 @@ export default {
 
       let beneficioProvisorio;
       this.beneficiosInacumulveisBanco.forEach((value) => {
+        console.log("TESTANDO1 = " + JSON.stringify(value));
+        console.log("TESTANDO2 = " + this.info_calculo.beneficio)
         if (
           parseInt(value.name.split("-")[0]) ==
           parseInt(this.info_calculo.beneficio.split("-")[0])
@@ -3841,13 +3922,16 @@ export default {
           if (beneficioProvisorio.dcb) {
             this.pensaoPorMorte = "Beneficio com dcb";
           }
-        }
+        } 
       });
       console.log(this.arrayBenficios)
       console.log(beneficioProvisorio)
       this.arrayBenficios.forEach((value) => {
         beneficioProvisorio.inacumulavel.forEach((dado) => {
           if (value.beneficio && dado) {
+            /* console.log("TTTTTTTTTTTTTTTTTTTEST   = " + this.verificarDataParaBeneficioAcumulado(this.dtInicial, this.dtFinal, value.dib, this.CalcularDataFinalMenorQueAnterior(value.dcb, value.dib)))
+            console.log("teste2 "  +  parseInt(dado.split("-")[0]))
+            console.log("teste3 "  +  parseInt(value.beneficio.split("-")[0])) */
             if (
               parseInt(dado.split("-")[0]) ==
               parseInt(value.beneficio.split("-")[0])
@@ -3858,6 +3942,7 @@ export default {
                 dcb: this.CalcularDataFinalMenorQueAnterior(value.dcb, value.dib),
                 rmi: value.rmi,
                 nb: value.nb,
+                dibInicial: value.dib, 
                 limiteMinimoMaximo: true,
                 salarioMinimo: false,
                 salario13: true,
@@ -3905,6 +3990,7 @@ export default {
         rmi: null,
         nb: null,
         nbAnterior: null,
+        dibInicial: null,
         obrigatorio: false,
         salario13: true,
         limiteMinimoMaximo: true,
@@ -3923,80 +4009,154 @@ export default {
         ` 
         
         * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px;} label {font-weight: bold;}
+        div {margin-bottom: 3px; background-color: rgb(154, 186, 215)} label {font-weight: bold;}
         .titulo, h1, h2 {text-align: center;}
-        
-        
 
-        body {height: auto; width: 100vw;padding: 15px; font-size: 1.3rem;}
-        .content{ padding: 15px;}
-        .center {
-          margin: auto;
-          width: 60%;
-          padding: 10px;
-          text-align: center
-
-          background-image: url(../assets/logo.png);
-          background-position: top left;
-          background-repeat: no-repeat;
-          /* background-size: cover; */
-          position: relative;
-        }
-
-        table th{
-          border: 20px solid #FFFFFF;
-          text-align: center;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-        table tr > td {
-          border: 4px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-
-        table tr < td {
-          border-up: 5px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-       
-        table td{
-          text-align: center;
-        }
-
-        .agu {text-align: center; font-size: 1.3rem; font-weight: bold;}
-        h1, h2, h3 {font-size: 1.2rem; font-weight: bold;}
-
-         .titulo {
-          text-align: center;
-        }
-
-        .camposInput {
-          text-align: left;
-          margin-left: -1%;
-          font-size: 1.0em;
-          font-weight: normal;
-        }
-
-        .center {
-          text-align: center;
-        }
+        body {height: auto; width: 100vw;padding: 15px; font-size: 1rem; background-color: rgb(154, 186, 215);}
 
         .centerAGU {
           text-align: center;
+          background-color: rgb(154, 186, 215);
           padding-top: 10px;
         }
 
-        .column {
-          float: left;
-          width: 48%;
+        .center {
+          text-align: center;
+          margin-bottom: 10px;
+          background-color: rgb(216, 228, 238);
+          border-radius: 10px;
+          padding: 3px;
         }
 
-        .columnRight {
-          float: left;
+        .rowInputsDados{
+          padding-top: 10px;
+          display:flex;
+          margin-left: 15%;
+        }
+
+        .column2 {
+          width: auto;
+        }
+
+        .column2 + .column2 {
+          margin-left: 50px;
+        }
+
+        .camposInputMemoriaCalculo {
+          margin-right: 5px;
+        }
+
+        .inputToPrint {
+          margin-left: 2px;
+        }
+
+        #testeTotal {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #thead-limpo-menor {
+          text-align: center;
+          border: 1px solid black;
+        }
+
+        #thead-limpo {
+          text-align: center;
+          border: 1px solid black
+        }
+
+        #textosResumo {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #valoresResumo {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #valor-percentual-execucao {
+          width: 25%;
+          text-align: center;
+          border: 1px solid black;
+        }
+
+        #valoresResumoExecucao {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #testeTotal {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #colunaResumoEsquerda {
+          width: 35%;
           text-align: right;
-          width: 52%;
+          border: 1px solid black;
+        }
+
+        #colunaResumoDireita {
+          width: 30%;
+          text-align: right;
+          border: 1px solid black;
+        }
+
+        #colunaVaziaDireita {
+          width: 45%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        .thead-centro{
+          text-align: center;
+          margin: 10px;
+        }
+
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #colunaAnaliseTexto {
+          width: 15%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #colunaAnaliseEsquerda {
+          width: 5%;
+          text-align: right;
+          border: 1px solid black;
+        }
+
+        #colunaAnaliseDireita {
+          width: 5%;
+          text-align: right;
+          border: 1px solid black;
+        }
+
+        #observacoes-div {
+          width: 100%;
+          margin-left: 10%;
+          font-size: small;
+        }
+
+        .center-first{
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
         }
 
         .rowInputs:after {
@@ -4005,290 +4165,81 @@ export default {
           clear: both;
         }
 
-        .resumoProcesso:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .columnResumoProcesso {
+        .column {
           float: left;
-          width: 14%;
-          margin-left: 1%;
+          width: 50%;
         }
 
-        .columnResumoProcessoParte {
-          float: left;
-          width: 39%;
-          margin-left: 1%;
-        }
-
-        .centerMargin {
-          text-align: center;
-          padding-left: 15px;
-          padding-right: 15px;
-        }
-
-        .inputToPrint {
-          margin-left: 10px;
-        }
-
-        .inputToPrintResumo {
-          margin-left: 0px;
-        }
-
-        .inputToPrintResumoParte {
-          float: left;
+        .camposInput {
+          text-align: right;
+          margin-left: 27%;
+          margin-right: 100px;
+          height: 5px;
           width: 500px;
+          display: flex;
+          align-items: center;
         }
 
-        .inputCalculo {
-          text-align: left;
-          margin-left: 1%;
+        .camposInput input{
+          flex-grow: 1;
+          box-sizing: border-box;
+          white-space:nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          border: none;
+          padding: 0;
         }
 
-        .rowCalculo:after {
-          content: "";
-          display: table;
-          clear: both;
+        .camposInput span {
+          margin-right: 5px;
         }
 
-        .page {
-          padding-top: 3px;
+        .13salarioPDF{
+          margin-left: 20px;
         }
 
-        
-        .columnResumoPagamentosAdministrativos {
-          float: left;
-          width: 11%;
-          margin-left: 1%;
-        }
-
-        .columnRightAlcada {
-          float: left;
-          margin-left: 0%;
-          text-align: left;
-          width: 50%;
-        }
-
-        .columnAlcadaPrint {
-          float: center;
-          text-align: left;
-          width: 60%;
-          margin-left: 20%;
-          margin-right: 20%;
-        }
-
-        .inputPagamentosAdministrativos {
-          max-width: 100%;
-        }
-
-        .inputTetoAlcada {
-          max-width: 15%;
-          font-size: 12px;
-        }
-
-        .camposInputAlcada {
-          text-align: left;
-          margin-left: 3%;
-          font-size: 16px;
-          width: 30%;
-        }
-        
-
-        .inputToPrintAlcada {
-          text-align: left;
-          margin-left: 3%;
-          font-size: 16px;
-          width: 30%;
-        }
-
-        table,
-        th,
-        td {
-          text-align: left;
-          margin-left: 0px;
-          padding-left: 5px;
-          width: 120%;
-        }
-
-        #impostoRendaTitulo {
-          font-size: 18px;
-          width: 120%;
-        }
-
-        #testeTotal {
-          width: 100%;
+        .tabelaPDF td,
+        .tabelaPDF th {
+          align-items:center;
           text-align: center;
+          border: 1px solid #000000;
         }
 
-        #textosResumo {
-          width: 42%;
-          text-align: right;
-          border: 1px solid white;
-        }
-        
-        #thead-limpo {
-          border: 1px solid white;
-          width: 29%;
-          font-size: 14px;
-        }
-
-        #thead-limpo-menor {
-          border: 1px solid white;
-          width: 42%;
-        }
-
-        #thead-centro {
-          border: 1px solid white;
-          width: 100%;
+        .center-first{
           text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
         }
 
-        #thead-invisivel {
-          border: 1px solid white;
-          width: 1%;
-        }
-
-
-        #valoresResumo {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valoresResumo2 {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valoresResumoExecucao {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valor-percentual-execucao {
-          width: 25%;
-          text-align: center;
-          border: 1px solid white;
-        }
-
-        #tabelaResumo {
-          width: 100%;
-          text-align: center;
-        }
-
-        #colunaVazia {
-          width: 15%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #colunaVaziaDireita {
-          width: 45%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #colunaResumoEsquerda {
-          width: 25%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #colunaResumoDireita {
-          width: 15%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-horizontal {
-          width: 57%;
-          border: 1px solid #000;
-          margin-left: 20%;
-          margin-top: 0%;
-        }
-
-        #colunaAnaliseTexto {
-          width: 35%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #colunaAnaliseEsquerda {
-          width: 2%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #colunaAnaliseDireita {
-          width: 2%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-soma {
-          width: 13%;
-          border: 1px solid #000;
-          margin-left: 69%;
-          margin-top: -4px;
-        }
-
-        #linha-horizontal-separacao {
-          width: 60%;
+        #tabelaPDF2 {
           border: 1px solid black;
-          margin-left: 21%;
-          margin-top: -1px;
-          margin-bottom: -10px;
         }
 
-        #observacoes-div {
-          width: 50%;
-          margin-left: 25%;
-          font-size: small;
-        }
-        
-        .describes{
-          text-overflow: clip ellipsis;
-          margin-right: 10px;
+        #impostoRenda {
+          justify-items: center;
         }
 
-        #observacoes-div-texto {
-          width:100%;
-          margin-left: 10%;
-          font-size: small;
-          height: auto;
-          text-overflow: clip ellipsis;
-        }
-        
-        #info-inicial {
-          width: 50%;
-          margin-left: 5%;
-          text-align: left;
-          border: 2px solid white;
+        #impostoRendaDiscriminacao {
+          width: 40%;
         }
 
-        #info-inicial-coluna {
-          width: 15%;
-          text-align: left;
-          border: 2px solid white;
+        #impostoRendaValores {
+          width: 30%;
         }
 
-
-        #info-inicial-linha {
-          width: 100%;
-          text-align: left;
-          border: 2px solid green;
+        #impostoRendaAcordo {
+          width: 30%;
         }
 
-
+        #impostoRendaCompetencias {
+          width: 20%;
+        }
         `;
       style = style + "</style>";
 
       var id = new Date().getTime();
-      console.log("foi aqui")
       var newWin = window.open(
         window.location.href + "?printerFriendly=true",
         id,
@@ -4324,80 +4275,154 @@ export default {
         ` 
         
         * {box-sizing: border-box; margin: 0; padding: 0}
-        div {margin-bottom: 3px;} label {font-weight: bold;}
+        div {margin-bottom: 3px; background-color: rgb(154, 186, 215)} label {font-weight: bold;}
         .titulo, h1, h2 {text-align: center;}
-        
-        
 
-        body {height: auto; width: 100vw;padding: 15px; font-size: 1.3rem;}
-        .content{ padding: 15px;}
-        .center {
-          margin: auto;
-          width: 60%;
-          padding: 10px;
-          text-align: center
-
-          background-image: url(../assets/logo.png);
-          background-position: top left;
-          background-repeat: no-repeat;
-          /* background-size: cover; */
-          position: relative;
-        }
-
-        table th{
-          border: 20px solid #FFFFFF;
-          text-align: center;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-        table tr > td {
-          border: 4px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-
-        table tr < td {
-          border-up: 5px solid #FFFFFF;
-          border: 1px solid #000000;
-          border-collapse: collapse;
-        }
-       
-        table td{
-          text-align: center;
-        }
-
-        .agu {text-align: center; font-size: 1.3rem; font-weight: bold;}
-        h1, h2, h3 {font-size: 1.2rem; font-weight: bold;}
-
-         .titulo {
-          text-align: center;
-        }
-
-        .camposInput {
-          text-align: left;
-          margin-left: -1%;
-          font-size: 1.0em;
-          font-weight: normal;
-        }
-
-        .center {
-          text-align: center;
-        }
+        body {height: auto; width: 100vw;padding: 15px; font-size: 1rem; background-color: rgb(154, 186, 215);}
 
         .centerAGU {
           text-align: center;
+          background-color: rgb(154, 186, 215);
           padding-top: 10px;
         }
 
-        .column {
-          float: left;
-          width: 48%;
+        .center {
+          text-align: center;
+          margin-bottom: 10px;
+          background-color: rgb(216, 228, 238);
+          border-radius: 10px;
+          padding: 3px;
         }
 
-        .columnRight {
-          float: left;
+        .rowInputsDados{
+          padding-top: 10px;
+          display:flex;
+          margin-left: 15%;
+        }
+
+        .column2 {
+          width: auto;
+        }
+
+        .column2 + .column2 {
+          margin-left: 50px;
+        }
+
+        .camposInputMemoriaCalculo {
+          margin-right: 5px;
+        }
+
+        .inputToPrint {
+          margin-left: 2px;
+        }
+
+        #testeTotal {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #thead-limpo-menor {
+          text-align: center;
+          border: 1px solid black;
+        }
+
+        #thead-limpo {
+          text-align: center;
+          border: 1px solid black
+        }
+
+        #textosResumo {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #valoresResumo {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #valor-percentual-execucao {
+          width: 25%;
+          text-align: center;
+          border: 1px solid black;
+        }
+
+        #valoresResumoExecucao {
+          width: 33%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #testeTotal {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #colunaResumoEsquerda {
+          width: 35%;
           text-align: right;
-          width: 52%;
+          border: 1px solid black;
+        }
+
+        #colunaResumoDireita {
+          width: 30%;
+          text-align: right;
+          border: 1px solid black;
+        }
+
+        #colunaVaziaDireita {
+          width: 45%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        .thead-centro{
+          text-align: center;
+          margin: 10px;
+        }
+
+        #tabelaResumo {
+          width: 80%;
+          margin-left: 10%;
+        }
+
+        #colunaAnaliseTexto {
+          width: 15%;
+          text-align: left;
+          border: 1px solid black;
+        }
+
+        #colunaAnaliseEsquerda {
+          width: 5%;
+          text-align: right;
+          border: 1px solid black;
+        }
+
+        #colunaAnaliseDireita {
+          width: 5%;
+          text-align: right;
+          border: 1px solid black;
+        }
+
+        #observacoes-div {
+          width: 100%;
+          margin-left: 10%;
+          font-size: small;
+        }
+
+        .center-first{
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
         }
 
         .rowInputs:after {
@@ -4406,285 +4431,72 @@ export default {
           clear: both;
         }
 
-        .resumoProcesso:after {
-          content: "";
-          display: table;
-          clear: both;
-        }
-
-        .columnResumoProcesso {
+        .column {
           float: left;
-          width: 14%;
-          margin-left: 1%;
+          width: 50%;
         }
 
-        .columnResumoProcessoParte {
-          float: left;
-          width: 39%;
-          margin-left: 1%;
-        }
-
-        .centerMargin {
-          text-align: center;
-          padding-left: 15px;
-          padding-right: 15px;
-        }
-
-        .inputToPrint {
-          margin-left: 10px;
-        }
-
-        .inputToPrintResumo {
-          margin-left: 0px;
-        }
-
-        .inputToPrintResumoParte {
-          float: left;
+        .camposInput {
+          text-align: right;
+          margin-left: 27%;
+          margin-right: 100px;
+          height: 5px;
           width: 500px;
+          display: flex;
+          align-items: center;
         }
 
-        .inputCalculo {
-          text-align: left;
-          margin-left: 1%;
+        .camposInput input{
+          flex-grow: 1;
+          box-sizing: border-box;
+          white-space:nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          border: none;
+          padding: 0;
         }
 
-        .rowCalculo:after {
-          content: "";
-          display: table;
-          clear: both;
+        .camposInput span {
+          margin-right: 5px;
         }
 
-        .page {
-          padding-top: 3px;
+        .13salarioPDF{
+          margin-left: 20px;
         }
 
-        
-        .columnResumoPagamentosAdministrativos {
-          float: left;
-          width: 11%;
-          margin-left: 1%;
+        .tabelaPDF td,
+        .tabelaPDF th {
+          text-align: center;
+          border: 1px solid #000000;
         }
 
-        .columnRightAlcada {
-          float: left;
-          margin-left: 0%;
-          text-align: left;
-          width: 50%;
+        .center-first{
+          text-align: center;
+          margin-bottom: 15px;
+          background-color: rgb(219, 228, 240);
+          border-radius: 10px;
+          padding: 4px;
         }
 
-        .columnAlcadaPrint {
-          float: center;
-          text-align: left;
-          width: 60%;
-          margin-left: 20%;
-          margin-right: 20%;
+        #impostoRenda {
+          justify-items: center;
         }
 
-        .inputPagamentosAdministrativos {
-          max-width: 100%;
+        #impostoRendaDiscriminacao {
+          width: 40%;
         }
 
-        .inputTetoAlcada {
-          max-width: 15%;
-          font-size: 12px;
-        }
-
-        .camposInputAlcada {
-          text-align: left;
-          margin-left: 3%;
-          font-size: 16px;
-          width: 30%;
-        }
-        
-
-        .inputToPrintAlcada {
-          text-align: left;
-          margin-left: 3%;
-          font-size: 16px;
+        #impostoRendaValores {
           width: 30%;
         }
 
-        table,
-        th,
-        td {
-          text-align: left;
-          margin-left: 0px;
-          padding-left: 5px;
-          width: 120%;
+        #impostoRendaAcordo {
+          width: 30%;
         }
 
-        #impostoRendaTitulo {
-          font-size: 18px;
-          width: 120%;
+        #impostoRendaCompetencias {
+          width: 20%;
         }
-
-        #testeTotal {
-          width: 100%;
-          text-align: center;
-        }
-
-        #textosResumo {
-          width: 42%;
-          text-align: right;
-          border: 1px solid white;
-        }
-        
-        #thead-limpo {
-          border: 1px solid white;
-          width: 29%;
-          font-size: 14px;
-        }
-
-        #thead-limpo-menor {
-          border: 1px solid white;
-          width: 42%;
-        }
-
-        #thead-centro {
-          border: 1px solid white;
-          width: 100%;
-          text-align: center;
-        }
-
-        #thead-invisivel {
-          border: 1px solid white;
-          width: 1%;
-        }
-
-
-        #valoresResumo {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valoresResumo2 {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valoresResumoExecucao {
-          width: 29%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #valor-percentual-execucao {
-          width: 25%;
-          text-align: center;
-          border: 1px solid white;
-        }
-
-        #tabelaResumo {
-          width: 100%;
-          text-align: center;
-        }
-
-        #colunaVazia {
-          width: 15%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #colunaVaziaDireita {
-          width: 45%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #colunaResumoEsquerda {
-          width: 25%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #colunaResumoDireita {
-          width: 15%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-horizontal {
-          width: 57%;
-          border: 1px solid #000;
-          margin-left: 20%;
-          margin-top: 0%;
-        }
-
-        #colunaAnaliseTexto {
-          width: 35%;
-          text-align: left;
-          border: 1px solid white;
-        }
-
-        #colunaAnaliseEsquerda {
-          width: 2%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #colunaAnaliseDireita {
-          width: 2%;
-          text-align: right;
-          border: 1px solid white;
-        }
-
-        #linha-soma {
-          width: 13%;
-          border: 1px solid #000;
-          margin-left: 69%;
-          margin-top: -4px;
-        }
-
-        #linha-horizontal-separacao {
-          width: 60%;
-          border: 1px solid black;
-          margin-left: 21%;
-          margin-top: -1px;
-          margin-bottom: -10px;
-        }
-
-        #observacoes-div {
-          width: 50%;
-          margin-left: 25%;
-          font-size: small;
-        }
-        
-        .describes{
-          text-overflow: clip ellipsis;
-          margin-right: 10px;
-        }
-
-        #observacoes-div-texto {
-          width:100%;
-          margin-left: 10%;
-          font-size: small;
-          height: auto;
-          text-overflow: clip ellipsis;
-        }
-        
-        #info-inicial {
-          width: 50%;
-          margin-left: 5%;
-          text-align: left;
-          border: 2px solid white;
-        }
-
-        #info-inicial-coluna {
-          width: 15%;
-          text-align: left;
-          border: 2px solid white;
-        }
-
-
-        #info-inicial-linha {
-          width: 100%;
-          text-align: left;
-          border: 2px solid green;
-        }
-
-
         `;
       style = style + "</style>";
 
@@ -4778,14 +4590,14 @@ export default {
             };
             console.log(body);
             axios
-              .post(`${apiSapiens}/insertMinutas`, body)
+              .post(`${process.env.VUE_APP_VISAO_API_URL}/samir/insertMinutas`, body)
               .then((response) => {
                 this.loading = false;
                 console.log(response);
                 this.$alert(
                   response.data.length -1,
                   "Minutas anexadas: ",
-                  "success"
+                  "sucesso"
                 );
               })
               .catch((error) => {
@@ -4830,6 +4642,21 @@ export default {
     redirectToCalculo() {
       this.$router.push({ name: "processos" }).catch(() => { });
     },
+
+    ExibirAjuda() {
+      Swal.fire({
+        title: 'Regras de cálculo do Samir', 
+        html: `<p>Cálculo de Reajuste (α) = Valor da RMI x Índice de Reajuste<br>
+               Reajuste Salarial (ß) = α x Correção Monetária<br>
+               Taxa Juros (δ) = ß x Juros<br>
+               Total (γ) = δ + Salário Corrigido<br>
+               Valor Devido: α + ß + δ + γ</p>`,
+        icon: 'info',
+        customClass: {
+          content: 'estilo-content-sweet'
+        }
+      });
+    }
   },
 
   mounted() {
@@ -4844,7 +4671,7 @@ export default {
       .catch((error) => {
         console.log("CatchHomeMounted(): " + error);
       });
-    axios.get(baseApiUrl + "/describeJuros").then((response) => {
+    axios.get(`${process.env.VUE_APP_BASE_API_URL}/describeJuros`).then((response) => {
       response.data.forEach((value) => {
         if (value.type!=0){
           this.optionsJuros.push({
@@ -4855,7 +4682,7 @@ export default {
       });
     });
 
-    axios.get(baseApiUrl + "/describeCorrecao").then((response2) => {
+    axios.get(`${process.env.VUE_APP_BASE_API_URL}/describeCorrecao`).then((response2) => {
       this.optionsCorrecao = [];
       // console.log(response2.body);
       response2.data.forEach((value) => {
@@ -4865,7 +4692,7 @@ export default {
         });
       });
     });
-    axios.get(baseApiUrl + "/beneficio/listar").then((res) => {
+    axios.get(`${process.env.VUE_APP_BASE_API_URL}/beneficio/listar`).then((res) => {
       res.data.forEach((item) => {
         this.beneficiosInacumulveisBancoName.push(item.name);
       });
@@ -4876,7 +4703,7 @@ export default {
     });
     let anoAtual = new Date().getFullYear();
     axios
-      .get(baseApiUrl + "/salarioMinimo/procuraPorAno/" + anoAtual)
+      .get(`${process.env.VUE_APP_BASE_API_URL}/salarioMinimo/procuraPorAno/${anoAtual}`)
       .then((res) => {
         console.log("Salrio minimo ano atual",res.data[res.data.length - 1]);
         this.salarioMinimoAnoAtual = res.data[res.data.length - 1].valor * 60;
@@ -4928,7 +4755,7 @@ v-card {
 .alertCalculoComObservacoes {
   background: firebrick;
   color: white;
-  font-size: 25px;
+  font-size: 16px;
   padding: 5px 5px;
   border-radius: 5px;
 }
@@ -4959,11 +4786,52 @@ v-card {
 
 .camposInput {
   text-align: left;
-  margin-left: 3%;
+  width: 100%;
+  height: auto;
+  align-items: center;
+}
+
+label{
+  display: block;
+  margin-bottom: 1%;
+}
+
+tr:nth-child(even){
+  background-color: #f2f2f2
+}
+
+tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.center-first{
+  text-align: center;
+  margin-bottom: 15px;
+  background-color: rgb(219, 228, 240);
+  border-radius: 10px;
+  padding: 4px;
 }
 
 .center {
   text-align: center;
+  margin-bottom: 15px;
+  background-color: rgb(216, 228, 238);
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.rowInputsCentral {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.columnInputs {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
 }
 
 .centerAGU {
@@ -4976,10 +4844,62 @@ v-card {
   width: 50%;
 }
 
+.cifrao-valor {
+  display: flex;
+  flex-direction: row;
+  margin-left: -1%;
+  padding: 5px 10px 2px 10px;
+}
+
+.camposInputMemoriaCalculo {
+  display: flex;
+}
+
+.camposInputMemoriaCalculo label {
+  flex: 1;
+  margin-left: 2px;
+  box-sizing: border-box;
+}
+
+.columnResumo {
+  float: left;
+}
+
+
+.align-text{
+  display: flex;
+  width: 100%;
+  padding: 5px 10px 5px 10px;
+}
+
+.inputCalculo {
+  text-align: left;
+}
+
+.inputCifrao {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  padding-right: 0.5%;
+}
+
 .columnRight {
   float: left;
   text-align: right;
   width: 50%;
+}
+
+.rowInputsDados{
+  align-items: center;
+  margin-left: 20%;
+}
+
+.rowInputs {
+  display: flex;
+  flex-direction: row;
+  margin-left: 20%;
+  width: 60%;
+  justify-content: center;
 }
 
 .rowInputs:after {
@@ -4997,13 +4917,18 @@ v-card {
 .columnResumoProcesso {
   float: left;
   width: 14%;
-  margin-left: 1%;
+  margin-left: 7%;
 }
 
 .columnResumoProcessoParte {
   float: left;
-  width: 39%;
-  margin-left: 1%;
+  width: 35%;
+  margin-left: 9%;
+}
+
+.columnResumoProcessoParte input {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .centerMargin {
@@ -5013,7 +4938,7 @@ v-card {
 }
 
 .inputToPrint {
-  margin-left: 10px;
+  margin-left: 2px;
 }
 
 .inputToPrintResumo {
@@ -5025,15 +4950,10 @@ v-card {
   width: 500px;
 }
 
-.inputCalculo {
-  text-align: left;
-  margin-left: 1%;
-}
-
-.rowCalculo:after {
-  content: "";
-  display: table;
-  clear: both;
+.rowCalculo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .page {
@@ -5068,6 +4988,19 @@ v-card {
 .inputTetoAlcada {
   max-width: 10%;
 }
+
+.thead-centro{
+  text-align: center;
+  margin: 10px;
+}
+
+.camposInputAlcada {
+  margin-left: 10%;
+  margin-right: 5px;
+  white-space:nowrap;
+  overflow:hidden;
+}
+        
 
 table,
 th {
@@ -5106,37 +5039,47 @@ td {
 }
 
 #testeTotal {
-  width: 100%;
+  width: 80%;
+  margin-left: 10%;
+}
+
+#thead-limpo-menor {
   text-align: center;
+  border: 1px solid black;
+}
+
+#thead-limpo {
+  text-align: center;
+  border: 1px solid black
 }
 
 #textosResumo {
-  width: 50%;
-  text-align: right;
-  border: 1px solid white;
+  width: 33%;
+  text-align: left;
+  border: 1px solid black;
 }
 
 #valoresResumo {
-  width: 25%;
-  text-align: center;
-  border: 1px solid white;
+  width: 33%;
+  text-align: left;
+  border: 1px solid black;
 }
 
 #valoresResumoExecucao {
-  width: 25%;
-  text-align: center;
-  border: 1px solid white;
+  width: 33%;
+  text-align: left;
+  border: 1px solid black;
 }
 
 #valor-percentual-execucao {
   width: 25%;
   text-align: center;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #tabelaResumo {
-  width: 100%;
-  text-align: center;
+  width: 80%;
+  margin-left: 10%;
 }
 
 #colunaVazia {
@@ -5148,44 +5091,43 @@ td {
 #colunaVaziaDireita {
   width: 45%;
   text-align: left;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaResumoEsquerda {
-  width: 25%;
+  width: 35%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaResumoDireita {
-  width: 15%;
+  width: 30%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #linha-horizontal {
-  width: 50%;
-  border: 2px solid #000;
-  margin-left: 25%;
-  margin-top: -1%;
+  width: 135%;
+  border: 1px solid #000;
+  margin-left: -2%;
 }
 
 #colunaAnaliseTexto {
-  width: 20%;
+  width: 15%;
   text-align: left;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaAnaliseEsquerda {
-  width: 2%;
+  width: 5%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #colunaAnaliseDireita {
-  width: 2%;
+  width: 5%;
   text-align: right;
-  border: 1px solid white;
+  border: 1px solid black;
 }
 
 #linha-soma {
@@ -5205,7 +5147,7 @@ td {
 
 #observacoes-div {
   width: 50%;
-  margin-left: 25%;
+  margin-left: 10%;
   font-size: small;
 }
 
@@ -5232,5 +5174,18 @@ td {
   width: 100%;
   text-align: left;
   border: 2px solid white;
+}
+.sticky-icon {
+  position: fixed;
+  display:flex;
+  top: 95%;
+  right: 2%; 
+  z-index: 1000;
+  font-size: 25px;
+  cursor:pointer
+}
+
+.estilo-content-sweet{
+  text-align: left
 }
 </style>

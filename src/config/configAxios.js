@@ -1,11 +1,15 @@
 import axios from "axios";
-import { samirControle  } from "../global";
 
 const AxiosApiControleUsuario = axios.create({
-    baseURL: samirControle,
-    headers: {
-        'authorization': `bearer ${localStorage.getItem("authToken")}`
+    baseURL: process.env.VUE_APP_CONTROLE_USUARIOS_API_URL,
+})
+
+AxiosApiControleUsuario.interceptors.request.use(config => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+        config.headers.authorization = `Bearer ${token}`;
     }
+    return config;
 })
 
 AxiosApiControleUsuario.interceptors.response.use(response => {

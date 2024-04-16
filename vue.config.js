@@ -3,6 +3,11 @@ module.exports = {
     'vuetify'
   ],
   configureWebpack: {
-    devtool: 'source-map'
-  }
+  },
+  devServer: {
+    headers: {
+      'X-Frame-Options': 'DENY',
+      'X-Content-Type-Options': "nosniff"
+    }
+  },
 }

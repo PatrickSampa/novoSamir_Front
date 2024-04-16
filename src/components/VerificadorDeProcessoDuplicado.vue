@@ -1,11 +1,6 @@
 <template>
     <body class="container">
-        <div class="VerificadorDeProcessoDuplicado">
-            <v-btn :loading="loading" @click="verificadorDeProcessoDuplicado()"
-                class="button-VerificadorDeProcessoDuplicado" color="primary">
-                Verificador de processo duplicado
-            </v-btn>
-        </div>
+
     </body>
 </template>
     
@@ -29,8 +24,8 @@ export default {
     methods: {
         verificadorDeProcessoDuplicado() {
             this.$prompt(
-                "Qual é o nome das etiquetas? as etiquetas não pode conter a palvra ATUALIZAÇAO e FALHA",
-                "LEGOLAS"
+                "Qual é o nome das etiquetas? as etiquetas não podem conter a palavra ATUALIZAÇÃO ou FALHA",
+                ""
             ).then((etiqueta) => {
                 if (etiqueta) {
                     const body = {
@@ -47,7 +42,7 @@ export default {
                             this.$alert(
                                 response.length,
                                 "Processos duplicados: ",
-                                "success"
+                                "sucesso"
                             );
                             this.loading = false;
                         })

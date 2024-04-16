@@ -1,7 +1,6 @@
 import axios from "axios";
-import { apiSapiens  } from "../../global";
 
 export const axios_visao = axios.create({
-    baseURL: apiSapiens,
+    baseURL: `${process.env.VUE_APP_VISAO_API_URL}/samir`,
 })
 

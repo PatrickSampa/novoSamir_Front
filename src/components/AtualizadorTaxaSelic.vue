@@ -55,7 +55,7 @@ export default {
                 }
                 console.log("BODY " + JSON.stringify(body))
                 AtualizarTaxaSelic(body).then(() => {
-                    return Swal.fire('Saved!', '', 'success')
+                    return Swal.fire('Salvo!', '', 'sucesso')
                 }).catch(e => {
                     console.log("ERRO AO ATUALIZAR A TAXA "+ e)
                     return Swal.fire({

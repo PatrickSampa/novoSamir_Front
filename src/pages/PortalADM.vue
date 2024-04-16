@@ -2,25 +2,24 @@
   <v-card class="pa-3 my-3">
     <ValidadorDossiePrevidenciario/>
    <AtualizadorDosPrev/>
-   <VerificadorDeProcessoDuplicado/>
    <AtualizadorTaxaSelic/>
+   <AtualizarSenha/>
   </v-card>
 </template>
 
 <script>
 import axios from "axios";
-import { baseApiUrl } from "../global";
 import AtualizadorDosPrev from "../components/AtualizadorDosPrev.vue";
 import ValidadorDossiePrevidenciario from "../components/ValidadorDossiePrevidenciario.vue";
-import VerificadorDeProcessoDuplicado from "../components/VerificadorDeProcessoDuplicado.vue";
 import AtualizadorTaxaSelic from "../components/AtualizadorTaxaSelic.vue";
+import AtualizarSenha from "../components/AtualizarSenha.vue";
 
 export default {
   components: {
     AtualizadorDosPrev: AtualizadorDosPrev,
     ValidadorDossiePrevidenciario: ValidadorDossiePrevidenciario,
     AtualizadorTaxaSelic: AtualizadorTaxaSelic,
-    VerificadorDeProcessoDuplicado: VerificadorDeProcessoDuplicado,
+    AtualizarSenha: AtualizarSenha
   },
 
   //name: "AdicionarTaxa",
@@ -79,7 +78,7 @@ export default {
       console.log(this.taxas_exibir);
     },
     tipo_execuçao() {
-      const url = `${baseApiUrl}/${this.taxa_modelo}/procurarPorTipo/${this.tipo}`
+      const url = `${process.env.VUE_APP_BASE_API_URL}/${this.taxa_modelo}/procurarPorTipo/${this.tipo}`
     /*  axios
         .get(url)
         .then((response) => (this.informacao_taxa = response.data));*/
@@ -100,7 +99,7 @@ export default {
         
     },
     id_elemento(){
-      let url = `${baseApiUrl}/${this.taxa_modelo}/listar`
+      let url = `${process.env.VUE_APP_BASE_API_URL}/${this.taxa_modelo}/listar`
       /* axios
         .get(url)
         .then((response) => (this.todos_taxas = response.data));
@@ -131,7 +130,7 @@ export default {
     }
   },
   mounted(){
-    const url = `${baseApiUrl}/juros/listar`;
+    const url = `${process.env.VUE_APP_BASE_API_URL}/juros/listar`;
     axios(url).then((res) => {
       let obj = {};
       this.descriçao_correcao = res.data;

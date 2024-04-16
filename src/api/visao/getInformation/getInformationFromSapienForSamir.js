@@ -4,6 +4,8 @@ export async function getInformationFromSapienForSamir(body){
 
     try {
         const res = await axios_visao.post("/getInformationFromSapienForSamir", body);
+        console.log("PASSOU NOS RES ")
+        console.log(res)
         if (!res.data) {
             return Promise.reject(new Error("erro ao triar as informações para calculo"));
         } else {

@@ -14,7 +14,7 @@
           {{ showPassword ? 'mdi-eye-off' : 'mdi-eye' }} <!-- Ícone de visibilidade -->
         </v-icon>
       </template></v-text-field>
-        <v-btn depressed :loading="loading" color="primary" @click="loginUsuario">LOGIN</v-btn>
+        <v-btn depressed :loading="loading" color="primary" @click="loginUsuario">PATRICK</v-btn>
         <v-btn id="cadastrar" depressed :loading="loading" color="secondary" to="/cadastrar">Cadastrar</v-btn>
       </v-form>
     </v-card>
@@ -57,7 +57,7 @@ export default {
         this.loading = false;
         this.valid = true;
         this.$router.push({ name: "sapienslogin" });
-        window.location.reload();
+        // window.location.reload();
       } catch (error) {
         console.log("TESTANDO321")
         this.loading = false;

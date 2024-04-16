@@ -2,7 +2,7 @@ import { getcalculoBeneficioinacumulavel } from "../../../api/calculadora/calcul
 import { quantosDiasFaltaParaAcabarOMes } from "../../Helps/quantosDiasFaltaParaAcabarOMes";
 import { validarValorDoDiaSerConsideradoNaTabelaDeCalculo } from "../../Helps/validarValorDoDiaSerConsideradoNaTabelaDeCalculo";
 import { verificarDiasDeIntersecao } from "../../Helps/verificarDiasIntersecao";
-import { receberRecebidoParaDecimoTerceiroSalario } from "../../Helps/receberDataParaDecimoTerceiroSalarioRecebido"
+//import { receberRecebidoParaDecimoTerceiroSalario } from "../../Helps/receberDataParaDecimoTerceiroSalarioRecebido"
 
 var contadorMesDe13SalarioBeneficioInacumulavel = 0;
 var contadorMesDe13SalarioSalarioBeneficioPrincipal = 0;
@@ -61,6 +61,7 @@ try{
       porcentagemRMI: parseFloat(beneficioInacumulavel.porcentagemRmi),
       salario13Obrigatorio: beneficioInacumulavel.salario13Obrigatorio,
       dibAnterior: beneficioInacumulavel.nbAnterior,
+      dib: beneficioInacumulavel.dibInicial,
       selic: informationBeneficioPrincpal.selic,
     };
     
@@ -141,6 +142,7 @@ async function descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioIn
 
   
   let recebido = await verificadorRecibidoEmDib_InicioCalculo_DIP_DCB(linhaTabelaPrincipal.data, dib, inicioCalculo, dip, dcb, linhaTabelaPrincipal.devido);
+  console.log(recebido + " ########  " + linhaTabelaPrincipal.devido)
   if (salario13 && recebido >= (linhaBeneficioInacumulavel.salario / 2) && linhaTabelaPrincipal.data.split("/")[0] != "13Salario") {
     contadorMesDe13SalarioBeneficioInacumulavel++;
     if (parseInt(linhaTabelaPrincipal.data.split("/")[1]) === 1) {
@@ -151,9 +153,11 @@ async function descontarBeneficioEspecial(linhaTabelaPrincipal, linhaBeneficioIn
   }
   if (linhaTabelaPrincipal.data.split("/")[0] == "13Salario") {
     let mesRecibidosNoAno = arrayDeQUnatidadeDeMessesDeCadaAno.find(obj => obj.data === linhaTabelaPrincipal.data).quantidadeDeMes;
+    console.log("RECEBIDOOOOOOOOOOOOO  = " + recebido)
     recebido = (recebido / mesRecibidosNoAno) * contadorMesDe13SalarioBeneficioInacumulavel;
+    console.log("RECEBIDOOOOOOOOOOOOO  = " + recebido)
   }
-  
+  console.log("RECEBIDOOOOOOOOOOOOO2222  = " + recebido)
   return {
     data: linhaTabelaPrincipal.data,
     reajusteAcumulado: linhaTabelaPrincipal.reajusteAcumulado,
@@ -177,10 +181,10 @@ async function decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicio
 
   //console.log("GTESTANDO VALORES "+inicioCalculo, dip, dib, dcb, salario13)
   try{
-  console.log("CHEGOU AQUI PARTE 1")
+  
   
   let recebido = await verificadorRecibidoEmDib_InicioCalculo_DIP_DCB(linhaTabelaPrincipal.data, dib, inicioCalculo, dip, dcb, linhaBeneficioInacumulavel.salario);
-  console.log("CHEGOU AQUI PARTE 2")
+  console.log("CHEGOU AQUI PARTE 2" + recebido + " ###### " + linhaBeneficioInacumulavel.salario)
 
   
   if (salario13 && recebido >= (linhaBeneficioInacumulavel.salario / 2) && linhaTabelaPrincipal.data.split("/")[0] != "13Salario") {
@@ -198,11 +202,12 @@ async function decontar(linhaTabelaPrincipal, linhaBeneficioInacumulavel, inicio
   console.log("CHEGOU AQUI PARTE 5")
   console.log(linhaTabelaPrincipal.data.split("/"))
   if (linhaTabelaPrincipal.data.split("/")[0] == "13Salario") {
+    //VERIFICAR CASO PRECISE DE ALGUMA REGRA PARA O 13SALARIO, IR TESTANDO COM A KELEN
     console.log("CHEGOU AQUI PARTE 6" + beneficiosAcumuladosParaDecimoTerceiro + " ESSE CODIGO E LIXO")
-    //recebido = recebido * (contadorMesDe13SalarioBeneficioInacumulavel-1) / 12;
-    const valoreRetornado = await receberRecebidoParaDecimoTerceiroSalario(dib) * (recebido/12)
-    console.log("CHEGOU AQUI PARTE 7")
-    recebido = valoreRetornado;
+   // recebido = recebido * (contadorMesDe13SalarioBeneficioInacumulavel-1) / 12;
+    //const valoreRetornado = await receberRecebidoParaDecimoTerceiroSalario(dib) * (recebido/12)
+    //console.log("CHEGOU AQUI PARTE 7 " + valoreRetornado + " t " + recebido)
+    //recebido = valoreRetornado;
 
   }
   console.log("CHEGOU AQUI PARTE 8")
@@ -237,14 +242,14 @@ async function verificadorRecibidoEmDib_InicioCalculo_DIP_DCB(dataLinhaTabela, d
     const diasConsiderados = await calcularDiasConsiderados(dataLinhaTabela, dib, inicioCalculo, dip, dcb);
     console.log("DIAS POR " + diasConsiderados)
     if (diasConsiderados === null) {
-      //console.log("merd1", recebido)
+      console.log("merd1", recebido)
       return recebido;
     } else {
-      //console.log("merd2", recebido)
+      console.log("merd222222222222222222222222222", recebido)
       return recebido * diasConsiderados / 30;
     }
   } else {
-    //console.log("merd3", recebido)
+    console.log("merd3", recebido)
     return recebido;
   }
 }catch(e){
